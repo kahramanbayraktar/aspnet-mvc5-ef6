@@ -1,0 +1,126 @@
+﻿@model IList<Ced.Web.Models.EventDirector.EventDirectorListItemModel>
+
+<div class="table-responsive" id="results">
+    <table id="tblEventDirectors" class="table table-striped table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>
+                    Event Name
+                </th>
+                <th>
+                    Director Email
+                </th>
+                <th>
+                    AD Logon Name
+                </th>
+                <th>
+                    Application
+                </th>
+                <th class="no-sort">
+                    Primary
+                </th>
+                <th class="no-sort">
+                    Assistant
+                </th>
+                <th>
+                    Created On
+                </th>
+                <th class="no-sort"></th>
+            </tr>
+        </thead>
+        <tfoot>
+            <tr>
+                <th>
+                    Event Name
+                </th>
+                <th>
+                    Director Email
+                </th>
+                <th>
+                    AD Logon Name
+                </th>
+                <th>
+                    Application
+                </th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+        </tfoot>
+        <tbody>
+            @if (Model != null)
+            {
+                foreach (var item in Model)
+                {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EventName)
+                </td>
+                <td class="nowrap">
+                    @Html.DisplayFor(modelItem => item.DirectorEmail)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ADLogonName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ApplicationName)
+                </td>
+                <td class="text-center">
+                    <small><i class="fa fa-@(item.IsPrimary ? "check" : "minus") fa-2x"></i></small>
+                </td>
+                <td class="text-center">
+                    <small><i class="fa fa-@(item.IsAssistant ? "check" : "minus") fa-2x"></i></small>
+                </td>
+                <td class="text-center">
+                    @Html.DisplayFor(modelItem => item.CreatedOn)
+                </td>
+                <td class="text-center nowrap">
+                    <a class="edit-eventdirector text-primary" href="#" data-id="@item.EventDirectorId" data-toggle="modal" data-target="#editEventDirector" title="Edit Event Director">
+                        <small><i class="fa fa-edit fa-2x text-success"></i></small>
+                    </a>&nbsp;
+                    <a href="#" class="del-eventdirector" data-id="@item.EventDirectorId" title="Delete Event Director">
+                        <small><i class="fa fa-trash fa-2x text-danger"></i></small>
+                    </a>
+                </td>
+            </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+<script>
+    $(document).ready(function () {
+
+        $.fn.dataTable.moment('DD/MM/YYYY');
+
+        $('#tblEventDirectors').DataTable({
+            "iDisplayLength": 10,
+            "order": [[0, 'asc']],
+            "oLanguage": {
+                "sSearch": "Quick filter:"
+            },
+            initComplete: function () {
+                this.api().columns([0,1,2,3,6]).every(function () {
+                    var column = this;
+                    var select = $('<select class="form-control" style="background: url(' + '@Url.Content("~/content/images/filter.png")' + ') no-repeat scroll 7px 9px;padding-left:20px;width: 100%"><option value=""></option></select>')
+                        .appendTo($(column.footer()).empty())
+                        .on('change', function () {
+                            var val = $.fn.dataTable.util.escapeRegex(
+                                $(this).val()
+                            );
+
+                            column
+                                .search(val ? '^' + val + '$' : '', true, false)
+                                .draw();
+                        });
+
+                    column.data().unique().sort().each(function (d, j) {
+                        select.append('<option value="' + d + '">' + d + '</option>');
+                    });
+                });
+            }
+        });
+    });
+</script>

@@ -1,0 +1,1031 @@
+﻿@using Ced.BusinessEntities
+@using Ced.Utility.Azure
+@using Ced.Utility.Edition
+@using Ced.Web.Helpers
+@using ITE.Utility.Extensions
+@model Ced.Web.Models.Edition.EditionDetailsModel
+
+<div class="content animate-panel" id="edition-details">
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="hpanel hgreen">
+                <div class="panel-body">
+                    <h3>
+                        Web Logo
+                    </h3>
+                </div>
+                <div class="panel-footer contact-footer">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="contact-stat">
+                                <img class="img-responsive" src="@EditionImageType.WebLogo.BlobFullUrl(Model.WebLogoFileName)" onerror="this.onerror = null; this.src = '@EditionImageType.WebLogo.EditionDefaultImageUrl()';" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-9">
+            <div class="hpanel hgreen">
+                <div class="panel-body">
+                    <h3>
+                        People Image
+                    </h3>
+                </div>
+                <div class="panel-footer contact-footer">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="contact-stat">
+                                <img class="img-responsive" src="@EditionImageType.PeopleImage.BlobFullUrl(Model.PeopleImageFileName)" onerror="this.onerror = null; this.src = '@EditionImageType.PeopleImage.EditionDefaultImageUrl()';" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="hpanel hgreen">
+                <div class="panel-body">
+                    <h3>
+                        Event BE ID
+                    </h3>
+                </div>
+                <div class="panel-footer contact-footer">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="contact-stat" style="text-align: justify">@Model.AxEventId</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="hpanel hgreen">
+                <div class="panel-body">
+                    <h3>
+                        Edition Name
+                    </h3>
+                </div>
+                <div class="panel-footer contact-footer">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="contact-stat" style="text-align: justify">@Model.EditionName</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="hpanel hgreen">
+                <div class="panel-body">
+                    <h3>
+                        International Name
+                    </h3>
+                </div>
+                <div class="panel-footer contact-footer">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="contact-stat" style="text-align: justify">@Model.InternationalName</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="hpanel hgreen">
+                <div class="panel-body">
+                    <h3>
+                        Local Name
+                    </h3>
+                </div>
+                <div class="panel-footer contact-footer">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="contact-stat" style="text-align: justify">@Model.LocalName</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="hpanel hyellow">
+                <div class="panel-body">
+                    <h3>
+                        Event Director
+                    </h3>
+                </div>
+                <div class="panel-footer contact-footer">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="contact-stat" style="text-align: justify">@Model.Director</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="hpanel hblue">
+                <div class="panel-body">
+                    <h3>
+                        Email
+                    </h3>
+                </div>
+                <div class="panel-footer contact-footer">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="contact-stat" style="text-align: justify">
+                                <a href="mailto:@(Model.ManagingOfficeEmail)"><i class="fa fa-envelope-o"></i> @Model.ManagingOfficeEmail</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="hpanel hblue">
+                <div class="panel-body">
+                    <h3>
+                        Phone
+                    </h3>
+                </div>
+                <div class="panel-footer contact-footer">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="contact-stat" style="text-align: justify"><i class="fa fa-phone"></i> @Model.ManagingOfficePhone</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="hpanel hblue">
+                <div class="panel-body">
+                    <h3>
+                        Event Website
+                    </h3>
+                </div>
+                <div class="panel-footer contact-footer">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="contact-stat" style="text-align: justify">
+                                <a href="@Model.EventWebsite.ToExternalLink()" target="_blank" title="Go to profile">@Model.EventWebsite <i class="fa fa-external-link"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="hpanel hviolet">
+                <div class="panel-body">
+                    <h3>
+                        Ranking
+                    </h3>
+                </div>
+                <div class="panel-footer contact-footer">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="contact-stat" style="text-align: justify">@Model.Classification</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="hpanel hviolet">
+                <div class="panel-body">
+                    <h3>
+                        Frequency
+                    </h3>
+                </div>
+                <div class="panel-footer contact-footer">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="contact-stat" style="text-align: justify">@Model.Frequency</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="hpanel hred">
+                <div class="panel-body">
+                    <h3>
+                        Country
+                    </h3>
+                </div>
+                <div class="panel-footer contact-footer">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="contact-stat" style="text-align: justify">@Model.Country</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="hpanel hred">
+                <div class="panel-body">
+                    <h3>
+                        City
+                    </h3>
+                </div>
+                <div class="panel-footer contact-footer">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="contact-stat" style="text-align: justify">@Model.City</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="hpanel hyellow">
+                <div class="panel-body">
+                    <h3>
+                        Summary
+                    </h3>
+                </div>
+                <div class="panel-footer contact-footer">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="contact-stat" style="text-align: justify">@Model.EditionSummary</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="hpanel hyellow">
+                <div class="panel-body">
+                    <h3>
+                        Description
+                    </h3>
+                </div>
+                <div class="panel-footer contact-footer">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="contact-stat" style="text-align: justify">@Model.EditionDescription</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="hpanel hyellow">
+                <div class="panel-body">
+                    <h3>
+                        Exhibitor Profile
+                    </h3>
+                </div>
+                <div class="panel-footer contact-footer">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="contact-stat" style="text-align: justify">@Html.Raw(!string.IsNullOrWhiteSpace(Model.ExhibitorProfile) ? Model.ExhibitorProfile.Replace("\r\n", "<br/>") : "")</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="hpanel hyellow">
+                <div class="panel-body">
+                    <h3>
+                        Visitor Profile
+                    </h3>
+                </div>
+                <div class="panel-footer contact-footer">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="contact-stat" style="text-align: justify">@Html.Raw(!string.IsNullOrWhiteSpace(Model.VisitorProfile) ? Model.VisitorProfile.Replace("\r\n", "<br/>") : "")</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="hpanel hyellow">
+                <div class="panel-body">
+                    <h3>
+                        Date/Time
+                    </h3>
+                </div>
+                <div class="panel-footer contact-footer">
+                    <div class="row">
+                        <div class="col-md-4 border-right">
+                            <div class="contact-stat">
+                                <span>Edition No: </span> <strong>@Model.EditionNo</strong>
+                            </div>
+                        </div>
+                        <div class="col-md-4 border-right">
+                            <div class="contact-stat">
+                                <span>Start Date: </span> <strong>@Html.DisplayFor(x => x.StartDate)</strong>
+
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="contact-stat">
+                                <span>End Date: </span> <strong>@Html.DisplayFor(x => x.EndDate)</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-footer contact-footer">
+                    <div class="row">
+                        <div class="col-md-6 border-right">
+                            <div class="contact-stat">
+                                <span>Visiting Hours: </span> <strong>@Html.DisplayFor(x => x.VisitStartTime) - @Html.DisplayFor(x => x.VisitEndTime)</strong>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="contact-stat">
+                                <span>Display Date: </span> <strong>@Model.DisplayDate</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="hpanel hyellow">
+                <div class="panel-body">
+                    <h3>
+                        Venue
+                    </h3>
+                </div>
+                <div class="panel-footer contact-footer">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="contact-stat">
+                                <span>Venue Name: </span> <strong>@Model.VenueName</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-footer contact-footer">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="contact-stat">
+                                <span>Coordinates: </span> <strong>@Model.VenueCoordinates</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="hpanel hgreen">
+                <div class="panel-body">
+                    <h3>
+                        Social Media Accounts
+                    </h3>
+                </div>
+                <div class="panel-footer contact-footer">
+                    <div class="row">
+                        @foreach (var socialMedia in Model.SocialMedias)
+                        {
+                            <div class="col-md-2 border-right">
+                                <div class="contact-stat">
+                                    <span>@socialMedia.SocialMediaId: </span> <a href="@SocialMediaLinkHelper.GetAccountLink(socialMedia.SocialMediaId, socialMedia.AccountName)" target="_blank" title="Go to profile">@socialMedia.AccountName <i class="fa fa-external-link"></i></a>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="hpanel hgreen">
+                <div class="panel-body">
+                    <h3>
+                        Sqm Sales
+                    </h3>
+                </div>
+                <div class="panel-footer contact-footer">
+                    <div class="row">
+                        <div class="col-md-4 border-right">
+                            <div class="contact-stat">
+                                <span>Local Sqm Sold: </span> <strong>@Html.DisplayFor(x => x.LocalSqmSold)</strong>
+                            </div>
+                        </div>
+                        <div class="col-md-4 border-right">
+                            <div class="contact-stat">
+                                <span>Int'l Sqm Sold: </span> <strong>@Html.DisplayFor(x => x.InternationalSqmSold)</strong>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="contact-stat">
+                                <span>Total Sqm Sold: </span> <strong>@Html.DisplayFor(x => x.TotalSqmSold)</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="hpanel hgreen">
+                <div class="panel-body">
+                    <h3>
+                        Sponsorships
+                    </h3>
+                </div>
+                <div class="panel-footer contact-footer">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="contact-stat">
+                                <span># of Sponsors: </span> <strong>@Model.SponsorCount</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="hpanel hblue">
+                <div class="panel-body">
+                    <h3>
+                        Exhibitors
+                    </h3>
+                </div>
+                <div class="panel-footer contact-footer">
+                    <div class="row">
+                        <div class="col-md-4 border-right">
+                            <div class="contact-stat">
+                                <span># of Local: </span> <strong>@Model.LocalExhibitorCount</strong>
+                            </div>
+                        </div>
+                        <div class="col-md-4 border-right">
+                            <div class="contact-stat">
+                                <span># of Int'l: </span> <strong>@Model.InternationalExhibitorCount</strong>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="contact-stat">
+                                <span># of Countries: </span> <strong>@Model.ExhibitorCountryCount</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-footer contact-footer">
+                    <div class="row">
+                        <div class="col-md-4 border-right">
+                            <div class="contact-stat">
+                                <span># of National Groups: </span> <strong>@Model.NationalGroupCount</strong>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="contact-stat">
+                                <span>Top Countries: </span> <strong>@(Model.TopExhibitorCountries != null ? string.Join(",", Model.TopExhibitorCountries) : "")</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="hpanel hblue">
+                <div class="panel-body">
+                    <h3>
+                        Visitors
+                    </h3>
+                </div>
+                <div class="panel-footer contact-footer">
+                    <div class="row">
+                        <div class="col-md-4 border-right">
+                            <div class="contact-stat">
+                                <span># of Unique Local: </span> <strong>@Model.LocalVisitorCount</strong>
+                            </div>
+                        </div>
+                        <div class="col-md-4 border-right">
+                            <div class="contact-stat">
+                                <span># of Unique Int'l: </span> <strong>@Model.InternationalVisitorCount</strong>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="contact-stat">
+                                <span># of Countries: </span> <strong>@Model.VisitorCountryCount</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-footer contact-footer">
+                    <div class="row">
+                        <div class="col-md-4 border-right">
+                            <div class="contact-stat">
+                                <span># of Repeat Local: </span> <strong>@Model.LocalRepeatVisitCount</strong>
+                            </div>
+                        </div>
+                        <div class="col-md-4 border-right">
+                            <div class="contact-stat">
+                                <span># of Repeat Int'l: </span> <strong>@Model.InternationalRepeatVisitCount</strong>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="contact-stat">
+                                <span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-footer contact-footer">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="contact-stat">
+                                <span>Top Countries: </span> <strong>@(Model.TopVisitorCountries != null ? string.Join(",", Model.TopVisitorCountries) : "")</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="hpanel hblue">
+                <div class="panel-body">
+                    <h3>
+                        E-Ticket / Registration
+                    </h3>
+                </div>
+                <div class="panel-footer contact-footer">
+                    <div class="row">
+                        <div class="col-md-4 border-right">
+                            <div class="contact-stat">
+                                <span># of e-Tickets Issued: </span> <strong>@Model.OnlineRegistrationCount</strong>
+                            </div>
+                        </div>
+                        <div class="col-md-4 border-right">
+                            <div class="contact-stat">
+                                <span># of Actual Visits: </span> <strong>@Model.OnlineRegisteredVisitorCount</strong>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="contact-stat">
+                                <span># of Buyers with e-Tickets: </span> <strong>@Model.OnlineRegisteredBuyerVisitorCount</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="hpanel hblue">
+                <div class="panel-body">
+                    <h3>
+                        Unique/Repeat Visitors
+                    </h3>
+                </div>
+                <div class="panel-footer contact-footer">
+                    <div class="row">
+                        <div class="col-md-2 border-right">
+                            <div class="contact-stat">
+                                <span><strong>Unique</strong></span>
+                            </div>
+                        </div>
+                        @for (var i = 0; i < Model.EditionVisitors.Count; i++)
+                        {
+                            var ev = Model.EditionVisitors[i];
+                            <div class="col-md-2 @(i < Model.EditionVisitors.Count - 1 ? "border-right" : "")">
+                                <div class="contact-stat">
+                                    <span>Day @ev.DayNumber: </span> <strong>@ev.VisitorCount</strong>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="panel-footer contact-footer">
+                    <div class="row">
+                        <div class="col-md-2 border-right">
+                            <div class="contact-stat">
+                                <span><strong>Repeat</strong></span>
+                            </div>
+                        </div>
+                        @for (var i = 0; i < Model.EditionVisitors.Count; i++)
+                        {
+                            var ev = Model.EditionVisitors[i];
+                            <div class="col-md-2 @(i < Model.EditionVisitors.Count - 1 ? "border-right" : "")">
+                                <div class="contact-stat">
+                                    <span>Day @ev.DayNumber: </span>
+                                    @if (i == 0)
+                                    {
+                                        <strong>-</strong>
+                                    }
+                                    else
+                                    {
+                                        <strong>@ev.RepeatVisitCount</strong>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="hpanel hblue">
+                <div class="panel-body">
+                    <h3>
+                        Old/New Visitors
+                    </h3>
+                </div>
+                <div class="panel-footer contact-footer">
+                    <div class="row">
+                        <div class="col-md-2 border-right">
+                            <div class="contact-stat">
+                                <span><strong>Old</strong></span>
+                            </div>
+                        </div>
+                        @for (var i = 0; i < Model.EditionVisitors.Count; i++)
+                        {
+                            var ev = Model.EditionVisitors[i];
+                            <div class="col-md-2 @(i < Model.EditionVisitors.Count - 1 ? "border-right" : "")">
+                                <div class="contact-stat">
+                                    <span>Day @ev.DayNumber: </span> <strong>@ev.OldVisitorCount</strong>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="panel-footer contact-footer">
+                    <div class="row">
+                        <div class="col-md-2 border-right">
+                            <div class="contact-stat">
+                                <span><strong>New</strong></span>
+                            </div>
+                        </div>
+                        @for (var i = 0; i < Model.EditionVisitors.Count; i++)
+                        {
+                            var ev = Model.EditionVisitors[i];
+                            <div class="col-md-2 @(i < Model.EditionVisitors.Count - 1 ? "border-right" : "")">
+                                <div class="contact-stat">
+                                    <span>Day @ev.DayNumber: </span> <strong>@ev.NewVisitorCount</strong>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="hpanel hyellow">
+                <div class="panel-body">
+                    <h3>
+                        Web Links
+                    </h3>
+                </div>
+                <div class="panel-footer contact-footer">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="contact-stat">
+                                <span>Book a Stand Link: </span> <a href="@Model.BookStandUrl.ToExternalLink()" target="_blank" title="Go to profile">@Model.BookStandUrl <i class="fa fa-external-link"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-footer contact-footer">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="contact-stat">
+                                <span>e-Ticket Web Link: </span> <a href="@Model.OnlineInvitationUrl.ToExternalLink()" target="_blank" title="Go to profile">@Model.OnlineInvitationUrl <i class="fa fa-external-link"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @if (Model.EventType.IsConferenceType())
+        {
+            <div class="col-lg-6">
+                <div class="hpanel hblue">
+                    <div class="panel-body">
+                        <h3>
+                            Delegates
+                        </h3>
+                    </div>
+                    <div class="panel-footer contact-footer">
+                        <div class="row">
+                            <div class="col-md-3 border-right">
+                                <div class="contact-stat">
+                                    <span># of Local: </span> <strong>@Model.LocalDelegateCount</strong>
+                                </div>
+                            </div>
+                            <div class="col-md-3 border-right">
+                                <div class="contact-stat">
+                                    <span># of Int'l: </span> <strong>@Model.InternationalDelegateCount</strong>
+                                </div>
+                            </div>
+                            <div class="col-md-3 border-right">
+                                <div class="contact-stat">
+                                    <span># of Int'l Paid: </span> <strong>@Model.InternationalPaidDelegateCount</strong>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="contact-stat">
+                                    <span># of Local Paid: </span> <strong>@Model.LocalPaidDelegateCount</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-footer contact-footer">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="contact-stat">
+                                    <span>Top Countries: </span> <strong>@(Model.DelegateCountries != null ? string.Join(",", Model.DelegateCountries) : "")</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="hpanel hred">
+                <div class="panel-body">
+                    <h3>
+                        Retention Rates
+                    </h3>
+                </div>
+                <div class="panel-footer contact-footer">
+                    <div class="row">
+                        <div class="col-md-6 border-right">
+                            <div class="contact-stat">
+                                <span>Local Rate: </span> <strong>@Model.LocalExhibitorRetentionRate</strong>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="contact-stat">
+                                <span>Int'l Rate: </span> <strong>@Model.InternationalExhibitorRetentionRate</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="hpanel hred">
+                <div class="panel-body">
+                    <h3>
+                        Net Promoter Scores (NPS)
+                    </h3>
+                </div>
+                <div class="panel-footer contact-footer">
+                    <div class="row">
+                        <div class="col-md-6 border-right">
+                            <div class="contact-stat">
+                                <span>Visitor Score: </span> <strong>@Model.NPSScoreVisitor</strong>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="contact-stat">
+                                <span>Exhibitor Score: </span> <strong>@Model.NPSScoreExhibitor</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="hpanel hred">
+                <div class="panel-body">
+                    <h3>
+                        Satisfactions
+                    </h3>
+                </div>
+                <div class="panel-footer contact-footer">
+                    <div class="row">
+                        <div class="col-md-6 border-right">
+                            <div class="contact-stat">
+                                <span>Visitor Score: </span> <strong>@Model.NPSSatisfactionVisitor</strong>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="contact-stat">
+                                <span>Exhibitor Score: </span> <strong>@Model.NPSSatisfactionExhibitor</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="hpanel hyellow">
+                <div class="panel-body">
+                    <h3>
+                        Displayed On
+                    </h3>
+                </div>
+                <div class="panel-footer contact-footer">
+                    <div class="row">
+                        <div class="col-md-1 border-right">
+                            <div class="contact-stat">
+                                <span>Hyve Asia: </span> <strong>@(Model.DisplayOnIteAsia ? Html.Raw("<i class='fa fa-check text-success'></i>") : Html.Raw("<i class='fa fa-minus text-danger'></i>"))</strong>
+                            </div>
+                        </div>
+                        <div class="col-md-1 border-right">
+                            <div class="contact-stat">
+                                <span>Hyve I: </span> <strong>@(Model.DisplayOnIteI ? Html.Raw("<i class='fa fa-check text-success'></i>") : Html.Raw("<i class='fa fa-minus text-danger'></i>"))</strong>
+                            </div>
+                        </div>
+                        <div class="col-md-1 border-right">
+                            <div class="contact-stat">
+                                <span>Hyve Germany: </span> <strong>@(Model.DisplayOnIteGermany ? Html.Raw("<i class='fa fa-check text-success'></i>") : Html.Raw("<i class='fa fa-minus text-danger'></i>"))</strong>
+                            </div>
+                        </div>
+                        <div class="col-md-1 border-right">
+                            <div class="contact-stat">
+                                <span>Hyve Turkey: </span> <strong>@(Model.DisplayOnIteTurkey ? Html.Raw("<i class='fa fa-check text-success'></i>") : Html.Raw("<i class='fa fa-minus text-danger'></i>"))</strong>
+                            </div>
+                        </div>
+                        <div class="col-md-1 border-right">
+                            <div class="contact-stat">
+                                <span>Trade link: </span> <strong>@(Model.DisplayOnTradeLink ? Html.Raw("<i class='fa fa-check text-success'></i>") : Html.Raw("<i class='fa fa-minus text-danger'></i>"))</strong>
+                            </div>
+                        </div>
+                        <div class="col-md-1 border-right">
+                            <div class="contact-stat">
+                                <span>Hyve Moda: </span> <strong>@(Model.DisplayOnIteModa ? Html.Raw("<i class='fa fa-check text-success'></i>") : Html.Raw("<i class='fa fa-minus text-danger'></i>"))</strong>
+                            </div>
+                        </div>
+                        <div class="col-md-1 border-right">
+                            <div class="contact-stat">
+                                <span>Hyve Ukraine: </span> <strong>@(Model.DisplayOnIteUkraine ? Html.Raw("<i class='fa fa-check text-success'></i>") : Html.Raw("<i class='fa fa-minus text-danger'></i>"))</strong>
+                            </div>
+                        </div>
+                        <div class="col-md-1 border-right">
+                            <div class="contact-stat">
+                                <span>Hyve Poland: </span> <strong>@(Model.DisplayOnItePoland ? Html.Raw("<i class='fa fa-check text-success'></i>") : Html.Raw("<i class='fa fa-minus text-danger'></i>"))</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="hpanel hyellow">
+                <div class="panel-body">
+                    <h3>
+                        Displayed On
+                    </h3>
+                </div>
+                <div class="panel-footer contact-footer">
+                    <div class="row">
+                        <div class="col-md-1 border-right">
+                            <div class="contact-stat">
+                                <span>Hyve Build & Interiors: </span> <strong>@(Model.DisplayOnIteBuildInteriors ? Html.Raw("<i class='fa fa-check text-success'></i>") : Html.Raw("<i class='fa fa-minus text-danger'></i>"))</strong>
+                            </div>
+                        </div>
+                        <div class="col-md-1 border-right">
+                            <div class="contact-stat">
+                                <span>Hyve Food & Drink: </span> <strong>@(Model.DisplayOnIteFoodDrink ? Html.Raw("<i class='fa fa-check text-success'></i>") : Html.Raw("<i class='fa fa-minus text-danger'></i>"))</strong>
+                            </div>
+                        </div>
+                        <div class="col-md-1 border-right">
+                            <div class="contact-stat">
+                                <span>Hyve Oil & Gas: </span> <strong>@(Model.DisplayOnIteOilGas ? Html.Raw("<i class='fa fa-check text-success'></i>") : Html.Raw("<i class='fa fa-minus text-danger'></i>"))</strong>
+                            </div>
+                        </div>
+                        <div class="col-md-1 border-right">
+                            <div class="contact-stat">
+                                <span>Hyve Travel & Tourism: </span> <strong>@(Model.DisplayOnIteTravelTourism ? Html.Raw("<i class='fa fa-check text-success'></i>") : Html.Raw("<i class='fa fa-minus text-danger'></i>"))</strong>
+                            </div>
+                        </div>
+                        <div class="col-md-1 border-right">
+                            <div class="contact-stat">
+                                <span>Trade Transport & Logistics: </span> <strong>@(Model.DisplayOnIteTransportLogistics ? Html.Raw("<i class='fa fa-check text-success'></i>") : Html.Raw("<i class='fa fa-minus text-danger'></i>"))</strong>
+                            </div>
+                        </div>
+                        <div class="col-md-1 border-right">
+                            <div class="contact-stat">
+                                <span>Hyve Fashion: </span> <strong>@(Model.DisplayOnIteFashion ? Html.Raw("<i class='fa fa-check text-success'></i>") : Html.Raw("<i class='fa fa-minus text-danger'></i>"))</strong>
+                            </div>
+                        </div>
+                        <div class="col-md-1 border-right">
+                            <div class="contact-stat">
+                                <span>Hyve Security: </span> <strong>@(Model.DisplayOnIteSecurity ? Html.Raw("<i class='fa fa-check text-success'></i>") : Html.Raw("<i class='fa fa-minus text-danger'></i>"))</strong>
+                            </div>
+                        </div>
+                        <div class="col-md-1 border-right">
+                            <div class="contact-stat">
+                                <span>Hyve Beauty: </span> <strong>@(Model.DisplayOnIteBeauty ? Html.Raw("<i class='fa fa-check text-success'></i>") : Html.Raw("<i class='fa fa-minus text-danger'></i>"))</strong>
+                            </div>
+                        </div>
+                        <div class="col-md-1 border-right">
+                            <div class="contact-stat">
+                                <span>Hyve Health Care: </span> <strong>@(Model.DisplayOnIteHealthCare ? Html.Raw("<i class='fa fa-check text-success'></i>") : Html.Raw("<i class='fa fa-minus text-danger'></i>"))</strong>
+                            </div>
+                        </div>
+                        <div class="col-md-1 border-right">
+                            <div class="contact-stat">
+                                <span>Hyve Mining: </span> <strong>@(Model.DisplayOnIteMining ? Html.Raw("<i class='fa fa-check text-success'></i>") : Html.Raw("<i class='fa fa-minus text-danger'></i>"))</strong>
+                            </div>
+                        </div>
+                        <div class="col-md-1 border-right">
+                            <div class="contact-stat">
+                                <span>Hyve Engineering & Industrial: </span> <strong>@(Model.DisplayOnIteEngineeringIndustrial ? Html.Raw("<i class='fa fa-check text-success'></i>") : Html.Raw("<i class='fa fa-minus text-danger'></i>"))</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="hpanel hred">
+                <div class="panel-body">
+                    <h3>
+                        Update Times
+                    </h3>
+                </div>
+                <div class="panel-footer contact-footer">
+                    <div class="row">
+                        <div class="col-md-6 border-right">
+                            <div class="contact-stat">
+                                <span>Update Time: </span> <strong>@Model.UpdateTime</strong>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="contact-stat">
+                                <span>Auto Update Time: </span> <strong>@Model.UpdateTimeByAutoIntegration</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="hpanel hred">
+                <div class="panel-body">
+                    <h3>
+                        Status
+                    </h3>
+                </div>
+                <div class="panel-footer contact-footer">
+                    <div class="row">
+                        <div class="col-md-6 border-right">
+                            <div class="contact-stat">
+                                <span>Event Activity: </span> <strong>@Model.EventActivity</strong>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="contact-stat">
+                                <span>Status: </span> <strong>@Model.Status</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    #edition-details .hpanel .panel-body {
+        padding: 0 10px;
+    }
+
+        #edition-details .hpanel .panel-body h3 {
+            font-size: 16px;
+        }
+</style>

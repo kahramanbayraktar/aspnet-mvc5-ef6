@@ -1,0 +1,103 @@
+﻿@using Ced.BusinessEntities
+@using Ced.Utility.Azure
+@using Ced.Utility.File
+@using ITE.Utility.Extensions
+@model Ced.Web.Models.File.FilesEditModel
+
+<table id="tblEditions" class="table borderless table-hover">
+    <tbody>
+        @if (Model.Files != null)
+        {
+            var files = Model.Files.Where(x => x.EditionFileType == Model.EditionFileType).ToList();
+            if (files.Any())
+            {
+                foreach (var file in files)
+                {
+                    <tr>
+                        <td class="col-lg-7" style="height: 30px">
+                            @if (file.EditionFileType == EditionFileType.ExhibitionPhoto)
+                        {
+                                <a class="pop">
+                                    <img src="@EditionFileType.ExhibitionPhoto.BlobFullUrl(file.FileName)" style="width: 50px" />
+                                    @file.FileName
+                                </a>
+                            }
+                            else
+                            {
+                                <i class="fa fa-@file.FileTypeIcon fa-lg text-info"></i>
+                                @file.FileName
+                            }
+                        </td>
+                        <td class="col-lg-2">
+                            <time class="timeago" datetime="@file.CreatedOn.ToUniversalTime().ToString(@"yyyy-MM-dd HH:mm:ssZ")"></time>
+                        </td>
+                        <td class="col-lg-2">
+                            @file.CreatedByFullName
+                        </td>
+                        <td style="text-align: center" class="col-lg-1 nowrap">
+                            @if (file.Downloadable(Model.CurrentUser))
+                            {
+                                <a href="@Url.Action("Download", "File", new {fileId = file.FileId})" title="Click to download">
+                                    <i class="fa fa-download"></i>
+                                </a>
+                            }
+                            &nbsp;
+                            @if (file.Deletable(Model.CurrentUser) && !Model.IsCancelled)
+                            {
+                                <a href="@Url.Action("_Delete", "File", new {fileId = file.FileId, fileType = Model.EditionFileType.GetDescription()})" class="deleteFile" target="_blank" title="Click to delete">
+                                    <i class="fa fa-trash-o"></i>
+                                </a>
+                            }
+                            @if (Model.EditionFileType == EditionFileType.PostShowReport)
+                            {
+                                <text>&nbsp;</text>
+                                @*<p id="public-link-@(file.FileId)" style="display: none">@EditionFileType.PostShowReport.BlobFullUrl(file.FileName)</p>*@
+                                <a href="#" data-href="@EditionFileType.PostShowReport.BlobFullUrl(file.FileName)" id="public-link-@(file.FileId)" class="copy-url" title="Copy the public url">
+                                    <i class="fa fa-copy"></i>
+                                </a>
+                                @*<button title="Copy the file url" onclick="copyToClipboard('#public-link-@(file.FileId)')"><i class="fa fa-copy"></i></button>*@
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="6" style="text-align: center">
+                        No files found
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+<script>
+    $(document).ready(function () {
+        $("time.timeago").timeago();
+    });
+
+    function copyToClipboard(element) {
+        var $temp = $("<input>");
+        $("body").append($temp);
+        var elm = $("#" + element);
+        var value;
+        if (elm.is("a"))
+            value = elm.attr("data-href");
+        else
+            value = elm.text();
+        $temp.val(value).select();
+        if (document.execCommand("copy")) {
+            swal("Copied!", value);
+        } else {
+            swal("Failed to copy! Please select the text below to copy.", value);
+        }
+        $temp.remove();
+    }
+
+    $(".copy-url").on("click", function (e) {
+        e.preventDefault();
+        copyToClipboard(this.id);
+    });
+</script>

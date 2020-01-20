@@ -1,0 +1,295 @@
+﻿@using Ced.BusinessEntities
+@using Ced.Utility
+@using Ced.Utility.Azure
+@using Ced.Web.Models
+@using Ced.Web.Models.Notification
+@using Ced.Web.Models.User
+@using ITE.Utility.Extensions
+
+@{
+    var currentCedUser = ViewBag.CurrentCedUser as CedUser;
+    var notifs = ViewBag.Notifications as IList<NotificationListItemModel>;
+    var recentViews = ViewBag.RecentViews as IList<RecentViewListModel>;
+    var unreadNotifCount = Convert.ToInt32(ViewBag.UnreadNotificationCount);
+}
+
+<div class="color-line">
+</div>
+<div id="logo" class="light-version" style="padding: 5px !important; background-color: #fff">
+    <a href="~/">
+        <img src="@Url.Content("~/Content/images/logo-small.png")" />
+    </a>
+</div>
+<nav role="navigation">
+    <div class="header-link hide-menu">
+        <i class="fa fa-bars"></i>
+    </div>
+    <div class="small-logo">
+        <span class="text-primary">CENTRAL EVENTS DATABASE</span>
+    </div>
+    <div class="navbar-form-custom">
+        <div class="form-group">
+            <input id="searchBox" name="Id" type="text" class="form-control" value="" style="padding-top: 12px" />
+        </div>
+    </div>
+    <div class="mobile-menu">
+        <button type="button" class="navbar-toggle mobile-menu-toggle" data-toggle="collapse" data-target="#mobile-collapse">
+            <i class="fa fa-chevron-down"></i>
+        </button>
+        <div class="collapse mobile-navbar" id="mobile-collapse">
+            <ul class="nav navbar-nav">
+                @if (!Request.IsAuthenticated)
+                {
+                    <li>
+                        @Html.ActionLink("Log in", "Login", "User")
+                    </li>
+                }
+                else
+                {
+                    <li>
+                        @Html.ActionLink("Log out", "Logout", "User")
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+    <div class="navbar-right">
+        <ul class="nav navbar-nav no-borders">
+            @if (currentCedUser != null && currentCedUser.IsSuperAdmin)
+            {
+                <li class="dropdown">
+                    <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+                        <i class="pe-7s-config"></i>
+                    </a>
+                    <div class="dropdown-menu hdropdown bigmenu animated flipInX">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <a href="@Url.Action("Index", "User")">
+                                            <i class="pe pe-7s-users text-primary"></i>
+                                            <h5>Users</h5>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a href="@Url.Action("Index", "UserRole")">
+                                            <i class="pe pe-7s-id text-warning"></i>
+                                            <h5>User Roles</h5>
+                                        </a>
+
+                                    </td>
+                                    <td>
+                                        <a href="@Url.Action("Index", "EventDirector")">
+                                            <i class="pe pe-7s-users text-success"></i>
+                                            <h5>Event Directors</h5>
+                                        </a>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <a href="@Url.Action("Index", "Log")">
+                                            <i class="pe pe-7s-news-paper text-danger"></i>
+                                            <h5>Logs</h5>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a href="@Url.Action("Index", "EmailNotification")">
+                                            <i class="pe pe-7s-mail text-info"></i>
+                                            <h5>Email Notifs</h5>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a href="@Url.Action("Index", "AdminEdition")">
+                                            <i class="pe pe-7s-menu text-primary-2"></i>
+                                            <h5>Editions</h5>
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <a href="@Url.Action("Index", "ConfigSetting")">
+                                            <i class="pe pe-7s-config text-warning"></i>
+                                            <h5>Config</h5>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a href="@Url.Action("Index", "Task")">
+                                            <i class="pe pe-7s-loop text-primary-2"></i>
+                                            <h5>Tasks</h5>
+                                        </a>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </li>
+            }
+            <li class="dropdown">
+                <a class="dropdown-toggle label-menu-corner" id="recentViews" href="#" data-toggle="dropdown" title="Recently viewed events">
+                    <i class="pe-7s-look"></i>
+                </a>
+                <ul class="dropdown-menu hdropdown notification animated flipInX">
+                    @{
+                        if (recentViews != null && recentViews.Any())
+                        {
+                            <li class="summary"><a href="#">Recently viewed events</a></li>
+                            foreach (var view in recentViews)
+                            {
+                                <li style="padding: 0 !important">
+                                    <table class="no-borders">
+                                        <tr>
+                                            <td class="col-md-2" style="height: 80px">
+                                                <a href="@Url.Action("Index", "Edition", new {eventId = view.EntityId, name = view.Title.ToUrlString()})">
+                                                    <img src="@EditionImageType.WebLogo.BlobFullUrl(view.Logo)" style="width: 80px" onerror="this.onerror = null; this.src = '@EditionImageType.WebLogo.EditionDefaultImageUrl()';" />
+                                                </a>
+                                            </td>
+                                            <td class="col-md-10" style="height: 80px; white-space: nowrap">
+                                                <a href="@Url.Action("Index", "Edition", new {eventId = view.EntityId, name = view.Title.ToUrlString()})">
+                                                    @view.Title
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </li>
+                            }
+                        }
+                        else
+                        {
+                            <li style="text-align: center !important">
+                                No recent views
+                            </li>
+                        }
+                    }
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a class="dropdown-toggle label-menu-corner" id="unreadNotification" href="#" data-toggle="dropdown" title="Notifications">
+                    <i class="pe-7s-bell"></i>
+                    <span id="unreadNotificationCount" class="label @(unreadNotifCount > 0 ? "label-success" : "")">
+                        @(unreadNotifCount > 0 ? unreadNotifCount.ToString() : "")
+                    </span>
+                </a>
+                <ul id="notificationsdiv" class="dropdown-menu hdropdown notification animated flipInX"></ul>
+            </li>
+            <li class="dropdown">
+                <a class="dropdown-toggle" href="#" data-toggle="dropdown" title="Help & support">
+                    <i class="pe-7s-paper-plane"></i>
+                </a>
+                <div class="dropdown-menu hdropdown animated flipInX">
+                    @{ Html.RenderPartial("~/Views/Shared/_HelpRequest.cshtml", new HelpRequestModel()); }
+                </div>
+            </li>
+            <li class="dropdown">
+                <a href="@Url.Action("Logout", "User")" title="Log out">
+                    <i class="pe-7s-power pe-rotate-90"></i>
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<script src="~/Scripts/jquery.signalR-2.2.2.min.js" type="text/javascript"></script>
+<script src="~/signalr/hubs"></script>
+
+<script>
+    $("#unreadNotification").on("click", function () {
+        getNotifications();
+    })
+
+    function getNotifications(signalRCall) {
+        var notifCount = $("#unreadNotificationCount");
+        notifCount.fadeOut();
+        $.ajax({
+            url: "@Url.Action("_GetNotifications", "Notification")",
+            type: "POST",
+            dataType: "json",
+            success: function (result) {
+                $("#notificationsdiv").html(result.data);
+                if (signalRCall) {
+                    notifCount.removeClass("label-success").fadeOut(
+                        function () {
+                            notifCount.addClass("label-danger").text(result.count).fadeIn();
+                        })
+                }
+                else { // the bell icon was clicked
+                    if (result.count > 0) {
+                        notifCount.fadeIn();
+                    } else {
+                        var isRed = notifCount.hasClass("label-danger");
+                        if (isRed) {
+                            notifCount.removeClass("label-danger").fadeOut(
+                                function () {
+                                    notifCount.addClass("label-success").fadeIn();
+                                })
+                        }
+                    }
+                }
+            },
+            error: function (xhr, textStatus, error) {
+            }
+        });
+    }
+</script>
+
+<script>
+    $(function () {
+        // Reference the auto-generated proxy for the hub.
+        var progress = $.connection.notificationHub;
+
+        // Create a function that the hub can call back to display messages.
+        progress.client.DisplayNotification = function (title, url) {
+
+            toastr.options = {
+                positionClass: "toast-bottom-right",
+                timeOut: 30000
+            };
+            toastr.warning(title);
+            getNotifications(true);
+        };
+
+        $.connection.hub.start().done(function () {
+            var connectionId = $.connection.hub.id;
+        });
+    });
+</script>
+
+<script>
+    var eventUrl = '@Url.Action("_SearchEvents", "Event")';
+    var pageSize = 20;
+
+    $('#searchBox').select2(
+        {
+            placeholder: 'Search events',
+            minimumInputLength: 3,
+            allowClear: true,
+            ajax: {
+                quietMillis: 150,
+                url: eventUrl,
+                dataType: 'json',
+                data: function (term, page) {
+                    return {
+                        pageSize: pageSize,
+                        pageNum: page,
+                        searchTerm: term
+                    };
+                },
+                results: function (data, page) {
+                    var more = (page * pageSize) < data.Total;
+                    return { results: data.Results, more: more };
+                }
+            }
+        });
+    $("#searchBox").on("select2-selecting", function (e) {
+        @*window.location.href = '@Url.Action("Index", "Edition")' + '?eventId=' + e.val + '&name=' + e.choice.text.replace(/[^a-z0-9]+/gi, '-').toLowerCase();*@
+        @*window.location.href = '@Url.RouteUrl("EditionsByEvent")' + '?eventId=' + e.val + '&name=' + e.choice.text.replace(/[^a-z0-9]+/gi, '-').toLowerCase();*@
+        window.location.href = '@Url.Content("~/editions/")' + e.val + '/' + e.choice.text.replace(/[^a-z0-9]+/gi, '-').toLowerCase();
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        $("time.timeago").timeago();
+    });
+</script>

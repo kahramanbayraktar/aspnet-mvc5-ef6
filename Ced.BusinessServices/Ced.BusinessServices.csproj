@@ -1,0 +1,218 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A8D5545A-9D5B-4779-9E3B-B4CA6634F39E}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Ced.BusinessServices</RootNamespace>
+    <AssemblyName>Ced.BusinessServices</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>CedBusinessServices.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AutoMapper, Version=5.2.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.5.2.0\lib\net45\AutoMapper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ITE.AzureStorage, Version=1.0.0.0, Culture=neutral, PublicKeyToken=3c8b71054be3bf0b, processorArchitecture=MSIL">
+      <HintPath>..\packages\ITE.AzureStorage.1.0.1\lib\net452\ITE.AzureStorage.dll</HintPath>
+    </Reference>
+    <Reference Include="ITE.Logger, Version=1.0.0.0, Culture=neutral, PublicKeyToken=dc8c4781598a637e, processorArchitecture=MSIL">
+      <HintPath>..\packages\ITE.Logger.1.0.0\lib\net452\ITE.Logger.dll</HintPath>
+    </Reference>
+    <Reference Include="ITE.Utility, Version=1.0.0.0, Culture=neutral, PublicKeyToken=1b9cb81c7e159909, processorArchitecture=MSIL">
+      <HintPath>..\packages\ITE.Utility.1.0.0\lib\net452\ITE.Utility.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Azure.KeyVault.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Azure.KeyVault.Core.1.0.0\lib\net40\Microsoft.Azure.KeyVault.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Data.Edm, Version=5.6.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Data.Edm.5.6.4\lib\net40\Microsoft.Data.Edm.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Data.OData, Version=5.6.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Data.OData.5.6.4\lib\net40\Microsoft.Data.OData.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Data.Services.Client, Version=5.6.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Data.Services.Client.5.6.4\lib\net40\Microsoft.Data.Services.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.Configuration, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.WindowsAzure.ConfigurationManager.3.2.3\lib\net40\Microsoft.WindowsAzure.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.Storage, Version=7.2.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\WindowsAzure.Storage.7.2.1\lib\net40\Microsoft.WindowsAzure.Storage.dll</HintPath>
+    </Reference>
+    <Reference Include="Mvc.Mailer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=fcd3ca614982a8c2, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Ced.Web\MvcMailer\Mvc.Mailer.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Spatial, Version=5.6.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Spatial.5.6.4\lib\net40\System.Spatial.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Mvc">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Auth\Implementations\ActiveDirectoryUserServices.cs" />
+    <Compile Include="Auth\Implementations\ApplicationServices.cs" />
+    <Compile Include="Auth\Implementations\IndustryServices.cs" />
+    <Compile Include="Auth\Implementations\RegionServices.cs" />
+    <Compile Include="Auth\Implementations\RoleServices.cs" />
+    <Compile Include="Auth\Implementations\UserRoleServices.cs" />
+    <Compile Include="Auth\Implementations\UserServices.cs" />
+    <Compile Include="Auth\Interfaces\IActiveDirectoryUserServices.cs" />
+    <Compile Include="Auth\Interfaces\IApplicationServices.cs" />
+    <Compile Include="Auth\Interfaces\IIndustryServices.cs" />
+    <Compile Include="Auth\Interfaces\IRegionServices.cs" />
+    <Compile Include="Auth\Interfaces\IRoleServices.cs" />
+    <Compile Include="Auth\Interfaces\IUserRoleServices.cs" />
+    <Compile Include="Auth\Interfaces\IUserServices.cs" />
+    <Compile Include="Implementations\EditionPaymentScheduleServices.cs" />
+    <Compile Include="Implementations\EditionDiscountApproverServices.cs" />
+    <Compile Include="Implementations\EditionSectionServices.cs" />
+    <Compile Include="Implementations\KeyVisitorServices.cs" />
+    <Compile Include="Implementations\CountryServices.cs" />
+    <Compile Include="Implementations\EditionKeyVisitorServices.cs" />
+    <Compile Include="Implementations\EditionVisitorServices.cs" />
+    <Compile Include="Implementations\SubscriptionServices.cs" />
+    <Compile Include="Implementations\EditionCohostServices.cs" />
+    <Compile Include="Implementations\FileServices.cs" />
+    <Compile Include="Helpers\Constants.cs" />
+    <Compile Include="Helpers\LanguageHelper.cs" />
+    <Compile Include="Helpers\ExternalLogHelper.cs" />
+    <Compile Include="Interfaces\IEditionPaymentScheduleServices.cs" />
+    <Compile Include="Interfaces\IEditionDiscountApproverServices.cs" />
+    <Compile Include="Interfaces\IEditionSectionServices.cs" />
+    <Compile Include="Interfaces\IKeyVisitorServices.cs" />
+    <Compile Include="Interfaces\ICountryServices.cs" />
+    <Compile Include="Interfaces\IEditionKeyVisitorServices.cs" />
+    <Compile Include="Interfaces\IEditionVisitorServices.cs" />
+    <Compile Include="Interfaces\IEditionCohostServices.cs" />
+    <Compile Include="Interfaces\ISubscriptionServices.cs" />
+    <Compile Include="Interfaces\IFileServices.cs" />
+    <Compile Include="Interfaces\IServiceBase.cs" />
+    <Compile Include="Interfaces\ITaskServices.cs" />
+    <Compile Include="Models\EditionStartDiff.cs" />
+    <Compile Include="ServiceBase.cs" />
+    <Compile Include="Implementations\SocialMediaServices.cs" />
+    <Compile Include="Implementations\EditionTranslationSocialMediaServices.cs" />
+    <Compile Include="Implementations\EditionCountryServices.cs" />
+    <Compile Include="Implementations\EventDirectorServices.cs" />
+    <Compile Include="Implementations\EditionServices.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Helpers\EditionServiceHelper.cs" />
+    <Compile Include="Interfaces\ISocialMediaServices.cs" />
+    <Compile Include="Interfaces\IEditionTranslationSocialMediaServices.cs" />
+    <Compile Include="Interfaces\IEditionCountryServices.cs" />
+    <Compile Include="Interfaces\IEventDirectorServices.cs" />
+    <Compile Include="Models\ICedRestResponse.cs" />
+    <Compile Include="Models\CedRestResponse.cs" />
+    <Compile Include="Models\EditionStat.cs" />
+    <Compile Include="Implementations\StatisticServices.cs" />
+    <Compile Include="Implementations\EditionTranslationServices.cs" />
+    <Compile Include="Interfaces\IStatisticServices.cs" />
+    <Compile Include="Interfaces\ILogServices.cs" />
+    <Compile Include="Extensions\LinqExtensions.cs" />
+    <Compile Include="Implementations\LogServices.cs" />
+    <Compile Include="Implementations\NotificationServices.cs" />
+    <Compile Include="Implementations\EventServices.cs" />
+    <Compile Include="Interfaces\IEditionTranslationServices.cs" />
+    <Compile Include="Interfaces\IEditionServices.cs" />
+    <Compile Include="Interfaces\INotificationServices.cs" />
+    <Compile Include="Interfaces\IEventServices.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Implementations\TaskServices.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="CedBusinessServices.snk" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Ced.BusinessEntities\Ced.BusinessEntities.csproj">
+      <Project>{42055dad-e7dd-4bfa-9047-bdf63972b3c2}</Project>
+      <Name>Ced.BusinessEntities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ced.Data\Ced.Data.csproj">
+      <Project>{058b310b-fdfb-4089-a2a8-716cfd2bc92b}</Project>
+      <Name>Ced.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ced.DwStaging\Ced.DwStaging.csproj">
+      <Project>{a230a3a0-7318-4e5e-8fa8-75e0d8201d44}</Project>
+      <Name>Ced.DwStaging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ced.Utility\Ced.Utility.csproj">
+      <Project>{d4809200-9c5d-426b-81ba-d543a0eede53}</Project>
+      <Name>Ced.Utility</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

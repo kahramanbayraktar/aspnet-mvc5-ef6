@@ -1,0 +1,138 @@
+﻿@model Ced.Web.Models.User.AccessRequestModel
+
+@*TODO Bundle & Scripts.Render*@
+@*<link rel="stylesheet" href="~/Vendor/sweetalert/lib/sweet-alert.css" type="text/css" />*@
+
+<script src="@Url.Content("~/Vendor/jquery-validation/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+@*<script src="@Url.Content("~/Vendor/sweetalert/lib/sweet-alert.min.js")" type="text/javascript"></script>*@
+<script src="@Url.Content("~/Scripts/bootstrap-maxlength.min.js")" type="text/javascript"></script>
+
+<div class="register-container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="hpanel">
+                <div class="panel-body">
+                    <div>
+                        <img src="@Url.Content("~/Content/images/logo.png")" />
+                    </div>
+                    <br /><br />
+                    @using (Html.BeginForm("_RequestAccess", "User", FormMethod.Post, new { id = "accessRequestForm" }))
+                    {
+                        <div class="row">
+                            <div class="form-group col-lg-6">
+                                <label>First Name</label>
+                                @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label>Last Name</label>
+                                @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label>Corporate Email</label>
+                                @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", placeholder = "event.director@hyve.group" } })
+                                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label>Office / Company Name</label>
+                                @Html.EditorFor(model => model.OfficeName, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.OfficeName, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group col-lg-12">
+                                <label>Event Names</label>
+                                @Html.TextAreaFor(model => model.EventNames, new { @class = "form-control maxlength", rows = 2, placeholder = "State the name of the event(s) you're in charge of as Event Director", maxlength = "500" })
+                                @Html.ValidationMessageFor(model => model.EventNames, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group col-lg-12">
+                                <label>Additional Remarks / Notes</label>
+                                @Html.TextAreaFor(model => model.AdditionalNotes, new { @class = "form-control maxlength", rows = 5, maxlength = "1000" })
+                                @Html.ValidationMessageFor(model => model.AdditionalNotes, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div style="float: left">
+                                @Html.ActionLink("Return to log in", "Login", "User")
+                            </div>
+                            <div>
+                                <button class="btn btn-orange" id="btnSubmit">Submit Help Request</button>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            © 2016 Hyve Group PLC. All rights reserved.
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        //$("#editExhibitorVisitorStatsForm").validate({
+        //    rules: {
+        //        FirstName: {
+        //            required: true
+        //        },
+        //        LastName: {
+        //            required: true
+        //        }
+        //    }
+        //});
+
+        $("#accessRequestForm").submit(function (e) {
+            //var validator = $("form").validate();
+            var btn = $("#btnSubmit").html("Submitting...").attr("disabled", true);
+            e.preventDefault();
+            if ($(this).valid()) {
+                $.ajax({
+                    url: this.action,
+                    type: this.method,
+                    data: $(this).serialize(),
+                    dataType: "json",
+                    success: function (result) {
+                        if (result.success == true) {
+                            swal({
+                                title: "Success!",
+                                text: "We are in receipt of your request. You will be contacted by Hyve HelpDesk team.",
+                                type: "success"
+                            });
+                            $("#accessRequestForm").trigger("reset");
+                            btn.html("Submit Help Request").attr("disabled", false);
+                        } else {
+                            swal({
+                                title: "Error!",
+                                text: result.message,
+                                type: "error"
+                            });
+                            btn.html("Submit Help Request").attr("disabled", false);
+                        }
+                    },
+                    error: function (xhr, textStatus, error) {
+                        swal({
+                            title: "Error!",
+                            text: error,
+                            type: "error"
+                        });
+                        btn.html("Submit Help Request").attr("disabled", false);
+                    }
+                });
+            } else {
+                btn.html("Submit Help Request").attr("disabled", false);
+            }
+            return false;
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        $('.maxlength').maxlength({
+            alwaysShow: true
+        });
+    });
+</script>

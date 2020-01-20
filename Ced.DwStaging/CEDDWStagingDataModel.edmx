@@ -1,0 +1,159 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Ced.DWStaging.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Edition">
+          <Key>
+            <PropertyRef Name="DWEventID" />
+          </Key>
+          <Property Name="DWEventID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EventBEID" Type="nvarchar" MaxLength="60" Nullable="false" />
+          <Property Name="EventMasterCode" Type="nvarchar" MaxLength="60" />
+          <Property Name="EventMaster" Type="nvarchar" MaxLength="60" Nullable="false" />
+          <Property Name="EventRegion" Type="nvarchar" MaxLength="60" />
+          <Property Name="EventCountryName" Type="nvarchar" MaxLength="255" />
+          <Property Name="EventCity" Type="nvarchar" MaxLength="60" />
+          <Property Name="EventManagingOfficeName" Type="nvarchar" MaxLength="60" Nullable="false" />
+          <Property Name="EventType" Type="nvarchar" MaxLength="60" Nullable="false" />
+          <Property Name="EventIndustry" Type="nvarchar" MaxLength="60" Nullable="false" />
+          <Property Name="EventSubIndustry" Type="nvarchar" MaxLength="60" Nullable="false" />
+          <Property Name="EventFrequency" Type="nvarchar" MaxLength="60" Nullable="false" />
+          <Property Name="EventName" Type="nvarchar" MaxLength="60" Nullable="false" />
+          <Property Name="EventVenue" Type="nvarchar" MaxLength="60" Nullable="false" />
+          <Property Name="Edition" Type="int" />
+          <Property Name="EventStartDate" Type="int" />
+          <Property Name="EventEndDate" Type="int" />
+          <Property Name="EventDirector" Type="nvarchar" MaxLength="60" />
+          <Property Name="EventBandClassification" Type="nvarchar" MaxLength="60" Nullable="false" />
+          <Property Name="PreviousEditionDWEventID" Type="int" />
+          <Property Name="EventLongNameLocal" Type="nvarchar" MaxLength="255" />
+          <Property Name="EventLongNameInternational" Type="nvarchar" MaxLength="255" />
+          <Property Name="EventNameReporting" Type="nvarchar" MaxLength="255" />
+          <Property Name="EventDirectorEmail" Type="nvarchar" MaxLength="255" />
+          <Property Name="EventFYStart" Type="nvarchar" MaxLength="60" />
+          <Property Name="EventFYEnd" Type="nvarchar" MaxLength="60" />
+          <Property Name="EventActivity" Type="nvarchar" MaxLength="60" />
+          <Property Name="DirectorManagingOfficeName" Type="nvarchar" MaxLength="60" />
+          <Property Name="EVENTTYPEBEID" Type="nvarchar" MaxLength="10" />
+          <Property Name="EventBusinessClassification" Type="nvarchar" MaxLength="60" />
+          <Property Name="EVENTOWNERSHIPBEID" Type="nvarchar" MaxLength="10" />
+          <Property Name="EVENTOWNERSHIP" Type="nvarchar" MaxLength="60" />
+        </EntityType>
+        <EntityContainer Name="Ced.DwStagingStoreContainer">
+          <EntitySet Name="Edition" EntityType="Self.Edition" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Ced.DwStaging" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="Ced.DwStagingEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Editions" EntityType="Ced.DwStaging.Edition" />
+        </EntityContainer>
+        <EntityType Name="Edition">
+          <Key>
+            <PropertyRef Name="DWEventID" />
+          </Key>
+          <Property Name="DWEventID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EventBEID" Type="String" Nullable="false" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="EventMasterCode" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="EventMaster" Type="String" Nullable="false" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="EventRegion" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="EventCountryName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="EventCity" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="EventManagingOfficeName" Type="String" Nullable="false" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="EventType" Type="String" Nullable="false" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="EventIndustry" Type="String" Nullable="false" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="EventSubIndustry" Type="String" Nullable="false" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="EventFrequency" Type="String" Nullable="false" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="EventName" Type="String" Nullable="false" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="EventVenue" Type="String" Nullable="false" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="EditionNo" Type="Int32" />
+          <Property Name="EventStartDate" Type="Int32" />
+          <Property Name="EventEndDate" Type="Int32" />
+          <Property Name="EventDirector" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="EventBandClassification" Type="String" Nullable="false" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="PreviousEditionDWEventID" Type="Int32" />
+          <Property Name="EventLongNameLocal" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="EventLongNameInternational" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="EventNameReporting" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="EventDirectorEmail" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="EventFYStart" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="EventFYEnd" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="EventActivity" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="DirectorManagingOfficeName" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="EVENTTYPEBEID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="EventBusinessClassification" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="EVENTOWNERSHIPBEID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="EVENTOWNERSHIP" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Ced.DWStagingStoreContainer" CdmEntityContainer="Ced.DWStagingEntities">
+          <EntitySetMapping Name="Editions">
+            <EntityTypeMapping TypeName="Ced.DWStaging.Edition">
+              <MappingFragment StoreEntitySet="Edition">
+                <ScalarProperty Name="EVENTOWNERSHIP" ColumnName="EVENTOWNERSHIP" />
+                <ScalarProperty Name="EVENTOWNERSHIPBEID" ColumnName="EVENTOWNERSHIPBEID" />
+                <ScalarProperty Name="EventBusinessClassification" ColumnName="EventBusinessClassification" />
+                <ScalarProperty Name="EVENTTYPEBEID" ColumnName="EVENTTYPEBEID" />
+                <ScalarProperty Name="DirectorManagingOfficeName" ColumnName="DirectorManagingOfficeName" />
+                <ScalarProperty Name="EventActivity" ColumnName="EventActivity" />
+                <ScalarProperty Name="EventFYEnd" ColumnName="EventFYEnd" />
+                <ScalarProperty Name="EventFYStart" ColumnName="EventFYStart" />
+                <ScalarProperty Name="EventDirectorEmail" ColumnName="EventDirectorEmail" />
+                <ScalarProperty Name="EventNameReporting" ColumnName="EventNameReporting" />
+                <ScalarProperty Name="EventLongNameInternational" ColumnName="EventLongNameInternational" />
+                <ScalarProperty Name="EventLongNameLocal" ColumnName="EventLongNameLocal" />
+                <ScalarProperty Name="PreviousEditionDWEventID" ColumnName="PreviousEditionDWEventID" />
+                <ScalarProperty Name="EventBandClassification" ColumnName="EventBandClassification" />
+                <ScalarProperty Name="EventDirector" ColumnName="EventDirector" />
+                <ScalarProperty Name="EventEndDate" ColumnName="EventEndDate" />
+                <ScalarProperty Name="EventStartDate" ColumnName="EventStartDate" />
+                <ScalarProperty Name="EditionNo" ColumnName="Edition" />
+                <ScalarProperty Name="EventVenue" ColumnName="EventVenue" />
+                <ScalarProperty Name="EventName" ColumnName="EventName" />
+                <ScalarProperty Name="EventFrequency" ColumnName="EventFrequency" />
+                <ScalarProperty Name="EventSubIndustry" ColumnName="EventSubIndustry" />
+                <ScalarProperty Name="EventIndustry" ColumnName="EventIndustry" />
+                <ScalarProperty Name="EventType" ColumnName="EventType" />
+                <ScalarProperty Name="EventManagingOfficeName" ColumnName="EventManagingOfficeName" />
+                <ScalarProperty Name="EventCity" ColumnName="EventCity" />
+                <ScalarProperty Name="EventCountryName" ColumnName="EventCountryName" />
+                <ScalarProperty Name="EventRegion" ColumnName="EventRegion" />
+                <ScalarProperty Name="EventMaster" ColumnName="EventMaster" />
+                <ScalarProperty Name="EventMasterCode" ColumnName="EventMasterCode" />
+                <ScalarProperty Name="EventBEID" ColumnName="EventBEID" />
+                <ScalarProperty Name="DWEventID" ColumnName="DWEventID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

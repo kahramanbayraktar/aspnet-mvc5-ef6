@@ -1,0 +1,61 @@
+﻿@using Ced.BusinessServices.Helpers
+@using Ced.Utility
+@using ITE.Utility.Extensions
+@model Ced.Web.Models.Edition.EditionDetailsModel
+
+@{
+    ViewBag.Title = Model.EditionName;
+}
+
+@if (!Request.Url.AbsoluteUri.ToLower().Contains("/pdf"))
+{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div class="pull-right">
+                    <a class="btn btn-primary" href="@Url.Action("ExportToPdf", "Edition", new { id = Model.EditionId, name = Model.EventName.ToUrlString(), lang = Model.LanguageCode })" target="_blank"><i class="fa fa-file-pdf-o"></i> Export to PDF</a>
+                    <a class="btn btn-orange" href="@Url.Action("Index", "Dashboard", new {id = Model.EventId, name = Model.EventName.ToUrlString()})" title="Dashboard for @Model.EventName" target="_blank"><i class="fa fa-line-chart"></i> Dashboard</a>
+                    <div class="btn-group">
+                        <button data-toggle="dropdown" class="btn btn-warning dropdown-toggle"><i class="fa fa-flag-o"></i> @(Model.LanguageCode.ToEnumFromDescription<LanguageHelper.Languages>()) <span class="caret"></span></button>
+                        <ul id="langDropdown" class="dropdown-menu">
+                            @foreach (LanguageHelper.Languages lang in Enum.GetValues(typeof(LanguageHelper.Languages)))
+                            {
+                                <li><a href="@Url.Action("Details", "Edition", new {id = Model.EditionId, name = Model.EditionName.ToUrlString(), lang = lang.GetDescription()})">@lang.ToString()</a></li>    
+                            }
+                        </ul>
+                    </div>
+                    <a class="btn btn-success" href="@Url.Action("Edit", "Edition", new {id = Model.EditionId, name = Model.EventName.ToUrlString(), lang = Model.LanguageCode})"><i class="fa fa-pencil"></i> Edit</a>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    Edition Details
+                </h2>
+                <div id="hbreadcrumb" class="pull-left">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li><a href="@Url.Action("Index", "Dashboard")">Main</a></li>
+                        <li>
+                            <a href="@Url.RouteUrl("EditionsIndex")">Event Editions</a>
+                        </li>
+                        <li class="active">
+                            <span>Edition Details</span>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@if (Request.Url.AbsoluteUri.ToLower().Contains("/pdf"))
+{
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-lg-12">
+                <h3 class="font-bold">
+                    @Model.EditionName
+                </h3>
+            </div>
+        </div>
+    </div>
+}
+
+@(Html.Partial("_Details", Model))

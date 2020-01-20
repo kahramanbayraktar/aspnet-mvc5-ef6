@@ -1,0 +1,438 @@
+﻿@using Ced.BusinessEntities
+@using Ced.Resources
+@using Ced.Utility.Edition
+@using Ced.Web.Models.Edition
+@model EditionEditExhibitorVisitorStatsModel
+
+@using (Html.BeginForm("_SaveExhibitiorVisitorStats", "Edition", FormMethod.Post, new { id = "editExhibitorVisitorStatsForm" }))
+{
+    @Html.HiddenFor(model => model.EditionId)
+    @Html.HiddenFor(model => model.EventId)
+    @Html.HiddenFor(model => model.LanguageCode)
+    @Html.HiddenFor(model => model.EventType)
+    @Html.HiddenFor(model => model.EventActivity)
+
+    var displayKeyVisitorSection = Model.CurrentUser.IsAdmin || Model.CurrentUser.IsSuperAdmin || Model.CurrentUser.IsEventBasedAdmin;
+
+    if (!Model.CurrentUser.IsViewer)
+    {
+        <div class="text-right m-t-xs">
+            <a class="btn btn-default prev" href="javascript:void(0)"><i class="fa fa-angle-left"></i> @Resources.Previous</a>
+            <button class="btn btn-success btnSave3" id="btnSave3" @(!Model.IsAlive || Model.IsCancelled ? "disabled=\"disabled\"" : "")>
+                Save
+            </button>
+        </div>
+    }
+
+    <div class="row">
+        <div class="col-lg-3 text-center">
+            <i class="pe-7s-users fa-5x text-muted"></i>
+            <p class="small m-t-md">
+                <ul class="wizard-notf">
+                    <li>
+                        Number of Visitors (Local or International) is a metric that is used to monitor an event's marketing and visitor promotion performance. IMPORTANT: The visitor numbers to be provided herein should be the actual results gathered from the turnstiles/entrance systems and under no circumstances should include published/official results that may subject to modifications. The Group stores this information behind corporate systems and addresses these metrics only for internal assessment/analysis purposes.
+                        <br />
+                        <br />
+                    </li>
+                    <li>
+                        Number of Exhibiting Countries represents the total number of different countries represented at an event.
+                        <br />
+                        <br />
+                    </li>
+                    <li>
+                        Number of Visitor Countries Represented taps into the geographical diversity of an event's visitor base. Receiving only 1 visitor from a country doesn't change the fact that that country has been represented, hence it should be counted towards this metric.
+                        <br />
+                        <br />
+                    </li>
+                    <li>
+                        Number of E-tickets Issued represents the total number of website or mobile visitors who signed up to receive a valid badge/e-ticket from an event's web/mobile registration forms.
+                        <br />
+                        <br />
+                    </li>
+                    <li>
+                        Number of Actual Visitors with E-Tickets is a metric that is used to capture an event's visitors who attended the event as a result of completing an E-ticket / Online Visitor Registration Form.
+                        <br />
+                        <br />
+                    </li>
+                    <li>
+                        Delegate Statistics section is only applicable to conferences and confex events.
+                        <br />
+                        <br />
+                    </li>
+                    <li>
+                        The data that will be submitted by Event Directors supports multi-lingual entry. Since most of our shows belong to geographies with localisation needs and English language at the same time, an Event Director has the flexibility to populate this information in a scalable format. The 4 steps, through which Event Directors are asked to provide information include web form field marked by 3 colours:
+                        <br />
+                        <br />
+                        <span style="color: #54c4fa"><b>Blue:</b> Multi-lingual entry is required. For example a show's description in English and in Russian need to be provided separately</span>
+                        <br />
+                        <br />
+                        <span style="color: #e74c3c">
+                            <b>Red:</b> Master Data that can't be modified by Event Directors. This data is populated by London HQ upon collection of "Event Setup Forms" and is integrated with the Group's financial systems. Should you wish to amend or update an information in these fields marked in red. Please contact <a href="mailto:event-setup@hyve.group">Reporting Department</a>.
+                        </span>
+                        <br />
+                        <br />
+                        <span style="color: #ffb606">
+                            <b>Orange:</b> Generic information that doesn't need to be populated every time an Event Director submits data in a different language. For example Venue Coordinates, Visiting Hours, etc.
+                        </span>
+                        <br />
+                        <br />
+                        <b>Tip:</b> To switch between available language input forms, please scroll up to the top right section of this page.
+                        <br />
+                        <br />
+                    </li>
+                </ul>
+            </p>
+        </div>
+        <div class="col-lg-9">
+            <div class="row">
+
+                <div class="col-lg-12">
+                    <div class="hpanel hgrey">
+                        <div class="panel-heading">
+                            Exhibitor Statistics
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                @*<div class="form-group col-lg-6">
+                                        <label>Number of Local Exhibitors</label>
+                                        @Html.EditorFor(model => model.LocalExhibitorCount, new { htmlAttributes = new { type = "text", id = "localExhCount", @class = "touchspin ts-common hyellow" } })
+                                    </div>
+                                    <div class="form-group col-lg-6">
+                                        <label>Number of International Exhibitors</label>
+                                        @Html.EditorFor(model => model.InternationalExhibitorCount, new { htmlAttributes = new { type = "text", id = "intlExhCount", @class = "touchspin ts-common hyellow" } })
+                                    </div>
+                                    <div class="form-group col-lg-12">
+                                        <label>Total Exhibitors:</label>
+                                        <span id="totalExhCount"></span>
+                                    </div>*@
+                                <div class="form-group col-lg-6">
+                                    <label>Number of Exhibitors</label>
+                                    @Html.EditorFor(model => model.ExhibitorCount, new { htmlAttributes = new { type = "text", @class = "touchspin ts-common hyellow" } })
+                                </div>
+                                <div class="form-group col-lg-6 tooltip-demo">
+                                    <label data-toggle="tooltip" data-placement="top" title="Number of Exhibiting Countries represents the total number of different countries represented at an event.">Number of Exhibiting Countries <i class="fa fa-question-circle"></i></label>
+                                    @Html.EditorFor(model => model.ExhibitorCountryCount, new { htmlAttributes = new { type = "text", @class = "touchspin ts-common hyellow" } })
+                                </div>
+                                <div class="form-group col-lg-6">
+                                    <label>Number of National Groups/Pavilions</label>
+                                    @Html.EditorFor(model => model.NationalGroupCount, new { htmlAttributes = new { type = "text", @class = "touchspin ts-common hyellow" } })
+                                </div>
+                                @*<div class="form-group col-lg-6">
+                                        <label>Local Exhibitor Retention Rate</label>
+                                        @Html.EditorFor(model => model.LocalExhibitorRetentionRate, new { htmlAttributes = new { @class = "touchspin ts-rate hyellow" } })
+                                    </div>
+                                    <div class="form-group col-lg-6">
+                                        <label>International Exhibitor Retention Rate</label>
+                                        @Html.EditorFor(model => model.InternationalExhibitorRetentionRate, new { htmlAttributes = new { @class = "touchspin ts-rate hyellow" } })
+                                    </div>*@
+                                <div class="form-group col-lg-6">
+                                    <label>Exhibitor Retention Rate</label>
+                                    @Html.EditorFor(model => model.ExhibitorRetentionRate, new { htmlAttributes = new { @class = "touchspin ts-rate hyellow" } })
+                                </div>
+                                <div class="form-group col-lg-12">
+                                    <label class="control-label">Top Exhibitor Countries</label>
+                                    @Html.ListBoxFor(model => model.TopExhibitorCountries, new SelectList(ViewBag.Countries, "CountryCode", "CountryName"), new { @class = "select2", multiple = "multiple" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-12">
+                    <div class="hpanel hgrey">
+                        <div class="panel-heading">
+                            Visitor Statistics
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="form-group col-lg-6 tooltip-demo">
+                                    <label data-toggle="tooltip" data-placement="top" title="A visitor is a local person attending an exhibition. He is counted only once for the entire duration of the fair.<br>Number of Visitors (Local or International) is a metric that is used to monitor an event's marketing and visitor promotion performance. IMPORTANT: The visitor numbers to be provided herein should be the actual results gathered from the turnstiles/entrance systems and under no circumstances should include published/official results that may subject to modifications.<br>The Group stores this information behind corporate systems and addresses these metrics only for internal assessment/analysis purposes.">Number of Unique Local Visitors <i class="fa fa-question-circle"></i></label>
+                                    @Html.EditorFor(model => model.LocalVisitorCount, new { htmlAttributes = new { type = "text", id = "localUnqVisCount", @class = "touchspin ts-common hyellow" } })
+                                </div>
+                                <div class="form-group col-lg-6 tooltip-demo">
+                                    <label data-toggle="tooltip" data-placement="top" title="A visitor is an international person attending an exhibition. He is counted only once for the entire duration of the fair.<br>Number of Visitors (Local or International) is a metric that is used to monitor an event's marketing and visitor promotion performance. IMPORTANT: The visitor numbers to be provided herein should be the actual results gathered from the turnstiles/entrance systems and under no circumstances should include published/official results that may subject to modifications.<br>The Group stores this information behind corporate systems and addresses these metrics only for internal assessment/analysis purposes.">Number of Unique International Visitors <i class="fa fa-question-circle"></i></label>
+                                    @Html.EditorFor(model => model.InternationalVisitorCount, new { htmlAttributes = new { type = "text", id = "intlUnqVisCount", @class = "touchspin ts-common hyellow" } })
+                                </div>
+                                <div class="form-group col-lg-12">
+                                    <label>Total Unique Visitors:</label>
+                                    <span id="totalUnqVisCount"></span>
+                                </div>
+
+                                @*<div class="form-group col-lg-6 tooltip-demo">
+                                        <label data-toggle="tooltip" data-placement="top" title="A repeat visit is each additional visit of a local visitor after the first visit, that can be controlled. Here also only one visit per day is counted.">Number of Local Repeat Visits <i class="fa fa-question-circle"></i></label>
+                                        @Html.EditorFor(model => model.LocalRepeatVisitCount, new { htmlAttributes = new { type = "text", id = "localRepVisCount", @class = "touchspin ts-common hyellow" } })
+                                    </div>
+                                    <div class="form-group col-lg-6 tooltip-demo">
+                                        <label data-toggle="tooltip" data-placement="top" title="A repeat visit is each additional visit of an international visitor after the first visit, that can be controlled. Here also only one visit per day is counted.">Number of International Repeat Visits <i class="fa fa-question-circle"></i></label>
+                                        @Html.EditorFor(model => model.InternationalRepeatVisitCount, new { htmlAttributes = new { type = "text", id = "intlRepVisCount", @class = "touchspin ts-common hyellow" } })
+                                    </div>
+                                    <div class="form-group col-lg-12">
+                                        <label>Total Repeat Visits:</label>
+                                        <span id="totalRepVisCount"></span>
+                                    </div>*@
+                                <div class="form-group col-lg-6 tooltip-demo">
+                                    <label data-toggle="tooltip" data-placement="top" title="A repeat visit is each additional visit of a visitor after the first visit, that can be controlled. Here also only one visit per day is counted.">Number of Repeat Visits <i class="fa fa-question-circle"></i></label>
+                                    @Html.EditorFor(model => model.RepeatVisitCount, new { htmlAttributes = new { type = "text", id = "localRepVisCount", @class = "touchspin ts-common hyellow" } })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="visitorStatsDaily" class="col-lg-12">
+                    <div class="hpanel hgrey">
+                        <div class="panel-heading">
+                            Visitor Statistics (Daily)
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <fieldset>
+                                    <legend>Number of Unique Visitors</legend>
+                                    @foreach (var visit in Model.EditionVisitors)
+                                    {
+                                        <div class="form-group col-lg-3">
+                                            <label class="control-label">Day @visit.DayNumber</label>
+                                            <input type="text" name="DailyVisitorCounts" class="touchspin ts-common hyellow" title="Number of Old Visitors" value="@visit.VisitorCount" />
+                                        </div>
+                                    }
+                                </fieldset>
+                            </div>
+                            <div class="row">
+                                <fieldset>
+                                    <legend>Number of Repeat Visitors</legend>
+                                    @foreach (var visit in Model.EditionVisitors)
+                                    {
+                                        if (visit.DayNumber > 1)
+                                        {
+                                            <div class="form-group col-lg-3">
+                                                <label class="control-label">Day @visit.DayNumber</label>
+                                                <input type="text" name="DailyRepeatVisits" class="touchspin ts-common hyellow" value="@visit.RepeatVisitCount" />
+                                            </div>
+                                        }
+                                    }
+                                </fieldset>
+                            </div>
+                            <div class="row">
+                                <fieldset>
+                                    <legend>Number of Old/New Visitors</legend>
+                                    @foreach (var visit in Model.EditionVisitors)
+                                    {
+                                        <div class="form-group col-lg-3">
+                                            <label class="control-label">Day @visit.DayNumber</label>
+                                            <input type="text" name="DailyOldVisitorCounts" class="touchspin ts-oldvisitor hyellow" title="Number of Old Visitors" value="@visit.OldVisitorCount" />
+                                            <input type="text" name="DailyNewVisitorCounts" class="touchspin ts-newvisitor hyellow" title="Number of New Visitors" value="@visit.NewVisitorCount" />
+                                        </div>
+                                    }
+                                </fieldset>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-12">
+                    <div class="hpanel hgrey">
+                        <div class="panel-heading">
+                            Visitor Countries
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="form-group col-lg-6 tooltip-demo">
+                                    <label data-toggle="tooltip" data-placement="top" title="Number of Visitor Countries Represented taps into the geographical diversity of an event's visitor base. Receiving only 1 visitor from a country doesn't change the fact that that country has been represented, hence it should be counted towards this metric.">Number of Visitor Countries Represented <i class="fa fa-question-circle"></i></label>
+                                    @Html.EditorFor(model => model.VisitorCountryCount, new { htmlAttributes = new { type = "text", @class = "touchspin ts-common hyellow" } })
+                                </div>
+
+                                <div class="form-group col-lg-12">
+                                    <label class="control-label">Top Visitor Countries</label>
+                                    @Html.ListBoxFor(model => model.TopVisitorCountries, new SelectList(ViewBag.Countries, "CountryCode", "CountryName"), new { @class = "select2", multiple = "multiple" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-12">
+                    <div class="hpanel hgrey">
+                        <div class="panel-heading">
+                            E-ticket / Online Registration Statistics
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="form-group col-lg-4 tooltip-demo">
+                                    <label data-toggle="tooltip" data-placement="top" title="Number of E-tickets Issued represents the total number of website or mobile visitors who signed up to receive a valid badge/e-ticket from an event's web/mobile registration forms.">Number of E-tickets Issued <i class="fa fa-question-circle"></i></label>
+                                    @Html.EditorFor(model => model.OnlineRegistrationCount, new { htmlAttributes = new { type = "text", @class = "touchspin ts-common hyellow" } })
+                                </div>
+                                <div class="form-group col-lg-4 tooltip-demo">
+                                    <label data-toggle="tooltip" data-placement="top" title="Number of Actual Visitors with E-Tickets is a metric that is used to capture an event's visitors who attended the event as a result of completing an E-ticket / Online Visitor Registration Form.">Number of Actual Visits with E-tickets <i class="fa fa-question-circle"></i></label>
+                                    @Html.EditorFor(model => model.OnlineRegisteredVisitorCount, new { htmlAttributes = new { type = "text", @class = "touchspin ts-common hyellow" } })
+                                </div>
+                                <div class="form-group col-lg-4 tooltip-demo">
+                                    <label data-toggle="tooltip" data-placement="top" title="Buyers with E-Tickets is buyers among the visitors with e-ticket. Buyer means registrants who choose 'Sourcing products and services for business' or 'Gathering general industry information' as purpose of their visit.">Buyers with E-tickets <i class="fa fa-question-circle"></i></label>
+                                    @Html.EditorFor(model => model.OnlineRegisteredBuyerVisitorCount, new { htmlAttributes = new { type = "text", @class = "touchspin ts-common hyellow" } })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                @if (Model.EventType.CanHaveDelegates())
+                {
+                    <div class="col-lg-12">
+                        <div class="hpanel hgrey">
+                            <div class="panel-heading tooltip-demo">
+                                <span data-toggle="tooltip" data-placement="top" title="Delegate Statistics section is only applicable to conferences and confex events.">Delegate Statistics (Conferences Only) <i class="fa fa-question-circle"></i></span>
+                            </div>
+                            <div class="panel-body">
+
+                                <div class="row">
+                                    <div class="form-group col-lg-6">
+                                        <label>Number of Local Delegates</label>
+                                        @Html.EditorFor(model => model.LocalDelegateCount, new { htmlAttributes = new { type = "text", @class = "touchspin ts-common hyellow" } })
+                                    </div>
+                                    <div class="form-group col-lg-6">
+                                        <label>Number of International Delegates</label>
+                                        @Html.EditorFor(model => model.InternationalDelegateCount, new { htmlAttributes = new { type = "text", @class = "touchspin ts-common hyellow" } })
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-lg-6">
+                                        <label>Number of Local Paid Delegates</label>
+                                        @Html.EditorFor(model => model.LocalPaidDelegateCount, new { htmlAttributes = new { type = "text", @class = "touchspin ts-common hyellow" } })
+                                    </div>
+                                    <div class="form-group col-lg-6">
+                                        <label>Number of International Paid Delegates</label>
+                                        @Html.EditorFor(model => model.InternationalPaidDelegateCount, new { htmlAttributes = new { type = "text", @class = "touchspin ts-common hyellow" } })
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-lg-12">
+                                        <label class="control-label">Delegate Countries</label>
+                                        @Html.ListBoxFor(model => model.DelegateCountries, new SelectList(ViewBag.Countries, "CountryCode", "CountryName"), new { @class = "select2", multiple = "multiple" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                @if (displayKeyVisitorSection)
+                {
+                    <div class="col-lg-12">
+                        <div class="hpanel hgrey">
+                            <div class="panel-heading">
+                                <label>Key Visitor Definitions</label>
+                            </div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div id="divEditionKeyVisitors" class="form-group col-lg-12">
+                                        @{ Html.RenderPartial("~/Views/EditionKeyVisitor/_EditionKeyVisitors.cshtml", new EditionKeyVisitorListModel { EditionId = Model.EditionId, EditionKeyVisitors = Model.EditionKeyVisitors }); }
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div id="keyvisitorsdiv" class="row">
+                                            <div class="form-group col-lg-2">
+                                                <select class="form-control" id="keyVisitorIdSelect">
+                                                    @foreach (var keyVisitor in Model.KeyVisitors)
+                                                    {
+                                                        <option name="KeyVisitorId" value="@keyVisitor.KeyVisitorId">@keyVisitor.Name</option>
+                                                    }
+                                                </select>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <input class="form-control hblue" id="keyVisitorValue" name="keyVisitorValue" placeholder="Key Visitor Value" />
+                                            </div>
+                                            <div class="col-lg-2">
+                                                <a href="#" id="addkeyvisitortbn" class="btn btn-primary">Add</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                <div class="col-lg-12">
+                    <div class="hpanel hgrey">
+                        <div class="panel-heading">
+                            Other
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="form-group col-lg-6" style="padding-top: 10px">
+                                    <label> @Html.CheckBoxFor(model => model.CohostedEvent, new { @class = "i-checks", id = "CohostedEvent" }) Co-hosted Event </label>
+                                </div>
+                                <div id="divCohostEditionSearch" class="col-lg-12" style="display: @(Model.CohostedEvent ? "block" : "none")">
+                                    <div class="form-group col-lg-12">
+                                        <input id="cohostedEditionSearchBox" name="Id" type="text" class="form-control" value="" />
+                                    </div>
+                                    <div id="divCohostEditions" class="form-group col-lg-6">
+                                        @{ Html.RenderPartial("~/Views/EditionCohost/_CohostEditions.cshtml", new CohostEditionListModel { EditionId = Model.EditionId, EditionCohosts = Model.Cohosts }); }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @if (!Model.CurrentUser.IsViewer)
+            {
+                <div class="text-right m-t-xs">
+                    <a class="btn btn-default prev" href="javascript:void(0)"><i class="fa fa-angle-left"></i> @Resources.Previous</a>
+                    <button class="btn btn-success btnSave3" id="btnSave3" @(!Model.IsAlive || Model.IsCancelled ? "disabled=\"disabled\"" : "")>
+                        Save
+                    </button>
+                </div>
+            }
+        </div>
+    </div>
+}
+<script>
+    var cohostGetUrl = "@Url.Action("_GetCohostEditions", "EditionCohost")";
+    var cohostAddUrl = "@Url.Action("_AddCohostEdition", "EditionCohost")";
+    var cohostDelUrl = "@Url.Action("_DeleteCohostEdition", "EditionCohost")";
+    var editionSearchUrl = '@Url.Action("_SearchEditions", "Edition", new { editionId = Model.EditionId })';
+
+    var editionKeyVisitorGetUrl = "@Url.Action("_GetEditionKeyVisitors", "EditionKeyVisitor")";
+    var editionKeyVisitorAddUrl = "@Url.Action("_AddEditionKeyVisitor", "EditionKeyVisitor")";
+    var editionKeyVisitorDelUrl = "@Url.Action("_DeleteEditionKeyVisitor", "EditionKeyVisitor")";
+    @*var keyVisitorSearchUrl = '@Url.Action("_SearchKeyVisitors", "KeyVisitor")';*@
+
+    var editionId = @Model.EditionId;
+</script>
+
+<script src="~/Scripts/ced-cohost.js"></script>
+<script src="~/Scripts/ced-keyvisitor.js"></script>
+
+<script>
+    $(document).ready(function () {
+        //setTotal("localExhCount", "intlExhCount", "totalExhCount");
+        //setTotal("localExhRetRate", "intlExhRetRate", "totalExhRetRate");
+        setTotal("localUnqVisCount", "intlUnqVisCount", "totalUnqVisCount");
+        //setTotal("localRepVisCount", "intlRepVisCount", "totalRepVisCount");
+    });
+
+    //$("#localExhCount, #intlExhCount").change(function () {
+    //    setTotal("localExhCount", "intlExhCount", "totalExhCount");
+    //});
+
+    //$("#localExhRetRate, #intlExhRetRate").change(function () {
+    //    setTotal("localExhRetRate", "intlExhRetRate", "totalExhRetRate");
+    //});
+
+    $("#localUnqVisCount, #intlUnqVisCount").change(function () {
+        setTotal("localUnqVisCount", "intlUnqVisCount", "totalUnqVisCount");
+    });
+
+    //$("#localRepVisCount, #intlRepVisCount").change(function () {
+    //    setTotal("localRepVisCount", "intlRepVisCount", "totalRepVisCount");
+    //});
+
+    function setTotal(localId, intlId, totalId) {
+        var local = Number($("#" + localId).val());
+        var intl = Number($("#" + intlId).val());
+        var total = local + intl;
+        $("#" + totalId).text(total);
+    }
+</script>

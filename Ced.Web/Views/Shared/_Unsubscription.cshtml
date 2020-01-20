@@ -1,0 +1,17 @@
+﻿@model Ced.Web.Models.Subscription.UnsubscriptionModel
+
+@{
+    Layout = "~/Views/Shared/_Layout_Blank.cshtml";
+    ViewBag.Title = "Unsubscribed";
+}
+
+<div class="error-container text-center">
+    <i class="pe-7s-bell text-danger big-icon"></i>
+    <h1>Unsubscribed</h1>
+    <strong>@(string.IsNullOrWhiteSpace(Model.Title) ? Model.Title : "")</strong>
+    <p>
+        @Model.Message
+    </p>
+    <a href="@Url.Action("Edit", "Edition", new { id = Model.EditionId })" class="btn btn-xs btn-success">Go to event</a>
+    <a href="~/" class="btn btn-xs btn-orange">Go to dashboard</a>
+</div>

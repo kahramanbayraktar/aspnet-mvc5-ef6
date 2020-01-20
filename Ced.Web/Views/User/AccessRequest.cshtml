@@ -1,0 +1,18 @@
+﻿@using Ced.Web.Models.User
+@model AccessRequestModel
+
+@{
+    Layout = "~/Views/Shared/_Layout_Blank.cshtml";
+    ViewBag.Title = "Access Request";
+}
+
+@{ Html.RenderPartial("~/Views/User/_AccessRequest.cshtml", new AccessRequestModel()); }
+
+@section Styles {
+    @Styles.Render("~/bundles/sweetAlert/css")
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/sweetAlert/js")
+    @Scripts.Render("~/bundles/maxlength")
+}

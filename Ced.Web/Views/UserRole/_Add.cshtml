@@ -1,0 +1,94 @@
+﻿@model Ced.Web.Models.UserRole.UserRoleEditModel
+
+<div class="modal-dialog" style="max-width: 600px">
+    <div class="modal-content">
+        <div class="color-line"></div>
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <h4 class="modal-title">Add User Role</h4>
+        </div>
+        <div class="modal-body">
+            @using (Html.BeginForm("_Add", "UserRole", FormMethod.Post, new { id = "addUserRoleForm" }))
+            {
+                <div class="col-lg-12">
+                    <div class="row">
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <label class="control-label">User:</label>
+                                <div class="input-group col-lg-12">
+                                    <input id="emailSearchBox2" name="UserEmail" class="form-control" type="text" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Application:</label>
+                                <div class="input-group col-lg-12">
+                                    <select id="appdropdown" name="ApplicationId" class="form-control">
+                                        <option value="">All</option>
+                                        @foreach (var app in Model.Applications)
+                                        {
+                                            <option id="op@(app.ApplicationId)" value="@app.ApplicationId">@app.Name</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div id="rolesDiv" class="form-group" style="display: none">
+                                <label class="control-label">Role:</label>
+                                <div class="input-group col-lg-12">
+                                    <select id="roledropdown" name="RoleId" class="form-control">
+                                        <option value="">All</option>
+                                        @foreach (var role in Model.Roles)
+                                        {
+                                            <option id="op@(role.RoleId)" data-appid="@role.ApplicationId" value="@role.RoleId">@role.Name</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div id="divRegion" class="form-group">
+                                <label class="control-label">Region:</label>
+                                <div class="input-group col-lg-12">
+                                    <select name="RegionId" class="form-control">
+                                        <option value="">All</option>
+                                        @foreach (var region in Model.Regions)
+                                        {
+                                            <option value="@region.RegionId">@region.Name</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div id="divCountry" class="form-group">
+                                <label class="control-label">Country:</label>
+                                <div class="input-group col-lg-12">
+                                    <select name="CountryId" class="form-control">
+                                        <option value="">All</option>
+                                        @foreach (var country in Model.Countries)
+                                        {
+                                            <option value="@country.CountryId">@country.CountryName</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div id="divIndustry" class="form-group">
+                                <label class="control-label">Industry:</label>
+                                <div class="input-group col-lg-12">
+                                    <select name="IndustryId" class="form-control">
+                                        <option value="">All</option>
+                                        @foreach (var industry in Model.Industries)
+                                        {
+                                            <option value="@industry.IndustryId">@industry.Name</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-justify m-b-md">
+                    <button class="btn btn-success btn-block" id="btnAdd"><i class="fa fa-spinner fa-spin" id="loading" style="display: none"></i> Add</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>

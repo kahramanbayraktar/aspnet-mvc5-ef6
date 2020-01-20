@@ -1,0 +1,102 @@
+﻿@using Ced.Utility.Web
+@model IList<Ced.Web.Models.Task.TaskListItemModel>
+
+<div class="table-responsive" id="results">
+    <table id="tblTasks" class="table table-striped table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>
+                    Task Name
+                </th>
+                <th>
+                    Description
+                </th>
+                <th class="no-sort">Last Run Time</th>
+                <th class="no-sort">Actions</th>
+            </tr>
+        </thead>
+        <tfoot>
+            <tr>
+                <th>
+                    Task Name
+                </th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+        </tfoot>
+        <tbody>
+            @if (Model != null)
+            {
+                foreach (var item in Model)
+                {
+                    <tr style="height: 50px">
+                        <td class="nowrap">
+                            @Html.DisplayFor(modelItem => item.TaskName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Description)
+                            <div id="progressmessage@(item.TaskId)" class="text-success font-bold"></div>
+                        </td>
+                        <td class="text-center nowrap">
+                            @Html.DisplayFor(modelItem => item.LastRunTime)
+                        </td>
+                        <td class="text-center">
+                            @if (item.IsActive)
+                            {
+                                @*<a href="@(item.TaskUrl)?key=@WebConfigHelper.TaskSchedulerSecretKey" title="Run Task" target="_blank">
+                                    <small><i class="fa fa-play fa-2x text-success"></i></small>
+                                </a>*@
+                                <a id="runbutton@(item.TaskId)" onclick="StartProcess(this, '@(item.TaskUrl)?key=@WebConfigHelper.TaskSchedulerSecretKey')" data-id="@item.TaskId" href="javascript:void(0)" title="Run Task">
+                                    <small><i class="fa fa-play fa-2x text-success"></i></small>
+                                </a>
+                                <div id="progressouter@(item.TaskId)" class="progress" style="height: 23px; display: none">
+                                    <div id="progressresult@(item.TaskId)" class="progress-bar progress-bar-striped bg-success" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: 0; height: 23px; padding: 0; background-color: #62CB31; color: white; text-align: center">
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <a href="javascript:void(0)" title="Not Runnable" target="_blank">
+                                    <small><i class="fa fa-play fa-2x text-warning"></i></small>
+                                </a>
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#tblTasks').DataTable({
+            "iDisplayLength": 10,
+            "order": [[0, 'asc']],
+            "oLanguage": {
+                "sSearch": "Quick filter:"
+            },
+            initComplete: function () {
+                this.api().columns([0]).every(function () {
+                    var column = this;
+                    var select = $('<select class="form-control" style="background: url(' + '@Url.Content("~/content/images/filter.png")' + ') no-repeat scroll 7px 9px;padding-left:20px;width: 100%"><option value=""></option></select>')
+                        .appendTo($(column.footer()).empty())
+                        .on('change', function () {
+                            var val = $.fn.dataTable.util.escapeRegex(
+                                $(this).val()
+                            );
+
+                            column
+                                .search(val ? '^' + val + '$' : '', true, false)
+                                .draw();
+                        });
+
+                    column.data().unique().sort().each(function (d, j) {
+                        select.append('<option value="' + d + '">' + d + '</option>');
+                    });
+                });
+            }
+        });
+    });
+</script>

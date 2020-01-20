@@ -1,0 +1,134 @@
+﻿@using Ced.Resources
+@model Ced.Web.Models.Edition.EditionEditPostShowMetricsModel
+
+@using (Html.BeginForm("_SavePostShowMetrics", "Edition", FormMethod.Post, new {id = "editPostShowMetricsForm"}))
+{
+    @Html.HiddenFor(model => model.EditionId)
+    @Html.HiddenFor(model => model.EventId)
+    @Html.HiddenFor(model => model.EventActivity)
+
+    if (!Model.CurrentUser.IsViewer)
+    {
+        <div class="text-right m-t-xs">
+            <a class="btn btn-default prev" href="javascript:void(0)"><i class="fa fa-angle-left"></i> @Resources.Previous</a>
+            <button class="btn btn-success btnSave4" id="btnSave4" @(!Model.IsAlive || Model.IsCancelled ? "disabled=\"disabled\"" : "")>
+                Save
+            </button>
+        </div>
+    }
+
+    <div class="row">
+        <div class="col-lg-3 text-center">
+            <i class="pe-7s-graph fa-5x text-muted"></i>
+            <p class="small m-t-md">
+                <ul class="wizard-notf">
+                    <li>
+                        Exhibitor Retention Rate: While retention rates for local exhibitors are easily measurable with the help of CRM systems or specialised reports, in the case of international exhibitors accurate measurement can be more complex due to the dynamic nature of the trade environment.
+                        <br /><br />
+                        An international exhibitor can first attend an event as a stand-sharer with a pavilion and establish relations with local distributors and/or decide on penetrating the market directly with a new local entity by becoming a direct international exhibitor for latter editions of the very same event. Even CRM systems may fall short on establishing such relations between two different entities unless prompted by the salesperson. With these limitations in mind, we understand that the international retention rate metric is often prone to "underreporting". We hear you, and we know that as an Event Director you will do your best and not try to model the entire world at the expense of your valuable time!
+                        <br />
+                        <br />
+                    </li>
+                    <li>
+                        NPS (Net Promoter Score) Fields: Applicable only to events that use "Explori" Post Show Survey software. To get more information please contact Stuart Ledden (stuart.ledden@hyve.group)
+                        <br />
+                        <br />
+                    </li>
+                    <li>
+                        The data that will be submitted by Event Directors supports multi-lingual entry. Since most of our shows belong to geographies with localisation needs and English language at the same time, an Event Director has the flexibility to populate this information in a scalable format. The 4 steps, through which Event Directors are asked to provide information include web form field marked by 3 colours:
+                        <br />
+                        <br />
+                        <span style="color: #54c4fa"><b>Blue:</b> Multi-lingual entry is required. For example a show's description in English and in Russian need to be provided separately</span>
+                        <br />
+                        <br />
+                        <span style="color: #e74c3c">
+                            <b>Red:</b> Master Data that can't be modified by Event Directors. This data is populated by London HQ upon collection of "Event Setup Forms" and is integrated with the Group's financial systems. Should you wish to amend or update an information in these fields marked in red. Please contact <a href="mailto:event-setup@hyve.group">Reporting Department</a>.
+                        </span>
+                        <br />
+                        <br />
+                        <span style="color: #ffb606">
+                            <b>Orange:</b> Generic information that doesn't need to be populated every time an Event Director submits data in a different language. For example Venue Coordinates, Visiting Hours, etc.
+                        </span>
+                        <br />
+                        <br />
+                        <b>Tip:</b> To switch between available language input forms, please refer to the dropdown menu selection which sits next to the 4 steps.
+                        <br />
+                        <br />
+                    </li>
+                </ul>
+            </p>
+        </div>
+        <div class="col-lg-9">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="hpanel hgrey">
+                        <div class="panel-heading">
+                            Net Promoter Score (NPS)
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="form-group col-lg-6">
+                                    <label>Visitor</label>
+                                    @Html.EditorFor(model => model.NPSScoreVisitor, new { htmlAttributes = new { @class = "touchspin ts-nps hyellow" } })
+                                </div>
+                                <div class="form-group col-lg-6">
+                                    <label>Exhibitor</label>
+                                    @Html.EditorFor(model => model.NPSScoreExhibitor, new { htmlAttributes = new { @class = "touchspin ts-nps hyellow" } })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-12">
+                    <div class="hpanel hgrey">
+                        <div class="panel-heading">
+                            Satisfaction Score
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="form-group col-lg-6">
+                                    <label>Visitor</label>
+                                    @Html.EditorFor(model => model.NPSSatisfactionVisitor, new { htmlAttributes = new { @class = "touchspin ts-satisfaction hyellow" } })
+                                </div>
+                                <div class="form-group col-lg-6">
+                                    <label>Exhibitor</label>
+                                    @Html.EditorFor(model => model.NPSSatisfactionExhibitor, new { htmlAttributes = new { @class = "touchspin ts-satisfaction hyellow" } })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-12">
+                    <div class="hpanel hgrey">
+                        <div class="panel-heading">
+                            Net Easy Score (NES)
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="form-group col-lg-6">
+                                    <label>Visitor</label>
+                                    @Html.EditorFor(model => model.NetEasyScoreVisitor, new { htmlAttributes = new { @class = "touchspin ts-nps hyellow" } })
+                                </div>
+                                <div class="form-group col-lg-6">
+                                    <label>Exhibitor</label>
+                                    @Html.EditorFor(model => model.NetEasyScoreExhibitor, new { htmlAttributes = new { @class = "touchspin ts-nps hyellow" } })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @if (!Model.CurrentUser.IsViewer)
+            {
+                <div class="text-right m-t-xs">
+                    <a class="btn btn-default prev" href="javascript:void(0)"><i class="fa fa-angle-left"></i> @Resources.Previous</a>
+                    <button class="btn btn-success btnSave4" id="btnSave4" @(!Model.IsAlive || Model.IsCancelled ? "disabled=\"disabled\"" : "")>
+                        Save
+                    </button>
+                </div>
+            }
+        </div>
+    </div>
+}

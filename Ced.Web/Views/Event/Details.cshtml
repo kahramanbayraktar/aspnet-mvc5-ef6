@@ -1,0 +1,182 @@
+﻿@using Ced.Resources
+@model Ced.Web.Models.Event.EventListModel
+
+@{
+    ViewBag.Title = "Event Details";
+}
+
+<script src="@Url.Content("~/Vendor/jquery-validation/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+
+<div class="small-header">
+    <div class="hpanel">
+        <div class="panel-body">
+            <h2 class="font-light m-b-xs">
+                Event Details
+            </h2>
+            <div id="hbreadcrumb" class="pull-left">
+                <ol class="hbreadcrumb breadcrumb">
+                    <li><a href="@Url.Action("Index", "Dashboard")">Main</a></li>
+                    <li>
+                        <span>Events</span>
+                    </li>
+                    <li class="active">
+                        <span>Event Details</span>
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="content transition animated fadeIn">
+    <div class="hpanel hbgyellow2" style="margin-bottom: 0 !important">
+        <div class="panel-body" style="padding: 7px !important">
+            <div class="text-center">
+                The information displayed herein has been provided by you during the <b>Event Setup</b> process. To request a change, please click <a href="mailto:event-setup@hyve.group?subject=Change Request in the Event Master (@Uri.EscapeDataString(Model.MasterName))">here</a> and submit your change request in detail.
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="content animate-panel" id="event-details">
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="hpanel hyellow">
+                <div class="panel-body">
+                    <h3>
+                        Master Name
+                    </h3>
+                </div>
+                <div class="panel-footer contact-footer">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="contact-stat" style="text-align: justify">@Model.MasterName</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="hpanel hyellow">
+                <div class="panel-body">
+                    <h3>
+                        Event Type
+                    </h3>
+                </div>
+                <div class="panel-footer contact-footer">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="contact-stat" style="text-align: justify">@Model.EventTypeName</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="hpanel hviolet">
+                <div class="panel-body">
+                    <h3>
+                        Industry
+                    </h3>
+                </div>
+                <div class="panel-footer contact-footer">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="contact-stat" style="text-align: justify">@Model.Industry</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="hpanel hviolet">
+                <div class="panel-body">
+                    <h3>
+                        Sub-industry
+                    </h3>
+                </div>
+                <div class="panel-footer contact-footer">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="contact-stat" style="text-align: justify">@Model.SubIndustry</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @*<div class="col-lg-3">
+            <div class="hpanel hyellow">
+                <div class="panel-body">
+                    <h3>
+                        City
+                    </h3>
+                </div>
+                <div class="panel-footer contact-footer">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="contact-stat" style="text-align: justify">@Model.City</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="hpanel hyellow">
+                <div class="panel-body">
+                    <h3>
+                        Country
+                    </h3>
+                </div>
+                <div class="panel-footer contact-footer">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="contact-stat" style="text-align: justify">@Model.Country</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>*@
+        <div class="col-lg-3">
+            <div class="hpanel hviolet">
+                <div class="panel-body">
+                    <h3>
+                        Region
+                    </h3>
+                </div>
+                <div class="panel-footer contact-footer">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="contact-stat" style="text-align: justify">@Model.Region</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="hpanel hgreen">
+                <div class="panel-body">
+                    <h3>
+                        Master Code
+                    </h3>
+                </div>
+                <div class="panel-footer contact-footer">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="contact-stat" style="text-align: justify">@Model.MasterCode</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    #event-details .hpanel .panel-body {
+        padding: 0 10px;
+    }
+    #event-details .hpanel .panel-body h3 {
+        font-size: 16px;
+    }
+</style>

@@ -1,0 +1,1059 @@
+﻿@using Ced.BusinessEntities
+@using Ced.Utility
+@using Ced.Utility.Edition
+@using ITE.Utility.Extensions
+@model Ced.Web.Models.Dashboard.IndexModel
+
+@{
+    ViewBag.Title = "Dashboard";
+}
+
+<div class="small-header">
+    <div class="hpanel">
+        <div class="panel-body">
+            <div class="pull-right">
+                <a class="btn btn-success" href="@Url.Action("Edit", "Edition", new {id = Model.SelectedEditionId, name = Model.SelectedEditionName.ToUrlString()})"><i class="fa fa-pencil"></i> Edit</a>
+                <div class="btn-group">
+                    <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" type="button">@Model.EventName @Html.Raw("<small>(" + Model.EventDisplayDate + ")</small>") <span class="caret"></span></button>
+                    <ul class="dropdown-menu pull-right">
+                        @if (Model.EventEditionList != null)
+                        {
+                            foreach (var event_ in Model.EventEditionList)
+                            {
+                                <li><a href="@Url.Action("Index", "Dashboard", new { id = event_.EventId, name = event_.MasterName.ToUrlString()})">@event_.MasterName @Html.Raw("<small>(" + event_.DisplayDate + ")</small>")</a></li>
+                            }
+                        }
+                        <li><hr style="margin: 5px" /></li>
+                        <li>
+                            <a href="@Url.Action("Index", "Event")"><i class="fa fa-search" style="color: #B5C0C1"></i> Show All Events</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <h2 class="font-light m-b-xs">
+                Dashboard
+            </h2>
+            @*<small>You can edit the edition below</small>*@
+            <div id="hbreadcrumb" class="pull-left">
+                <ol class="hbreadcrumb breadcrumb">
+                    <li><a href="@Url.Action("Index", "Dashboard" )">Main</a></li>
+                    <li>
+                        <span>@Model.EventName</span>
+                    </li>
+                </ol>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@if (Model.EditionStatModel != null)
+{
+    <div class="content animate-panel">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="hpanel">
+                    <div class="panel-heading">
+                        Number of Exhibitors
+                    </div>
+                    <div class="panel-body">
+                        <div class="chart-area">
+                            <canvas id="barExhibitor" height="140"></canvas>
+                            <div id="legendExhibitor"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="hpanel">
+                    <div class="panel-heading">
+                        Number of Unique Visitors
+                    </div>
+                    <div class="panel-body">
+                        <div class="chart-area">
+                            <canvas id="barVisitor" height="140"></canvas>
+                            <div id="legendVisitor"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="hpanel">
+                    <div class="panel-heading">
+                        Number of Unique Visitors per Exhibitor
+                    </div>
+                    <div class="panel-body">
+                        <div class="chart-area">
+                            <canvas id="barVisitorPerExhibitor" height="140"></canvas>
+                            <div id="legendVisitorPerExhibitor"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="hpanel">
+                    <div class="panel-heading">
+                        Average Stand Size (Sqm)
+                    </div>
+                    <div class="panel-body">
+                        <div class="chart-area">
+                            <canvas id="barSqmPerExhibitor" height="140"></canvas>
+                            <div id="legendSqmPerExhibitor"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="hpanel">
+                    <div class="panel-heading">
+                        Sqm Sales
+                    </div>
+                    @*<div class="panel-body">
+                            <div>
+                                <div id="ct-chart3">
+                                    <ul class="ct-legend">
+                                        <li class="ct-series-0" data-legend="0">Local</li>
+                                        <li class="ct-series-1" data-legend="1">International</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>*@
+                    <div class="panel-body">
+                        <div class="chart-area">
+                            <canvas id="barSqmSales" height="140"></canvas>
+                            <div id="legendSqmSales"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="hpanel">
+                    <div class="panel-heading">
+                        Number of Sponsors
+                    </div>
+                    <div class="panel-body">
+                        <div class="chart-area">
+                            <canvas id="barSponsor" height="140"></canvas>
+                            <div id="legendSponsor"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="hpanel">
+                    <div class="panel-heading">
+                        E-ticket Conversion Ratio
+                    </div>
+                    <div class="panel-body">
+                        <div class="chart-area">
+                            <canvas id="barActVisRat" height="140"></canvas>
+                            <div id="legendActVisRat"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="hpanel">
+                    <div class="panel-heading">
+                        Number of Unique Visitors per Sqm
+                    </div>
+                    <div class="panel-body">
+                        <div class="chart-area">
+                            <canvas id="barVisitorPerSqm" height="140"></canvas>
+                            <div id="legendVisitorPerSqm"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="hpanel">
+                    <div class="panel-heading">
+                        Number of Unique Visitors per Sqm & Day
+                    </div>
+                    <div class="panel-body">
+                        <div class="chart-area">
+                            <canvas id="barVisitorPerSqmAndDay" height="140"></canvas>
+                            <div id="legendVisitorPerSqmAndDay"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            @if (EditionExtensions.CanHaveDelegates(Model.EventType))
+            {
+                <div class="col-lg-6">
+                    <div class="hpanel">
+                        <div class="panel-heading">
+                            Number of Delegates
+                        </div>
+                        <div class="panel-body">
+                            <div class="chart-area">
+                                <canvas id="barDelegate" height="140"></canvas>
+                                <div id="legendDelegate"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="hpanel">
+                        <div class="panel-heading">
+                            Number of Paid Delegates
+                        </div>
+                        <div class="panel-body">
+                            <div class="chart-area">
+                                <canvas id="barPaidDelegate" height="140"></canvas>
+                                <div id="legendPaidDelegate"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="row">
+            <div class="col-md-3">
+                <div class="hpanel hbggreen" style="-ms-opacity: 0.8; opacity: 0.8; margin-bottom: 0">
+                    <div class="panel-body">
+                        <div class="text-center">
+                            <h4>Exhibitor Countries</h4>
+                            <p @*class="text-big font-light" *@ style="font-size: 30px">
+                                @(Model.EditionStatModel.NumberOfExhibitorCountries.Any() ? Model.EditionStatModel.NumberOfExhibitorCountries.First().TotalNumber.ToString() : "?")
+                            </p>
+                            <small>
+                                Number of Unique Countries
+                            </small>
+                        </div>
+                    </div>
+                </div>
+                <div class="hpanel">
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Year</th>
+                                        <th class="text-right">Number</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var stat in Model.EditionStatModel.NumberOfExhibitorCountries)
+                                    {
+                                        <tr>
+                                            <td>@stat.Year</td>
+                                            <td class="text-right">
+                                                <span class="text-success font-bold">@stat.TotalNumber</span>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="hpanel hbggreen" style="-ms-opacity: 0.8; opacity: 0.8; margin-bottom: 0">
+                    <div class="panel-body">
+                        <div class="text-center">
+                            <h4>Visitor Countries</h4>
+                            <p @*class="text-big font-light" *@ style="font-size: 30px">
+                                @(Model.EditionStatModel.NumberOfVisitorCountries.Any() ? Model.EditionStatModel.NumberOfVisitorCountries.First().TotalNumber.ToString() : "?")
+                            </p>
+                            <small>
+                                Number of Countries Represented
+                            </small>
+                        </div>
+                    </div>
+                </div>
+                <div class="hpanel">
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Year</th>
+                                        <th class="text-right">Number</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var stat in Model.EditionStatModel.NumberOfVisitorCountries)
+                                    {
+                                        <tr>
+                                            <td>@stat.Year</td>
+                                            <td class="text-right">
+                                                <span class="text-success font-bold">@stat.TotalNumber</span>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="hpanel hbggreen" style="-ms-opacity: 0.8; opacity: 0.8; margin-bottom: 0">
+                    <div class="panel-body">
+                        <div class="text-center">
+                            <h4>Exhibitor Pavilions</h4>
+                            <p @*class="text-big font-light" *@ style="font-size: 30px">
+                                @(Model.EditionStatModel.NumberOfInternationalPavilions.Any() ? Model.EditionStatModel.NumberOfInternationalPavilions.First().TotalNumber.ToString() : "?")
+                            </p>
+                            <small>
+                                Number of International Pavilions
+                            </small>
+                        </div>
+                    </div>
+                </div>
+                <div class="hpanel">
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Year</th>
+                                        <th class="text-right">Number</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var stat in Model.EditionStatModel.NumberOfInternationalPavilions)
+                                    {
+                                        <tr>
+                                            <td>@stat.Year</td>
+                                            <td class="text-right">
+                                                <span class="text-success font-bold">@stat.TotalNumber</span>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3">
+                <div class="hpanel hbggreen" style="-ms-opacity: 0.8; opacity: 0.8">
+                    <div class="panel-body">
+                        <div class="text-center">
+                            <h4>Top Exhibitor Countries</h4>
+                            <ul class="top-countries" style="line-height: 20px;">
+                                @if (Model.EditionStatModel.ExhibitorCountries.Count > 0)
+                                {
+                                    foreach (var country in Model.EditionStatModel.ExhibitorCountries)
+                                    {
+                                        <li><span class="fa fa-flag"></span> @country</li>
+                                    }
+                                }
+                                else
+                                {
+                                    <li><span class="fa fa-exclamation"></span> No countries found</li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="hpanel hbggreen" style="-ms-opacity: 0.8; opacity: 0.8">
+                    <div class="panel-body">
+                        <div class="text-center">
+                            <h4>Top Visitor Countries</h4>
+                            <ul class="top-countries" style="line-height: 20px;">
+                                @if (Model.EditionStatModel.VisitorCountries.Count > 0)
+                                {
+                                    foreach (var country in Model.EditionStatModel.VisitorCountries)
+                                    {
+                                        <li><span class="fa fa-flag"></span> @country</li>
+                                    }
+                                }
+                                else
+                                {
+                                    <li><span class="fa fa-exclamation"></span> No countries found</li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @if (EditionExtensions.CanHaveDelegates(Model.EventType))
+            {
+                <div class="col-md-3">
+                    <div class="hpanel hbggreen" style="-ms-opacity: 0.8; opacity: 0.8">
+                        <div class="panel-body">
+                            <div class="text-center">
+                                <h4>Delegate Countries</h4>
+                                <ul class="top-countries" style="line-height: 20px;">
+                                    @if (Model.EditionStatModel.DelegateCountries.Count > 0)
+                                    {
+                                        foreach (var country in Model.EditionStatModel.DelegateCountries)
+                                        {
+                                            <li><span class="fa fa-flag"></span> @country</li>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <li><span class="fa fa-exclamation"></span> No countries found</li>
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="normalheader transition animated fadeIn">
+        <div class="hpanel">
+            <div class="panel-body">
+                <h2 class="font-light m-b-xs">
+                    Survey Results
+                </h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="content animate-panel">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="hpanel">
+                    <div class="panel-heading">
+                        Visitor Net Promoter Scores
+                    </div>
+                    <div class="panel-body">
+                        <div>
+                            <div id="ct-chartVisitorNps" style="height: 255px"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="hpanel">
+                    <div class="panel-heading">
+                        Exhibitor Net Promoter Scores
+                    </div>
+                    <div class="panel-body">
+                        <div>
+                            <div id="ct-chart5" style="height: 255px"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="hpanel">
+                    <div class="panel-heading">
+                        Visitor NPS Satisfaction
+                    </div>
+                    <div class="panel-body">
+                        <div>
+                            <div id="ct-chart6" style="height: 255px"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="hpanel">
+                    <div class="panel-heading">
+                        Exhibitor NPS Satisfaction
+                    </div>
+                    <div class="panel-body">
+                        <div>
+                            <div id="ct-chart7" style="height: 255px"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @*<div class="row">
+                <div class="col-lg-4">
+                    <div class="hpanel">
+                        <div class="panel-heading">
+                            Visitor NPS Average
+                        </div>
+                        <div class="panel-body">
+                            <div>
+                                <div id="ct-chart8" style="height: 255px"></div>
+                                <div id="legendSqmSales"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="hpanel">
+                        <div class="panel-heading">
+                            Exhibitor NPS Average
+                        </div>
+                        <div class="panel-body">
+                            <div>
+                                <div id="ct-chart9" style="height: 255px"></div>
+                                <div id="legendSqmSales"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>*@
+    </div>
+
+    <div class="normalheader transition animated fadeIn">
+        <div class="hpanel">
+            <div class="panel-body">
+                <h2 class="font-light m-b-xs">
+                    Other Metrics
+                </h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="content animate-panel">
+        <div class="row">
+            @foreach (var rate in Model.EditionStatModel.LocalExhibitorRetentionRates)
+            {
+                <div class="col-md-3">
+                    <div class="hpanel hbggreen" style="-ms-opacity: 0.8; opacity: 0.8">
+                        <div class="panel-body">
+                            <div class="text-center">
+                                <h4>Local Retention Rate</h4>
+                                <p @*class="text-big font-light" *@ style="font-size: 30px">
+                                    @rate.TotalNumber%
+                                </p>
+                                <small>
+                                    @rate.Year
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="row">
+            @foreach (var rate in Model.EditionStatModel.InternationalExhibitorRetentionRates)
+            {
+                <div class="col-md-3">
+                    <div class="hpanel hbgyellow" style="-ms-opacity: 0.8; opacity: 0.8">
+                        <div class="panel-body">
+                            <div class="text-center">
+                                <h4>Int'l Retention Rate</h4>
+                                <p @*class="text-big font-light" *@ style="font-size: 30px">
+                                    @rate.TotalNumber%
+                                </p>
+                                <small>
+                                    @rate.Year
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="content animate-panel">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="hpanel">
+                    <div class="panel-body">
+                        <div class="text-center">
+                            <h2 class="m-b-xs">Book a Stand Web Link</h2>
+                            <p class="font-bold text-success">
+                                @if (!string.IsNullOrWhiteSpace(Model.EditionStatModel.BookAStandUrl))
+                                {
+                                    <a href="@Model.EditionStatModel.BookAStandUrl.ToExternalLink()" target="_blank">@Model.EditionStatModel.BookAStandUrl <i class="fa fa-external-link"></i></a>
+                                }
+                                else
+                                {
+                                    <text>
+                                        -
+                                    </text>
+                                }
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="hpanel">
+                    <div class="panel-body">
+                        <div class="text-center">
+                            <h2 class="m-b-xs">Visitor e-Ticket Web Link</h2>
+                            <p class="font-bold text-success">
+                                @if (!string.IsNullOrWhiteSpace(Model.EditionStatModel.VisitorETicketUrl))
+                                {
+                                    <a href="@Model.EditionStatModel.VisitorETicketUrl.ToExternalLink()" target="_blank">@Model.EditionStatModel.VisitorETicketUrl <i class="fa fa-external-link"></i></a>
+                                }
+                                else
+                                {
+                                    <text>
+                                        -
+                                    </text>
+                                }
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <script>
+        $(document).ready(function() {
+            setTimeout(function() {
+                swal({
+                    title: "Warning!",
+                    text: "This event will take place on <b>" + "@(DateHelper.GetDisplayDate(Model.NextEditionStartDate, Model.NextEditionStartDate))" + "</b>. Please revisit this page once the show has taken place. Bear in mind that it may take up to 2-4 weeks for Event Directors to input post show data into the system.",
+                    type: "warning"
+                });
+            }, 100);
+        });
+    </script>
+}
+
+@section Styles {
+    @Styles.Render("~/bundles/sweetAlert/css")
+    @Styles.Render("~/bundles/toastr/css")
+    @Styles.Render("~/bundles/chartist/css")
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/flot/js")
+    @Scripts.Render("~/bundles/chartjs/js")
+    @Scripts.Render("~/bundles/chartist/js")
+    @Scripts.Render("~/bundles/sweetAlert/js")
+    @Scripts.Render("~/bundles/toastr/js")
+    <script src="~/Scripts/ced-charts.js?v=2"></script>
+    <script src="~/Scripts/chartist-bar-labels.js"></script>
+    <script type="text/javascript" language="javascript" src="https://codeyellowbv.github.io/chartist-plugin-legend/chartist-plugin-legend.js"></script>
+
+    @* SQM SALES *@
+    <script>
+        $(document).ready(function() {
+            $.ajax({
+                url: "@Url.Action("_SqmSales", "Dashboard")" + "?id=" + @Model.EventId,
+                type: "POST",
+                data: $(this).serialize(),
+                dataType: "json",
+                success: function(data) {
+                    BarChartSqmSales(data);
+                },
+                error: function(xhr, textStatus, error) {
+                    swal({
+                        title: "Error!",
+                        text: "Pulling data failed!",
+                        type: "error"
+                    });
+                    toastr.error(error);
+                }
+            });
+        });
+    </script>
+
+    @* ACTUAL VISITOR RATIO *@
+    <script>
+        $(document).ready(function() {
+            $.ajax({
+                url: "@Url.Action("_ActualVisitorRatio", "Dashboard")" + "?id=" + @Model.EventId,
+                type: "POST",
+                data: $(this).serialize(),
+                dataType: "json",
+                success: function(data) {
+                    BarChartActVisRat(data);
+                },
+                error: function(xhr, textStatus, error) {
+                    swal({
+                        title: "Error!",
+                        text: "Pulling data failed!",
+                        type: "error"
+                    });
+                    toastr.error(error);
+                }
+            });
+        });
+    </script>
+
+    @* SPONSORSHIP STATS *@
+    <script>
+        $(document).ready(function() {
+            $.ajax({
+                url: "@Url.Action("_NumberOfSponsorships", "Dashboard")" + "?id=" + @Model.EventId,
+                type: "POST",
+                data: $(this).serialize(),
+                dataType: "json",
+                success: function(data) {
+                    BarChart2(data);
+                },
+                error: function(xhr, textStatus, error) {
+                    swal({
+                        title: "Error!",
+                        text: "Pulling data failed!",
+                        type: "error"
+                    });
+                    toastr.error(error);
+                }
+            });
+        });
+    </script>
+
+    @* NUMBER OF EXHIBITORS *@
+    <script>
+        $(document).ready(function() {
+            $.ajax({
+                url: "@Url.Action("_NumberOfExhibitors", "Dashboard")" + "?id=" + @Model.EventId,
+                type: "POST",
+                data: $(this).serialize(),
+                dataType: "json",
+                success: function(data) {
+                    BarChartExhibitor(data);
+                },
+                error: function(xhr, textStatus, error) {
+                    swal({
+                        title: "Error!",
+                        text: "Pulling data failed!",
+                        type: "error"
+                    });
+                    toastr.error(error);
+                }
+            });
+        });
+    </script>
+
+    @* NUMBER OF VISITORS *@
+    <script>
+        $(document).ready(function() {
+            $.ajax({
+                url: "@Url.Action("_NumberOfVisitors", "Dashboard")" + "?id=" + @Model.EventId,
+                type: "POST",
+                data: $(this).serialize(),
+                dataType: "json",
+                success: function(data) {
+                    BarChart5(data);
+                },
+                error: function(xhr, textStatus, error) {
+                    swal({
+                        title: "Error!",
+                        text: "Pulling data failed!",
+                        type: "error"
+                    });
+                    toastr.error(error);
+                }
+            });
+        });
+    </script>
+
+    @* NUMBER OF EXHIBITORS PER SQM *@
+    <script>
+        $(document).ready(function() {
+            $.ajax({
+                url: "@Url.Action("_SqmPerExhibitor", "Dashboard")" + "?id=" + @Model.EventId,
+                type: "POST",
+                data: $(this).serialize(),
+                dataType: "json",
+                success: function(data) {
+                    BarChartSqmPerExhibitor(data);
+                },
+                error: function(xhr, textStatus, error) {
+                    swal({
+                        title: "Error!",
+                        text: "Pulling data failed!",
+                        type: "error"
+                    });
+                    toastr.error(error);
+                }
+            });
+        });
+    </script>
+
+
+    @* NUMBER OF VISITORS PER SQM *@
+    <script>
+        $(document).ready(function() {
+            $.ajax({
+                url: "@Url.Action("_NumberOfVisitorsPerSqm", "Dashboard")" + "?id=" + @Model.EventId,
+                type: "POST",
+                data: $(this).serialize(),
+                dataType: "json",
+                success: function(data) {
+                    BarChartVisitorPerSqm(data);
+                },
+                error: function(xhr, textStatus, error) {
+                    swal({
+                        title: "Error!",
+                        text: "Pulling data failed!",
+                        type: "error"
+                    });
+                    toastr.error(error);
+                }
+            });
+        });
+    </script>
+
+    @* NUMBER OF VISITORS PER SQM *@
+    <script>
+        $(document).ready(function() {
+            $.ajax({
+                url: "@Url.Action("_NumberOfVisitorsPerExhibitor", "Dashboard")" + "?id=" + @Model.EventId,
+                type: "POST",
+                data: $(this).serialize(),
+                dataType: "json",
+                success: function(data) {
+                    BarChartVisitorPerExhibitor(data);
+                },
+                error: function(xhr, textStatus, error) {
+                    swal({
+                        title: "Error!",
+                        text: "Pulling data failed!",
+                        type: "error"
+                    });
+                    toastr.error(error);
+                }
+            });
+        });
+    </script>
+
+    @* NUMBER OF VISITORS PER SQM PER DAY *@
+    <script>
+        $(document).ready(function() {
+            $.ajax({
+                url: "@Url.Action("_NumberOfVisitorsPerSqmAndDay", "Dashboard")" + "?id=" + @Model.EventId,
+                type: "POST",
+                data: $(this).serialize(),
+                dataType: "json",
+                success: function(data) {
+                    BarChartVisitorPerSqmAndDay(data);
+                },
+                error: function(xhr, textStatus, error) {
+                    swal({
+                        title: "Error!",
+                        text: "Pulling data failed!",
+                        type: "error"
+                    });
+                    toastr.error(error);
+                }
+            });
+        });
+    </script>
+
+    @if (EditionExtensions.CanHaveDelegates(Model.EventType))
+    {
+        @* NUMBER OF DELEGATES *@
+        <script>
+            $(document).ready(function() {
+                $.ajax({
+                    url: "@Url.Action("_NumberOfDelegates", "Dashboard")" + "?id=" + @Model.EventId,
+                    type: "POST",
+                    data: $(this).serialize(),
+                    dataType: "json",
+                    success: function(data) {
+                        BarChart6(data);
+                    },
+                    error: function(xhr, textStatus, error) {
+                        swal({
+                            title: "Error!",
+                            text: "Pulling data failed!",
+                            type: "error"
+                        });
+                        toastr.error(error);
+                    }
+                });
+            });
+        </script>
+
+        @* NUMBER OF PAID DELEGATES *@
+        <script>
+            $(document).ready(function() {
+                $.ajax({
+                    url: "@Url.Action("_NumberOfPaidDelegates", "Dashboard")" + "?id=" + @Model.EventId,
+                    type: "POST",
+                    data: $(this).serialize(),
+                    dataType: "json",
+                    success: function(data) {
+                        BarChart7(data);
+                    },
+                    error: function(xhr, textStatus, error) {
+                        swal({
+                            title: "Error!",
+                            text: "Pulling data failed!",
+                            type: "error"
+                        });
+                        toastr.error(error);
+                    }
+                });
+            });
+        </script>
+    }
+
+    @* NPS VISITOR *@
+    <script>
+        $(document).ready(function() {
+            $.ajax({
+                url: "@Url.Action("_VisitorNetPromoterScores", "Dashboard")" + "?id=" + @Model.EventId,
+                type: "POST",
+                data: $(this).serialize(),
+                dataType: "json",
+                success: function(data) {
+                    BarChart8(data);
+                },
+                error: function(xhr, textStatus, error) {
+                    swal({
+                        title: "Error!",
+                        text: "Pulling data failed!",
+                        type: "error"
+                    });
+                    toastr.error(error);
+                }
+            });
+        });
+    </script>
+
+    @* NPS EXHIBITOR *@
+    <script>
+        $(document).ready(function() {
+            $.ajax({
+                url: "@Url.Action("_ExhibitorNetPromoterScores", "Dashboard")" + "?id=" + @Model.EventId,
+                type: "POST",
+                data: $(this).serialize(),
+                dataType: "json",
+                success: function(data) {
+                    BarChart9(data);
+                },
+                error: function(xhr, textStatus, error) {
+                    swal({
+                        title: "Error!",
+                        text: "Pulling data failed!",
+                        type: "error"
+                    });
+                    toastr.error(error);
+                }
+            });
+        });
+    </script>
+
+    @* NPS SATISFACTION VISITOR *@
+    <script>
+        $(document).ready(function() {
+            $.ajax({
+                url: "@Url.Action("_VisitorSatisfactionNetPromoterScores", "Dashboard")" + "?id=" + @Model.EventId,
+                type: "POST",
+                data: $(this).serialize(),
+                dataType: "json",
+                success: function(data) {
+                    BarChart10(data);
+                },
+                error: function(xhr, textStatus, error) {
+                    swal({
+                        title: "Error!",
+                        text: "Pulling data failed!",
+                        type: "error"
+                    });
+                    toastr.error(error);
+                }
+            });
+        });
+    </script>
+
+    @* NPS SATISFACTION EXHIBITOR *@
+    <script>
+        $(document).ready(function() {
+            $.ajax({
+                url: "@Url.Action("_ExhibitorSatisfactionNetPromoterScores", "Dashboard")" + "?id=" + @Model.EventId,
+                type: "POST",
+                data: $(this).serialize(),
+                dataType: "json",
+                success: function(data) {
+                    BarChart11(data);
+                },
+                error: function(xhr, textStatus, error) {
+                    swal({
+                        title: "Error!",
+                        text: "Pulling data failed!",
+                        type: "error"
+                    });
+                    toastr.error(error);
+                }
+            });
+        });
+    </script>
+
+    @* NPS AVERAGE VISITOR *@
+    @*<script>
+            $(document).ready(function() {
+                $.ajax({
+                    url: "@Url.Action("_VisitorAverageNetPromoterScores", "Dashboard")" + "?id=" + @Model.EventId,
+                    type: "POST",
+                    data: $(this).serialize(),
+                    dataType: "json",
+                    success: function(data) {
+                        BarChart12(data);
+                    },
+                    error: function(xhr, textStatus, error) {
+                        swal({
+                            title: "Error!",
+                            text: "Pulling data failed!",
+                            type: "error"
+                        });
+                        toastr.error(error);
+                    }
+                });
+            });
+        </script>*@
+
+    @* NPS AVERAGE EXHIBITOR *@
+    @*<script>
+            $(document).ready(function() {
+                $.ajax({
+                    url: "@Url.Action("_ExhibitorAverageNetPromoterScores", "Dashboard")" + "?id=" + @Model.EventId,
+                    type: "POST",
+                    data: $(this).serialize(),
+                    dataType: "json",
+                    success: function(data) {
+                        BarChart13(data);
+                    },
+                    error: function(xhr, textStatus, error) {
+                        swal({
+                            title: "Error!",
+                            text: "Pulling data failed!",
+                            type: "error"
+                        });
+                        toastr.error(error);
+                    }
+                });
+            });
+        </script>*@
+
+    @*<script>
+            // Instance the tour
+            var tour = new Tour({
+                steps: [
+                {
+                    element: ".my-element",
+                    title: "Title of my step",
+                    content: "Content of my step"
+                },
+                {
+                    element: ".my-other-element",
+                    title: "Title of my step",
+                    content: "Content of my step"
+                }
+                ]});
+
+            // Initialize the tour
+            tour.init();
+
+            // Start the tour
+            tour.start();
+        </script>*@
+}

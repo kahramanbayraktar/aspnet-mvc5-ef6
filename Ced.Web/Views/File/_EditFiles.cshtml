@@ -1,0 +1,340 @@
+﻿@using Ced.BusinessEntities
+@using Ced.Web.Models.File
+@using ITE.Utility.Extensions
+@model FilesEditModel
+
+@{
+    var isEditable = !Model.CurrentUser.IsViewer && Model.IsAlive && !Model.IsCancelled;
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="hpanel hgrey">
+            <div class="panel-heading tooltip-demo">
+                <label data-toggle="tooltip" data-placement="top" title="...">
+                    Price List Upload <i class="fa fa-question-circle"></i>
+                </label>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    @if (isEditable)
+                    {
+                        <div class="form-group col-lg-3">
+                            <form action="@Url.Action("_Upload", "File")" class="dropzone dzfile" id="dropzonePriceList" style="border: none">
+                                @Html.HiddenFor(x => x.EntityId)
+                                @Html.Hidden("FileType", EditionFileType.PriceList)
+                                <div class="dz-default dz-message">
+                                    <i id="uploadPriceList" class="fa fa-send" style="font-size: 1.5em; position: absolute; left: 0; top: 20px"> <span style="font-family: 'open sans'; font-size: 0.8em; color: #6a6c6f">to upload a file drag & drop here or click to select file from your computer</span></i>
+                                </div>
+                            </form>
+                        </div>
+                    }
+                        <div class="form-group col-lg-@(isEditable ? 9 : 12)">
+                            <div id="divpricelistfiles" url="@Url.Action("_GetFiles", "File", new {entityId = Model.EntityId, EntityType = Model.EntityType.GetDescription().ToLower(), fileType = EditionFileType.PriceList.GetDescription().ToLower()})">
+                                @{
+                                    var priceListFiles = Model.Files.Where(x => x.EditionFileType == EditionFileType.PriceList).ToList();
+                                    Html.RenderPartial("~/Views/File/_EditionFiles.cshtml", new FilesEditModel { EntityId = Model.EntityId, EntityType = EntityType.Edition, Files = priceListFiles, EditionFileType = EditionFileType.PriceList, CurrentUser = Model.CurrentUser, IsCancelled = Model.IsCancelled });
+                                }
+                            </div>
+                            <div style="text-align: right">
+                                <a href="~/content/files/price-list-template.xlsx" target="_blank" title="Click to download Price List Template file" class="btn btn-orange">
+                                    <i class="fa fa-download"></i> Download Price List Template
+                                </a>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="hpanel hgrey">
+            <div class="panel-heading tooltip-demo">
+                <label data-toggle="tooltip" data-placement="top" title="Please refer to the excel template to understand the scope of this task. You are allowed to upload more than 1 file.
+                       <br><br>Visitor data refers to:<br>
+                        - Data collected during the exhibition (paper forms, other digital mediums)<br>
+                        - Online registration data (website, mobile phone or other digital mediums)<br>
+                        - Any other mediums hosting structured visitor data.">
+                    Visitor Data Upload <i class="fa fa-question-circle"></i>
+                </label>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    @if (isEditable)
+                    {
+                        <div class="form-group col-lg-3">
+                            <form action="@Url.Action("_Upload", "File")" class="dropzone dzfile" id="dropzoneVisitorData" style="border: none">
+                                @Html.HiddenFor(x => x.EntityId)
+                                @Html.Hidden("FileType", EditionFileType.VisitorData)
+                                <div id="dz-message-visitor-data" class="dz-default dz-message">
+                                    <i id="uploadVisitorData" class="fa fa-send" style="font-size: 1.5em; position: absolute; left: 0; top: 20px"> <span style="font-family: 'open sans'; font-size: 0.8em; color: #6a6c6f">to upload a file drag & drop here or click to select file from your computer</span></i>
+                                </div>
+                            </form>
+                        </div>
+                    }
+                    <div class="form-group col-lg-@(isEditable ? 9 : 12)">
+                        <div id="divvisitordatafiles" url="@Url.Action("_GetFiles", "File", new {entityId = Model.EntityId, EntityType = Model.EntityType.GetDescription().ToLower(), fileType = EditionFileType.VisitorData.GetDescription().ToLower()})">
+                            @{
+                                var visitorDataFiles = Model.Files.Where(x => x.EditionFileType == EditionFileType.VisitorData).ToList();
+                                Html.RenderPartial("~/Views/File/_EditionFiles.cshtml", new FilesEditModel { EntityId = Model.EntityId, EntityType = EntityType.Edition, Files = visitorDataFiles, EditionFileType = EditionFileType.VisitorData, CurrentUser = Model.CurrentUser, IsCancelled = Model.IsCancelled });
+                            }
+                        </div>
+                        <div style="text-align: right">
+                            <a href="~/content/files/visitor-data-input-template.xlsx" target="_blank" title="Click to download Visitor Data Input Template file" class="btn btn-orange">
+                                <i class="fa fa-download"></i> Download Visitor Data Input Template
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="hpanel hgrey">
+            <div class="panel-heading tooltip-demo">
+                <label data-toggle="tooltip" data-placement="top" title="Post show reports are important marketing materials and contain key metrics and information about an edition of an exhibition/event.
+                       <br><br>
+                    Should you have reports in multiple languages please feel free to upload each version by naming these files in such a way that other users can understand the difference between your reports while downloading. (max. 5 MB / .pdf or .ppt/pptx)">
+                    Post Show Report Upload <i class="fa fa-question-circle"></i>
+                </label>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    @if (isEditable)
+                    {
+                        <div class="form-group col-lg-3">
+                            <form action="@Url.Action("_Upload", "File")" class="dropzone dzfile" id="dropzonePostShowReport" style="border: none">
+                                @Html.HiddenFor(x => x.EntityId)
+                                @Html.Hidden("FileType", EditionFileType.PostShowReport)
+                                @Html.HiddenFor(x => x.LanguageCode)
+                                <div id="dz-message-post-show-report" class="dz-default dz-message">
+                                    <i id="uploadPostShowReport" class="fa fa-send" style="font-size: 1.5em; position: absolute; left: 0; top: 20px"> <span style="font-family: 'open sans'; font-size: 0.8em; color: #6a6c6f">to upload a file drag & drop here or click to select file from your computer</span></i>
+                                </div>
+                            </form>
+                        </div>
+                    }
+                    <div class="form-group col-lg-@(isEditable ? 9 : 12)">
+                        <div id="divpostshowreportfiles" url="@Url.Action("_GetFiles", "File", new {entityId = Model.EntityId, EntityType = Model.EntityType.GetDescription().ToLower(), fileType = EditionFileType.PostShowReport.GetDescription().ToLower(), langCode = Model.LanguageCode})">
+                            @{
+                                var postShowReportFiles = Model.Files.Where(x => x.EditionFileType == EditionFileType.PostShowReport).ToList();
+                                Html.RenderPartial("~/Views/File/_EditionFiles.cshtml", new FilesEditModel { EntityId = Model.EntityId, Files = postShowReportFiles, EditionFileType = EditionFileType.PostShowReport, CurrentUser = Model.CurrentUser, IsCancelled = Model.IsCancelled });
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="hpanel hgrey">
+            <div class="panel-heading tooltip-demo">
+                <label data-toggle="tooltip" data-placement="top" title="We kindly ask you to upload high quality images/photos you believe best represent your exhibition/event. A minimum of 3 pictures is recommended (max. 500 KB / image .png or .jpg/jpeg)">Photos taken at the Exhibition <i class="fa fa-question-circle"></i></label>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    @if (isEditable)
+                    {
+                        <div class="form-group col-lg-3">
+                            <form action="@Url.Action("_Upload", "File")" class="dropzone dzfile" id="dzExhibitionPhoto" style="border: none">
+                                @Html.HiddenFor(x => x.EntityId)
+                                @Html.Hidden("FileType", EditionFileType.ExhibitionPhoto)
+                                <div id="dz-message-exhibition-photo" class="dz-default dz-message">
+                                    <i id="uploadExhibitionPhoto" class="fa fa-send" style="font-size: 1.5em; position: absolute; left: 0; top: 20px"> <span style="font-family: 'open sans'; font-size: 0.8em; color: #6a6c6f">to upload a file drag & drop here or click to select file from your computer</span></i>
+                                </div>
+                            </form>
+                        </div>
+                    }
+                    <div class="form-group col-lg-@(isEditable ? 9 : 12)">
+                        <div id="divexhibitionphotofiles" url="@Url.Action("_GetFiles", "File", new {entityId = Model.EntityId, EntityType = Model.EntityType.GetDescription().ToLower(), fileType = EditionFileType.ExhibitionPhoto.GetDescription().ToLower()})">
+                            @{
+                                var exhibitionPhotoFiles = Model.Files.Where(x => x.EditionFileType == EditionFileType.ExhibitionPhoto).ToList();
+                                Html.RenderPartial("~/Views/File/_EditionFiles.cshtml", new FilesEditModel { EntityId = Model.EntityId, Files = exhibitionPhotoFiles, EditionFileType = EditionFileType.ExhibitionPhoto, CurrentUser = Model.CurrentUser, IsCancelled = Model.IsCancelled });
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body text-center">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <img src="" class="imagepreview img-responsive" style="display: inline !important">
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (isEditable)
+{
+    <script>
+        Dropzone.options.dropzonePriceList = {
+            maxFiles: 1,
+            acceptedFiles: '.xls, .xlsx',
+            uploadMultiple: false,
+            maxFilesize: 50,
+            init: function() {
+                this.on("complete", function(file) {
+                    this.removeFile(file);
+                });
+                this.on("success", function(file, result) {
+                    if (result.success === true) {
+                        refreshFiles('@EditionFileType.PriceList.GetDescription().ToLower()');
+                    } else {
+                        swal({
+                            title: "Error!",
+                            text: result.message,
+                            type: "error"
+                        });
+                    }
+                });
+                this.on("error", function(file, message) {
+                    swal({
+                        title: "Error!",
+                        text: message,
+                        type: "error"
+                    });
+                    this.removeFile(file);
+                });
+            }
+        };
+        Dropzone.options.dropzoneVisitorData = {
+            maxFiles: 1,
+            acceptedFiles: '.xls, .xlsx',
+            uploadMultiple: false,
+            maxFilesize: 50,
+            init: function() {
+                this.on("complete", function(file) {
+                    this.removeFile(file);
+                });
+                this.on("success", function(file, result) {
+                    if (result.success === true) {
+                        refreshFiles('@EditionFileType.VisitorData.GetDescription().ToLower()');
+                    } else {
+                        swal({
+                            title: "Error!",
+                            text: result.message,
+                            type: "error"
+                        });
+                    }
+                });
+                this.on("error", function(file, message) {
+                    swal({
+                        title: "Error!",
+                        text: message,
+                        type: "error"
+                    });
+                    this.removeFile(file);
+                });
+            }
+        };
+        Dropzone.options.dropzonePostShowReport = {
+            maxFiles: 1,
+            acceptedFiles: '.ppt, .pptx, .pdf',
+            uploadMultiple: false,
+            maxFilesize: 10,
+            init: function() {
+                this.on("complete", function(file) {
+                    this.removeFile(file);
+                });
+                this.on("success", function(file, result) {
+                    if (result.success === true) {
+                        refreshFiles('@EditionFileType.PostShowReport.GetDescription().ToLower()');
+                    } else {
+                        swal({
+                            title: "Error!",
+                            text: result.message,
+                            type: "error"
+                        });
+                    }
+                });
+                this.on("error", function(file, message) {
+                    swal({
+                        title: "Error!",
+                        text: message,
+                        type: "error"
+                    });
+                    this.removeFile(file);
+                });
+            }
+        };
+        Dropzone.options.dzExhibitionPhoto = {
+            maxFiles: 5,
+            acceptedFiles: ".jpg, .jpeg, .png",
+            uploadMultiple: false,
+            maxFilesize: 0.5,
+            init: function() {
+                this.on("complete", function(file) {
+                    this.removeFile(file);
+                });
+                this.on("success", function(file, result) {
+                    if (result.success === true) {
+                        refreshFiles('@EditionFileType.ExhibitionPhoto.GetDescription().ToLower()');
+                        swal({
+                            title: "Uploaded!",
+                            text: "Photo(s) uploaded.",
+                            type: "success"
+                        });
+                    } else {
+                        swal({
+                            title: "Error!",
+                            text: result.message,
+                            type: "error"
+                        });
+                    }
+                });
+                this.on("error", function(file, message) {
+                    swal({
+                        title: "Error!",
+                        text: message,
+                        type: "error"
+                    });
+                    this.removeFile(file);
+                });
+            },
+            //previewTemplate: "<div style=\"display:none\"></div>"
+        };
+    </script>
+
+    <style>
+        .dzfile {
+            border: 2px dashed #FF1932 !important;
+            border-radius: 2px;
+            width: 100%;
+            min-height: 150px;
+        }
+
+            .dzfile .dz-processing, .dz-preview, .dz-image, .dz-complete {
+                padding: 0;
+            }
+
+            .dzfile .dz-processing {
+                width: 98%;
+            }
+
+            .dzfile .dz-preview {
+                width: 98%;
+            }
+
+            .dzfile .dz-image {
+                width: 98%;
+            }
+
+            .dzfile .dz-complete {
+                width: 98%;
+                margin: 0;
+            }
+    </style>
+}

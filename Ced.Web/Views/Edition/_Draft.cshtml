@@ -1,0 +1,339 @@
+﻿@using Ced.BusinessEntities
+@using Ced.Web.Models.Edition
+@using ITE.Utility.Extensions
+@model EditionCloneModel
+
+@using (Html.BeginForm("_SaveDraft", "Edition", FormMethod.Post, new { id = "saveDraftForm" }))
+{
+    @Html.HiddenFor(model => model.EditionTranslationId)
+    @Html.HiddenFor(model => model.EditionId)
+    @Html.HiddenFor(model => model.EventId)
+    @Html.HiddenFor(model => model.LanguageCode)
+    @Html.HiddenFor(model => model.Status)
+
+    <div class="text-right m-t-xs">
+        @if (Model.Status != EditionStatusType.Approved && (Model.IsUpdatable || Model.CurrentUser.IsApprover))
+        {
+            <button class="btn btn-success saveDraft" id="saveDraft" type="submit">
+                Save Draft
+            </button>
+        }
+        @if (Model.IsSendableForApproval)
+        {
+            <a href="@Url.Action("_SendForApproval", "Edition", new {id = Model.EditionId})" class="sendForApproval btn btn-danger" title="Send for Approval">
+                <i class="fa fa-certificate"></i> Send for Approval
+            </a>
+        }
+        @if (Model.CurrentUser.IsApprover && Model.Status == EditionStatusType.WaitingForApproval)
+        {
+            <a href="@Url.Action("_Approve", "Edition", new {id = Model.EditionId})" data-id="@Model.EditionId" class="approve btn btn-success" title="Approve">
+                <i class="fa fa-check-circle-o"></i> Approve
+            </a>
+            <a href="@Url.Action("_Reject", "Edition", new {id = Model.EditionId})" data-id="@Model.EditionId" class="reject btn btn-danger" title="Reject">
+                <i class="fa fa-remove"></i> Reject
+            </a>
+        }
+    </div>
+
+    <div class="row generalinfo">
+        <div class="col-lg-3 text-center">
+            <i class="pe-7s-info fa-5x text-muted"></i>
+            <p class="small m-t-md">
+                <ul class="wizard-notf">
+                    <li>
+                        Central Events Database is an information repository built for Event Directors. The information to be provided herein allows the Group to standardise its reporting structures and performance metrics.
+                        <br />
+                        <br />
+                    </li>
+                    <li>
+                        Event Directors will use this portal to submit their key metrics. These metrics consist of "Public" and "Sensitive" data. While public data will be used for integration purposes like population of our calendars on corporate sites, sensitive data will only be used for internal reporting and visualisation purposes to better guide management hierarchies for efficient operational planning & budget duties.
+                        <hr />
+                    </li>
+                    <li>
+                        The data that will be submitted by Event Directors supports multi-lingual entry. Since most of our shows belong to geographies with localisation needs and English language at the same time, an Event Director has the flexibility to populate this information in a scalable format. The 4 steps, through which Event Directors are asked to provide information include web form field marked by 3 colours:
+                        <br />
+                        <br />
+                        <span style="color: #54c4fa"><b>Blue:</b> Multi-lingual entry is required. For example a show's description in English and in Russian need to be provided separately</span>
+                        <br />
+                        <br />
+                        <span style="color: #e74c3c">
+                            <b>Red:</b> Master Data that can't be modified by Event Directors. This data is populated by London HQ upon collection of "Event Setup Forms" and is integrated with the Group's financial systems. Should you wish to amend or update an information in these fields marked in red. Please contact <a href="mailto:event-setup@hyve.group">Reporting Department</a>.
+                        </span>
+                        <br />
+                        <br />
+                        <span style="color: #ffb606">
+                            <b>Orange:</b> Generic information that doesn't need to be populated every time an Event Director submits data in a different language. For example Venue Coordinates, Visiting Hours, etc.
+                        </span>
+                        <br />
+                        <br />
+                        <b>Tip:</b> To switch between available language input forms, please refer to the dropdown menu selection which sits next to the 4 steps.
+                        <br />
+                        <br />
+                    </li>
+                </ul>
+            </p>
+        </div>
+
+        <div class="col-lg-9">
+            <div class="row">
+
+                <div class="col-lg-12">
+                    <div class="hpanel hgrey">
+                        <div class="panel-heading">
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="form-group col-lg-12 tooltip-demo">
+                                    <label data-toggle="tooltip" data-placement="top" title="This is the reporting name of your event and is based on the name you submit as part of the event/edition set-up process. It will be used in the Group's AX Finance system, for all internal reporting purposes and as the Project ID in the Group's CRM system.">Event Name <i class="fa fa-question-circle"></i></label>
+                                    @Html.EditorFor(model => model.EditionName, new { htmlAttributes = new { @class = "form-control hyellow" } })
+                                </div>
+                                <div class="form-group col-lg-12 tooltip-demo">
+                                    <label data-toggle="tooltip" data-placement="top" title="Please enter the name of the event as it would be expressed internationally. This is the name that will be displayed on external Hyve Group websites and in all documentation (invoices, quotes) generated from the Group's CRM system.">International Name <i class="fa fa-question-circle"></i></label>
+                                    @Html.EditorFor(model => model.InternationalName, new { htmlAttributes = new { @class = "form-control hblue" } })
+                                </div>
+                                <div class="form-group col-lg-12 tooltip-demo">
+                                    <label data-toggle="tooltip" data-placement="top" title="If the name of the event is expressed differently in the host country, please enter it here. This name will be displayed on documentation (invoices, quotes) generated from the Group's CRM system for local contracts.">Local Name <i class="fa fa-question-circle"></i></label>
+                                    @Html.EditorFor(model => model.LocalName, new { htmlAttributes = new { @class = "form-control hblue" } })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-12">
+                    <div class="hpanel hgrey">
+                        <div class="panel-heading">
+                            Dates / Visiting Hours
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="form-group col-lg-6">
+                                    <label>Start-End Dates</label>
+                                    <div class="input-group">
+                                        @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "datepicker form-control hyellow" } })
+                                        <span class="input-group-addon">
+                                            <span class="fa fa-calendar-o"></span>
+                                        </span>
+                                        <span class="input-group-addon">-</span>
+                                        @Html.EditorFor(model => model.EndDate, new { htmlAttributes = new { @class = "datepicker form-control hyellow" } })
+                                        <span class="input-group-addon">
+                                            <span class="fa fa-calendar-o"></span>
+                                        </span>
+                                    </div>
+                                    @Html.ValidationMessageFor(model => model.StartDate, null, new { @class = "text-danger" })
+                                </div>
+                                <div class="form-group col-lg-6">
+                                    <label>Visiting Hours</label>
+                                    <div class="input-group">
+                                        @Html.EditorFor(model => model.VisitStartTime, new { htmlAttributes = new { @type = "text", @class = "form-control clockpicker hyellow" } })
+                                        <span class="input-group-addon">
+                                            <span class="fa fa-clock-o"></span>
+                                        </span>
+                                        <span class="input-group-addon">-</span>
+                                        @Html.EditorFor(model => model.VisitEndTime, new { htmlAttributes = new { @type = "text", @class = "form-control clockpicker hyellow" } })
+                                        <span class="input-group-addon">
+                                            <span class="fa fa-clock-o"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="form-group col-lg-2">
+                                    <label>Edition No</label>
+                                    @Html.EditorFor(model => model.EditionNo, new { htmlAttributes = new { @class = "form-control hyellow" } })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-12">
+                    <div class="hpanel hgrey">
+                        <div class="panel-heading">
+                            Contact Information
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="form-group col-lg-12">
+                                    <label>Email</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="fa fa-at"></i></span>
+                                        @Html.EditorFor(model => model.ManagingOfficeEmail, new { htmlAttributes = new { @class = "form-control hyellow" } })
+                                        @if (!string.IsNullOrWhiteSpace(Model.ManagingOfficeEmail))
+                                        {
+                                            <span class="input-group-addon"><a href="mailto:@(Model.ManagingOfficeEmail)"><i class="fa fa-envelope-o"></i> </a></span>
+                                        }
+                                    </div>
+                                </div>
+                                <div class="form-group col-lg-12">
+                                    <label>Phone</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="fa fa-phone"></i></span>
+                                        @Html.EditorFor(model => model.ManagingOfficePhone, new { htmlAttributes = new { @class = "form-control hyellow" } })
+                                    </div>
+                                </div>
+                                <div class="form-group col-lg-12">
+                                    <label>Event Website</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="fa fa-chain"></i></span>
+                                        @Html.EditorFor(model => model.EventWebSite, new { htmlAttributes = new { @class = "form-control hyellow" } })
+                                        @if (!string.IsNullOrWhiteSpace(Model.EventWebSite))
+                                        {
+                                            <span class="input-group-addon"><a href="@Model.EventWebSite.ToExternalLink()" target="_blank" title="Go to website"><i class="fa fa-external-link"></i></a></span>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-12">
+                    <div class="hpanel hgrey">
+                        <div class="panel-heading">
+                            Event Venue
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="form-group col-lg-6">
+                                    <label>Country</label>
+                                    @Html.EditorFor(model => model.Country, new { htmlAttributes = new { @class = "form-control hred", readOnly = "readOnly" } })
+                                </div>
+                                <div class="form-group col-lg-6">
+                                    <label>City</label>
+                                    @Html.EditorFor(model => model.City, new { htmlAttributes = new { @class = "form-control hred", readOnly = "readOnly" } })
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group col-lg-12">
+                                    <label>Venue Name</label>
+                                    @Html.EditorFor(model => model.VenueName, new {htmlAttributes = new {@class = "form-control hblue", @readonly = true}})
+                                    <input id="venueSearchBox" type="text" class="form-control" value=""/>
+                                </div>
+                                <div class="form-group col-lg-12 tooltip-demo">
+                                    <label data-toggle="tooltip" data-placement="top" title="Please use the address form field to locate the venue location. If the result on the map is somewhat off, you may also use the pin to adjust the location from the map module.">Full Address <i class="fa fa-question-circle"></i></label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon" style="width: 40px" id="basic-addon1"><i class="fa fa-map-signs"></i></span>
+                                        @Html.EditorFor(model => model.MapVenueFullAddress, new {htmlAttributes = new {id = "VenueAddress", @class = "form-control hyellow", @placeholder = "Full Address"}})
+                                        @Html.HiddenFor(model => model.VenueCoordinates, new {id = "VenueCoordinates"})
+                                        <span class="input-group-btn">
+                                            <button type="button" id="btnGetByAddress" class="btn btn-default" title="Search By Full Address" aria-label="Left Align">
+                                                <i class="fa fa-search"></i>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-lg-12">
+                                    <div class="border-right border-left">
+                                        <section id="map">
+                                            <div id="dvMap" style="height: 200px"></div>
+                                        </section>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-12">
+                    <div class="hpanel hgrey">
+                        <div class="panel-heading">
+                            Other
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="form-group col-lg-6" style="padding-top: 10px">
+                                    <label> @Html.CheckBoxFor(model => model.CohostedEvent, new { @class = "i-checks", id = "CohostedEvent" }) Co-hosted Event </label>
+                                </div>
+                                <div id="divCohostEditionSearch" class="col-lg-12" style="display: @(Model.CohostedEvent ? "block" : "none")">
+                                    <div class="form-group col-lg-12">
+                                        <input id="cohostedEditionSearchBox" name="Id" type="text" class="form-control" value="" />
+                                    </div>
+                                    <div id="divCohostEditions" class="form-group col-lg-6">
+                                        @{ Html.RenderPartial("~/Views/EditionCohost/_CohostEditions.cshtml", new CohostEditionListModel { EditionCohosts = Model.Cohosts }); }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-right m-t-xs">
+                @if (Model.Status != EditionStatusType.Approved && (Model.IsUpdatable || Model.CurrentUser.IsApprover))
+                {
+                    <button class="btn btn-success saveDraft" id="saveDraft" type="submit">
+                        Save Draft
+                    </button>
+                }
+                @if (Model.IsSendableForApproval)
+                {
+                    <a href="@Url.Action("_SendForApproval", "Edition", new {id = Model.EditionId})" class="sendForApproval btn btn-danger" title="Send for Approval">
+                        <i class="fa fa-certificate"></i> Send for Approval
+                    </a>
+                }
+                @if (Model.CurrentUser.IsApprover && Model.Status == EditionStatusType.WaitingForApproval)
+                {
+                    <a href="@Url.Action("_Approve", "Edition", new {id = Model.EditionId})" data-id="@Model.EditionId" class="approve btn btn-success" title="Approve">
+                        <i class="fa fa-check-circle-o"></i> Approve
+                    </a>
+                    <a href="@Url.Action("_Reject", "Edition", new {id = Model.EditionId})" data-id="@Model.EditionId" class="reject btn btn-danger" title="Reject">
+                        <i class="fa fa-remove"></i> Reject
+                    </a>
+                }
+            </div>
+        </div>
+    </div>
+}
+
+<script>
+    /* MAP */
+    var currentCoords = '@Model.VenueCoordinates';
+    var eventCity = '@Model.City';
+</script>
+
+<script>
+    var cohostGetUrl = "@Url.Action("_GetCohostEditions", "EditionCohost")";
+    var cohostAddUrl = "@Url.Action("_AddCohostEdition", "EditionCohost")";
+    var cohostDelUrl = "@Url.Action("_DeleteCohostEdition", "EditionCohost")";
+    var editionSearchUrl = '@Url.Action("_SearchEditions", "Edition", new { editionId = Model.EditionId })';
+    var editionId = @Model.EditionId;
+</script>
+
+<script src="~/Scripts/ced-cohost.js"></script>
+
+<script>
+    var venueSearchUrl = '@Url.Action("_SearchVenues", "Edition", new { editionId = Model.EditionId })';
+
+    $("#venueSearchBox").select2(
+    {
+        placeholder: "Find a venue",
+        minimumInputLength: 3,
+        allowClear: true,
+        ajax: {
+            quietMillis: 150,
+            url: venueSearchUrl,
+            dataType: "json",
+            data: function (term, page) {
+                return {
+                    pageSize: pageSize,
+                    pageNum: page,
+                    searchTerm: term
+                };
+            },
+            results: function (data, page) {
+                var more = (page * pageSize) < data.Total;
+                return { results: data.Results, more: more };
+            }
+        }
+    });
+
+    $("#venueSearchBox").on("select2-selecting", function (e) {
+        $("#VenueName").val(e.val);
+    });
+    $("#venueSearchBox").on("select2-select", function (e) {
+        $("#select2-chosen-3").text("Find a venue");
+    });
+</script>
+
+<link rel="stylesheet" href="~/Content/bootstrap-clockpicker.min.css" />
+<script src="~/Scripts/bootstrap-clockpicker.min.js"></script>

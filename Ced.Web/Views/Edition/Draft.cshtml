@@ -1,0 +1,122 @@
+﻿@using Ced.BusinessEntities
+@using ITE.Utility.Extensions
+@model Ced.Web.Models.Edition.EditionCloneModel
+
+@{
+    ViewBag.Title = Model.EditionName;
+}
+
+<div class="small-header">
+    <div class="hpanel">
+        <div class="panel-body">
+            <h2 class="font-light m-b-xs">
+                Draft Edition
+            </h2>
+            <div id="hbreadcrumb" class="pull-left">
+                <ol class="hbreadcrumb breadcrumb">
+                    <li>
+                        <a href="@Url.Action("Index", "Dashboard")">Main</a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Index", "Edition")">Event Editions</a>
+                    </li>
+                    <li class="active">
+                        <span>Draft Edition</span>
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="content animate-panel">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="hpanel" id="editionedit">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <h3 class="font-bold">
+                                <i class="fa @(Model.Status.GetAttribute<EditionStatusAttribute>().FaIcon) 2x text-danger" title="@Model.Status.GetDescription()"></i> @Model.EditionName
+                            </h3>
+                            <h5 style="padding-left: 30px">
+                                <span class="font-bold">Master Name:</span> @Html.ActionLink(Model.EventName, "Index", "Edition", new { eventId = Model.EventId, name = Model.EventName.ToUrlString() }, new { target = "_blank" })
+                            </h5>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="col-lg-6">
+                                <div class="row">
+                                    <div class="text-muted m-b-xs col-lg-12"><span class="font-bold">Type:</span> @Model.EventType</div>
+                                </div>
+                                <div class="row">
+                                    <div class="text-muted m-b-xs col-lg-12"><span class="font-bold">Frequency:</span> @Model.Frequency</div>
+                                </div>
+                                <div class="row">
+                                    <div class="text-muted m-b-xs col-lg-12"><span class="font-bold">Ownership:</span> @Model.EventOwnership</div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="row">
+                                    <div class="text-muted m-b-xs col-lg-12"><span class="font-bold">Industry:</span> @Model.Industry</div>
+                                </div>
+                                <div class="row">
+                                    <div class="text-muted m-b-xs col-lg-12"><span class="font-bold">Sub-industry:</span> @Model.SubIndustry</div>
+                                </div>
+                                <div class="row">
+                                    <div class="text-muted m-b-xs col-lg-12"><span class="font-bold">Director:</span> @Model.DirectorFullName</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <div class="panel-body">
+                    @{ Html.RenderPartial("_Draft", Model); }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    @Styles.Render("~/bundles/sweetalert/css")
+    @Styles.Render("~/bundles/toastr/css")
+    @Styles.Render("~/bundles/datepicker/css")
+    <style>
+        fieldset {
+            padding: 0 !important;
+            margin: 0;
+            display: inline-block;
+            border: dashed 1px lightgrey !important;
+            border-bottom: 0 !important;
+            height: 20px !important;
+        }
+        legend {
+            white-space: nowrap;
+            font-weight: bold !important;
+            font-size: 11px !important;
+            margin: 10px !important;
+            color: grey;
+        }
+    </style>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/sweetalert/js")
+    @Scripts.Render("~/bundles/toastr/js")
+    @Scripts.Render("~/bundles/datepicker/js")
+    @*<script type="text/javascript" src="~/Vendor/bootstrap-datepicker-master/dist/locales/bootstrap-datepicker.en-GB.min.js"></script>*@
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDuYZTUdX5nRB8gfGw0x32iNo3yVm0O6qI"></script>
+    <script src="~/Scripts/ced-editiondraft.js?v=2"></script>
+    <script src="~/Scripts/ced-google-map.js"></script>
+    <script>
+        var editionTranslationId = @Model.EditionTranslationId;
+    </script>
+    <script>
+        $('.datepicker').datepicker({
+            format: "dd-mm-yyyy",
+            language: "en-GB"
+        });
+        $('.clockpicker').clockpicker({ autoclose: true });
+    </script>
+}

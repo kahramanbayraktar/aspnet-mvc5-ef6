@@ -1,0 +1,121 @@
+﻿@model Ced.Web.Models.AdminEdition.AdminEditionDetailsModel
+
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="color-line"></div>
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <h4 class="modal-title">Edition Details</h4>
+        </div>
+        <div class="modal-body" style="width: 800px">
+            <div class="panel-body no-padding log-details" style="display: block;">
+                <ul class="list-group" style="width: 50%; float: left">
+                    <li class="list-group-item">
+                        <span class="badge badge-primary">Edition Id</span>
+                        @Html.DisplayFor(x => x.EditionId)
+                    </li>
+                    <li class="list-group-item">
+                        <span class="badge badge-primary">Edition Name</span>
+                        @Html.DisplayFor(x => x.EditionName)
+                    </li>
+                    <li class="list-group-item">
+                        <span class="badge badge-primary">Event Name</span>
+                        @Html.DisplayFor(x => x.EventName)
+                    </li>
+                    <li class="list-group-item">
+                        <span class="badge badge-info">Director Email</span>
+                        @(string.IsNullOrWhiteSpace(Model.DirectorEmail) ? "-" : Model.DirectorEmail)
+                    </li>
+                    <li class="list-group-item">
+                        <span class="badge badge-danger">Start/End Date</span>
+                        @Html.DisplayFor(x => x.StartDate) / @Html.DisplayFor(x => x.EndDate)
+                    </li>
+                    <li class="list-group-item ">
+                        <span class="badge badge-info">ReportingName</span>
+                        @Html.DisplayFor(x => x.ReportingName)
+                    </li>
+                    <li class="list-group-item ">
+                        <span class="badge badge-info">LocalName</span>
+                        @Html.DisplayFor(x => x.LocalName)
+                    </li>
+                    <li class="list-group-item ">
+                        <span class="badge badge-info">InternationalName</span>
+                        @Html.DisplayFor(x => x.InternationalName)
+                    </li>
+                    <li class="list-group-item ">
+                        <span class="badge badge-info">Frequency</span>
+                        @Html.DisplayFor(x => x.Frequency)
+                    </li>
+                    <li class="list-group-item ">
+                        <span class="badge badge-info">City/Country</span>
+                        @Html.DisplayFor(x => x.City) / @Html.DisplayFor(x => x.Country)
+                    </li>
+                    <li class="list-group-item ">
+                        <span class="badge badge-info">ManagingOfficeName</span>
+                        @Html.DisplayFor(x => x.ManagingOfficeName)
+                    </li>
+                    <li class="list-group-item ">
+                        <span class="badge badge-info">ManagingOfficeEmail</span>
+                        @Html.DisplayFor(x => x.ManagingOfficeEmail)
+                    </li>
+                    <li class="list-group-item ">
+                        <span class="badge badge-info">ManagingOfficePhone</span>
+                        @Html.DisplayFor(x => x.ManagingOfficePhone)
+                    </li>
+                    <li class="list-group-item ">
+                        <span class="badge badge-info">ManagingOfficeWebsite</span>
+                        @Html.DisplayFor(x => x.ManagingOfficeWebsite)
+                    </li>
+                    <li class="list-group-item ">
+                        <span class="badge badge-info">DirectorManagingOfficeName</span>
+                        @Html.DisplayFor(x => x.DirectorManagingOfficeName)
+                    </li>
+                </ul>
+                <ul class="list-group" style="width: 50%; float: left">
+                    <li class="list-group-item ">
+                        <span class="badge badge-info">DwEventId</span>
+                        @Html.DisplayFor(x => x.DwEventId)
+                    </li>
+                    <li class="list-group-item ">
+                        <span class="badge badge-info">AxEventId</span>
+                        @Html.DisplayFor(x => x.AxEventId)
+                    </li>
+                    <li class="list-group-item ">
+                        <span class="badge badge-info">EditionNo</span>
+                        @Html.DisplayFor(x => x.EditionNo)
+                    </li>
+                    <li class="list-group-item ">
+                        <span class="badge badge-info">Visit Start/End</span>
+                        @Html.DisplayFor(x => x.VisitStartTime) / @Html.DisplayFor(x => x.VisitEndTime)
+                    </li>
+                    <li class="list-group-item ">
+                        <span class="badge badge-info">VenueCoordinates</span>
+                        @Html.DisplayFor(x => x.VenueCoordinates)
+                    </li>
+                    <li class="list-group-item ">
+                        <span class="badge badge-info">Financial Year Start/End</span>
+                        @Html.DisplayFor(x => x.FinancialYearStart) / @Html.DisplayFor(x => x.FinancialYearEnd)
+                    </li>
+                    <li class="list-group-item ">
+                        <span class="badge badge-info">Frequency</span>
+                        @Html.DisplayFor(x => x.Frequency)
+                    </li>
+                    <li class="list-group-item ">
+                        <span class="badge badge-info">Status</span>
+                        @Html.DisplayFor(x => x.Status)
+                    </li>
+                    <li class="list-group-item ">
+                        <span class="badge badge-info">EventActivity</span>
+                        @Html.DisplayFor(x => x.EventActivity)
+                    </li>
+                    <li class="list-group-item ">
+                        <span class="badge badge-info">EventType</span>
+                        @Html.DisplayFor(x => x.EventType)
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

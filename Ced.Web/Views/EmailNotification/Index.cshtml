@@ -1,0 +1,87 @@
+﻿@model Ced.Web.Models.EmailNotification.EmailNotificationListModel
+
+@{
+    ViewBag.Title = "Email Notifications";
+}
+
+<div class="small-header">
+    <div class="hpanel">
+        <div class="panel-body">
+            <h2 class="font-light m-b-xs">
+                Email Notifications to Send
+            </h2>
+            <div id="hbreadcrumb" class="pull-left">
+                <ol class="hbreadcrumb breadcrumb">
+                    <li><a href="@Url.Action("Index", "Dashboard")">Main</a></li>
+                    <li>
+                        <span>Email Notifications</span>
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="content animate-panel">
+    <div class="row">
+        <div class="col-lg-3">
+            @Html.Action("_Search", "EmailNotification")
+        </div>
+        <div class="col-lg-9">
+            <div class="hpanel">
+                <div class="panel-body">
+                    <div id="tableHolder">
+                        @*@Html.Partial("_List", new EmailNotificationListModel { Notifications = Model.Notifications })*@
+                        @Html.Partial("_List", Model.EmailNotifications)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    @Styles.Render("~/bundles/datatables/css")
+    @Styles.Render("~/bundles/sweetAlert/css")
+    @Styles.Render("~/bundles/datepicker/css")
+
+    <link rel="stylesheet" href="~/Vendor/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" />
+    <link href="https://cdn.jsdelivr.net/jquery.loading/1.2.0/jquery.loading.min.css" rel="stylesheet">
+
+    <style>
+        .dataTable > thead > tr > th[class*="no-sort"]:after {
+            content: "" !important;
+        }
+
+        .table-responsive {
+            overflow-x: hidden;
+        }
+    </style>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/moment/js")
+    @Scripts.Render("~/bundles/datatables/js")
+    @Scripts.Render("~/bundles/datatablesBootstrap/js")
+    @Scripts.Render("~/bundles/sweetAlert/js")
+    @Scripts.Render("~/bundles/toastr/js")
+    @Scripts.Render("~/bundles/datepicker/js")
+
+    <script type="text/javascript" src="~/Vendor/bootstrap-datepicker-master/dist/locales/bootstrap-datepicker.en-GB.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.loading/1.2.0/jquery.loading.min.js"></script>
+
+    <script>
+        $(function () {
+            $('.datepicker').datepicker({
+                language: 'en-GB'
+            });
+        });
+    </script>
+
+    <script>
+        var notificationGetUrl = "@Url.Action("_Search", "EmailNotification")";
+        var eventSearchUrl = '@Url.Action("_SearchEventsAsAdmin", "Event")';
+    </script>
+
+    <script src="~/Scripts/ced-emailnotification.js"></script>
+}

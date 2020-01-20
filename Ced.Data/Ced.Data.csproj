@@ -1,0 +1,182 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{058B310B-FDFB-4089-A2A8-716CFD2BC92B}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Ced.Data</RootNamespace>
+    <AssemblyName>Ced.Data</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>CedData.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AutoMapper, Version=5.2.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.5.2.0\lib\net45\AutoMapper.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="GenericRepository\GenericRepository.cs" />
+    <Compile Include="Migrations\201903111326505_FirstMigration.cs" />
+    <Compile Include="Migrations\201903111326505_FirstMigration.Designer.cs">
+      <DependentUpon>201903111326505_FirstMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201909130745001_AddedRussiaAndEurasiaRegionsToEdition.cs" />
+    <Compile Include="Migrations\201909130745001_AddedRussiaAndEurasiaRegionsToEdition.Designer.cs">
+      <DependentUpon>201909130745001_AddedRussiaAndEurasiaRegionsToEdition.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201910230730588_AddedCRMFinanceFields.cs" />
+    <Compile Include="Migrations\201910230730588_AddedCRMFinanceFields.Designer.cs">
+      <DependentUpon>201910230730588_AddedCRMFinanceFields.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201910311140110_UpdatedEditionPaymentSchedule.cs" />
+    <Compile Include="Migrations\201910311140110_UpdatedEditionPaymentSchedule.Designer.cs">
+      <DependentUpon>201910311140110_UpdatedEditionPaymentSchedule.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201911060650156_MovedSomeFieldsFromEditionTranslationToEdition.cs" />
+    <Compile Include="Migrations\201911060650156_MovedSomeFieldsFromEditionTranslationToEdition.Designer.cs">
+      <DependentUpon>201911060650156_MovedSomeFieldsFromEditionTranslationToEdition.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201911061306307_UpdatedEditionPaymentScheduleScheme.cs" />
+    <Compile Include="Migrations\201911061306307_UpdatedEditionPaymentScheduleScheme.Designer.cs">
+      <DependentUpon>201911061306307_UpdatedEditionPaymentScheduleScheme.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201911140902355_AddedImageFieldsAndPromotedFieldToEdition.cs" />
+    <Compile Include="Migrations\201911140902355_AddedImageFieldsAndPromotedFieldToEdition.Designer.cs">
+      <DependentUpon>201911140902355_AddedImageFieldsAndPromotedFieldToEdition.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201911141106090_AddedImageFieldsAndPromotedFieldToEdition2.cs" />
+    <Compile Include="Migrations\201911141106090_AddedImageFieldsAndPromotedFieldToEdition2.Designer.cs">
+      <DependentUpon>201911141106090_AddedImageFieldsAndPromotedFieldToEdition2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201912091026109_RemovedExchangeRateTable.cs" />
+    <Compile Include="Migrations\201912091026109_RemovedExchangeRateTable.Designer.cs">
+      <DependentUpon>201912091026109_RemovedExchangeRateTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\Application.cs" />
+    <Compile Include="Models\CedContext.cs" />
+    <Compile Include="Models\Clnd_AdUserList.cs" />
+    <Compile Include="Models\Clnd_customtable_Organiser.cs" />
+    <Compile Include="Models\Clnd_customtable_Venue.cs" />
+    <Compile Include="Models\Clnd_Custom_Countries.cs" />
+    <Compile Include="Models\Clnd_Custom_IndustrySectors.cs" />
+    <Compile Include="Models\Clnd_Custom_Regions.cs" />
+    <Compile Include="Models\Clnd_EventDirectors.cs" />
+    <Compile Include="Models\Clnd_KenticoEvents.cs" />
+    <Compile Include="Models\Clnd_Temp_Org.cs" />
+    <Compile Include="Models\Country.cs" />
+    <Compile Include="Models\Edition.cs" />
+    <Compile Include="Models\EditionCohost.cs" />
+    <Compile Include="Models\EditionCountry.cs" />
+    <Compile Include="Models\EditionCountryRelationType.cs" />
+    <Compile Include="Models\EditionDiscountApprover.cs" />
+    <Compile Include="Models\EditionKeyVisitor.cs" />
+    <Compile Include="Models\EditionPaymentSchedule.cs" />
+    <Compile Include="Models\EditionSection.cs" />
+    <Compile Include="Models\EditionTranslation.cs" />
+    <Compile Include="Models\EditionTranslationSocialMedia.cs" />
+    <Compile Include="Models\EditionVisitor.cs" />
+    <Compile Include="Models\Event.cs" />
+    <Compile Include="Models\EventDirector.cs" />
+    <Compile Include="Models\File.cs" />
+    <Compile Include="Models\Industry.cs" />
+    <Compile Include="Models\KeyVisitor.cs" />
+    <Compile Include="Models\Log.cs" />
+    <Compile Include="Models\Notification.cs" />
+    <Compile Include="Models\Region.cs" />
+    <Compile Include="Models\Role.cs" />
+    <Compile Include="Models\SocialMedia.cs" />
+    <Compile Include="Models\Subscription.cs" />
+    <Compile Include="Models\User.cs" />
+    <Compile Include="Models\UserRole.cs" />
+    <Compile Include="Models\Vw_EventInformations.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UnitOfWork\IUnitOfWork.cs" />
+    <Compile Include="UnitOfWork\UnitOfWork.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="CedData.snk" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201903111326505_FirstMigration.resx">
+      <DependentUpon>201903111326505_FirstMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201909130745001_AddedRussiaAndEurasiaRegionsToEdition.resx">
+      <DependentUpon>201909130745001_AddedRussiaAndEurasiaRegionsToEdition.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201910230730588_AddedCRMFinanceFields.resx">
+      <DependentUpon>201910230730588_AddedCRMFinanceFields.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201910311140110_UpdatedEditionPaymentSchedule.resx">
+      <DependentUpon>201910311140110_UpdatedEditionPaymentSchedule.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201911060650156_MovedSomeFieldsFromEditionTranslationToEdition.resx">
+      <DependentUpon>201911060650156_MovedSomeFieldsFromEditionTranslationToEdition.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201911061306307_UpdatedEditionPaymentScheduleScheme.resx">
+      <DependentUpon>201911061306307_UpdatedEditionPaymentScheduleScheme.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201911140902355_AddedImageFieldsAndPromotedFieldToEdition.resx">
+      <DependentUpon>201911140902355_AddedImageFieldsAndPromotedFieldToEdition.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201911141106090_AddedImageFieldsAndPromotedFieldToEdition2.resx">
+      <DependentUpon>201911141106090_AddedImageFieldsAndPromotedFieldToEdition2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201912091026109_RemovedExchangeRateTable.resx">
+      <DependentUpon>201912091026109_RemovedExchangeRateTable.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

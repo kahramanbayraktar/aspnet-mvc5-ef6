@@ -1,0 +1,724 @@
+﻿@using Ced.BusinessEntities
+@using Ced.BusinessServices.Helpers
+@using Ced.Utility
+@using Ced.Utility.Azure
+@using Ced.Utility.Web
+@using ITE.Utility.Extensions
+@using Constants = Ced.Utility.Constants
+@model Ced.Web.Models.Edition.EditionEditModel
+
+@{
+    ViewBag.Title = Model.EditionEditGeneralInfoModel.EditionName;
+    var webLogo = EditionImageType.WebLogo.GetAttribute<ImageAttribute>();
+    var peopleImage = EditionImageType.PeopleImage.GetAttribute<ImageAttribute>();
+    var isImagesEditable = !Model.IsCancelled && Model.IsAlive && Model.IsEditableForImages && Model.EditionTranslationId > 0;
+}
+
+<div class="small-header">
+    <div class="hpanel">
+        <div class="panel-body">
+            <h2 class="font-light m-b-xs">
+                Edit Edition
+            </h2>
+            <div id="hbreadcrumb" class="pull-left">
+                <ol class="hbreadcrumb breadcrumb">
+                    <li>
+                        <a href="@Url.RouteUrl("DashboardIndex")">Main</a>
+                    </li>
+                    <li>
+                        <a href="@Url.RouteUrl("EditionsIndex")">Event Editions</a>
+                    </li>
+                    <li class="active">
+                        <span>Edit Edition</span>
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="content">
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="hpanel" id="editionedit">
+                <div class="hpanel hbgyellow2" style="margin-bottom: 0 !important">
+                    <div class="panel-body" style="padding-top: 10px !important; padding-bottom: 7px !important; padding-right: 0 !important">
+                        <div class="col-lg-10 text-left">
+                            You are currently entering information in <b>@(Model.LanguageCode.ToEnumFromDescription<LanguageHelper.Languages>().ToString())</b>.
+                            <br />To submit the same information in another language in order to support multi-lingual structures on various Hyve websites, please select:
+                        </div>
+                        <div class="col-lg-2 text-right" style="padding-right: 0 !important">
+                            <div class="btn-group">
+                                <button data-toggle="dropdown" class="btn btn-orange dropdown-toggle"><i class="fa fa-flag-o"></i> @(Model.LanguageCode.ToEnumFromDescription<LanguageHelper.Languages>()) <span class="caret"></span></button>
+                                <ul class="dropdown-menu pull-right">
+                                    @foreach (LanguageHelper.Languages lang in Enum.GetValues(typeof(LanguageHelper.Languages)))
+                                    {
+                                        var langAttr = lang.GetAttribute<LanguageHelper.LanguageAttribute>();
+                                        <li><a href="@Url.Action("Edit", "Edition", new {id = Model.EditionId, name = Model.EditionEditGeneralInfoModel.EditionName.ToUrlString(), lang = langAttr.LanguageCode})">@langAttr.LongName</a></li>
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="col-lg-6">
+                                <h3 class="font-bold">
+                                    @if (Model.Status != EditionStatusType.Published)
+                                    {
+                                        <i class="fa @(Model.Status.GetAttribute<EditionStatusAttribute>().FaIcon) 2x text-@(Model.Status.GetAttribute<EditionStatusAttribute>().IconColor)" title="@Model.Status.GetDescription()"></i>
+                                    }
+                                    @Model.EditionEditGeneralInfoModel.EditionName
+                                    <span class="tooltip-demo">
+                                        <a data-toggle="tooltip" data-placement="top" style="display: @(Model.IsUserSubscribed ? "none" : "")" id="subscribebtn" href="@Url.Action("_Subscribe", "Subscription", new {editionId = Model.EditionId})" data-editionid="@Model.EditionId" class="btn btn-circle btn-danger" title="Subscribe to event edition">
+                                            <i class="fa fa-bell-slash fa-lg"></i>
+                                        </a>
+                                        <a data-toggle="tooltip" data-placement="top" style="display: @(Model.IsUserSubscribed ? "" : "none")" id="unsubscribebtn" href="@Url.Action("Unsubscribe", "Subscription", new {editionId = Model.EditionId})" data-editionid="@Model.EditionId" class="btn btn-circle btn-success" title="Unsubscribe from event edition">
+                                            <i class="fa fa-bell fa-lg"></i>
+                                        </a>
+                                    </span>
+                                </h3>
+                                <h5>
+                                    <span class="font-bold">Master Name:</span> @Html.ActionLink(Model.EventMasterName, "Index", "Edition", new {eventId = Model.EventId, name = Model.EventMasterName.ToUrlString()}, new {target = "_blank"})
+                                </h5>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="col-lg-6">
+                                    <div class="row">
+                                        <div class="text-muted m-b-xs col-lg-12"><span class="font-bold">Ranking:</span> @Model.Classification</div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="text-muted m-b-xs col-lg-12"><span class="font-bold">Frequency:</span> @Model.Frequency</div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="text-muted m-b-xs col-lg-8 tooltip-demo">
+                                            <label data-toggle="tooltip" data-placement="top" title="Business Entity ID: This global ID is what connects our event data across all global systems. It originates from London’s global AX Finance system and is distributed to global systems including but not limited to Dynamics CRM, Navision CRM, CED, etc."><span class="font-bold">Event BE ID <i class="fa fa-question-circle"></i> :</span></label>
+                                            @Model.AxEventId
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="row">
+                                        <div class="text-muted m-b-xs col-lg-12"><span class="font-bold">Update:</span> @Model.UpdateTime</div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="text-muted m-b-xs col-lg-12"><span class="font-bold">Auto-Update:</span> @Model.UpdateTimeByAutoIntegration</div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="text-muted m-b-xs col-lg-12"><span class="font-bold">Director:</span> @Model.DirectorFullName</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 text-right">
+                            @if (!Model.IsEditableForImages)
+                            {
+                                <a href="@string.Format("mailto:stuart.ledden@hyve.group?subject=CED - Exhibition Media / Artwork Change Request - {0}", Uri.EscapeDataString(Model.EditionEditGeneralInfoModel.EditionName))" class="btn btn-danger">
+                                    <i class="fa fa-picture-o"></i> Click to request for web logo/people image change
+                                </a>
+                            }
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-12" style="display: flex !important">
+                            <div class="col-lg-2" style="display: flex; flex: 2 !important">
+                                @if (isImagesEditable)
+                                {
+                                    <table>
+                                        <tr>
+                                            <td>
+                                                <form action="@Url.Action("_SaveImage", "Edition")" class="dropzone dzimage" id="dzForm@(webLogo.Key)" style="border: 1px solid #f1f3f6; height: 100%">
+                                                    @Html.HiddenFor(x => x.EditionEditGeneralInfoModel.EditionId)
+                                                    @Html.HiddenFor(x => x.EditionEditGeneralInfoModel.EditionName)
+                                                    @Html.HiddenFor(x => x.EditionEditGeneralInfoModel.WebLogoFileName)
+                                                    @Html.HiddenFor(x => x.EditionEditGeneralInfoModel.LanguageCode)
+                                                    @Html.Hidden("EditionImageType", EditionImageType.WebLogo)
+                                                    <div id="dz-message-logo" class="dz-default dz-message" style="position: relative; left: 0; top: 0">
+                                                        <div>
+                                                            @*<img class="img-responsive" id="img@(webLogo.Key)" src="@EditionImageType.WebLogo.BlobFullUrl(Model.EditionEditGeneralInfoModel.WebLogoFileName)" style="display: block; margin: auto" onerror="this.onerror = null; this.src = '@EditionImageType.WebLogo.EditionDefaultImageUrl()';" />*@
+                                                            <img class="img-responsive" id="img@(webLogo.Key)" src="@EditionImageType.WebLogo.BlobFullUrl(Model.EditionEditGeneralInfoModel.WebLogoFileName)" style="display: block; margin: auto" onerror="this.onerror = null; this.src = 'https://dummyimage.com/214x111/f1f3f6/000000.png&text=+';" />
+                                                        </div>
+                                                        <div class="text-justify tooltip-demo" style="padding: 10px; line-height: 1em">
+                                                            <label data-toggle="tooltip" data-placement="top" title="The web logo will be used on all Group websites and online calendars."><span class="font-bold">Web Logo <i class="fa fa-question-circle"></i></span></label><br>
+                                                            <span style="font-size: 10px; font-weight: normal">Click above to upload web logo.<br />Image format: <b>.png</b><br />Image dimensions: <b>214 x 111 px</b><br />Max file size: <b>@webLogo.MinMaxLengths[1] KB</b></span>
+                                                        </div>
+                                                        <i id="upload@(webLogo.Key)" class="fa fa-send" style="font-size: 1.5em; display: none; position: absolute; left: 20px; top: 35px"><br /><span style="font-family: 'open sans'; font-size: 0.8em; color: #6a6c6f">upload web logo</span></i>
+                                                    </div>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align: right">
+                                                <a href="@Url.Action("_DeleteImage", "Edition", new {editionTranslationId = Model.EditionTranslationId, imageType = EditionImageType.WebLogo})" id="del@(webLogo.Key)" class="deletePic" style="display: @(!string.IsNullOrWhiteSpace(Model.EditionEditGeneralInfoModel.WebLogoFileName) ? "block" : "none")" target="_blank" title="Click to delete logo">
+                                                    <i class="fa fa-trash-o"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                }
+                                else
+                                {
+                                    <img class="img-responsive" id="img@(webLogo.Key)" src="@EditionImageType.WebLogo.BlobFullUrl(Model.EditionEditGeneralInfoModel.WebLogoFileName)" style="display: block; margin: auto" onerror="this.onerror = null; this.src = '@EditionImageType.WebLogo.EditionDefaultImageUrl()';" />
+                                }
+                            </div>
+                            <div class="col-lg-10" style="display: flex; flex: 10 !important">
+                                @if (isImagesEditable)
+                                {
+                                    <table class="col-lg-12">
+                                        <tr>
+                                            <td>
+                                                <form action="@Url.Action("_SaveImage", "Edition")" class="dropzone" id="dzForm@(peopleImage.Key)" style="border: 1px solid #f1f3f6">
+                                                    @Html.HiddenFor(x => x.EditionEditGeneralInfoModel.EditionId)
+                                                    @Html.HiddenFor(x => x.EditionEditGeneralInfoModel.EditionName)
+                                                    @Html.HiddenFor(x => x.EditionEditGeneralInfoModel.PeopleImageFileName)
+                                                    @Html.HiddenFor(x => x.EditionEditGeneralInfoModel.LanguageCode)
+                                                    @Html.Hidden("EditionImageType", EditionImageType.PeopleImage)
+                                                    <div class="row" style="display: flex">
+                                                        <div class="col-lg-10" style="flex: 10 0 auto">
+                                                            <div id="dz-message-cover" class="dz-default dz-message" style="position: relative; left: 0; top: 0">
+                                                                @*<img class="img-responsive" id="img@(peopleImage.Key)" src="@EditionImageType.PeopleImage.BlobFullUrl(Model.EditionEditGeneralInfoModel.PeopleImageFileName)" style="display: block; margin: auto; max-width: 100%; max-height: 100%" onerror="this.onerror = null; this.src = '@EditionImageType.PeopleImage.EditionDefaultImageUrl()';" />*@
+                                                                <img class="img-responsive" id="img@(peopleImage.Key)" src="@EditionImageType.PeopleImage.BlobFullUrl(Model.EditionEditGeneralInfoModel.PeopleImageFileName)" style="display: block; margin: auto; max-width: 100%; max-height: 100%" onerror="this.onerror = null; this.src = 'https://dummyimage.com/1140x283/f1f3f6/000000.png&text=+';" />
+                                                                <i id="upload@(peopleImage.Key)" class="fa fa-send fa-3x" style="display: none; position: absolute; right: 210px; top: 50px"><br /><span style="font-family: 'open sans'; font-size: 0.8em; color: #6a6c6f">upload people image</span></i>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-2 text-justify tooltip-demo" style="position: relative; padding: 10px 25px 0 0; line-height: 1em">
+                                                            <label data-toggle="tooltip" data-placement="top" title="This image is used on Hyve Group websites and other Group communications."><span class="font-bold">People Image <i class="fa fa-question-circle"></i></span></label><br>
+                                                            <span style="font-size: 10px; font-weight: normal">Click left to upload people image.<br />Image format: <b>.png</b><br />Image dimensions: <b>@(peopleImage.Width) x @(peopleImage.Height) px</b><br />Max file size: <b>@peopleImage.MinMaxLengths[1] KB</b></span>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align: right">
+                                                <a href="@Url.Action("_DeleteImage", "Edition", new {editionTranslationId = Model.EditionTranslationId, imageType = EditionImageType.PeopleImage})" id="del@(peopleImage.Key)" class="deletePic" style="display: @(!string.IsNullOrWhiteSpace(Model.EditionEditGeneralInfoModel.PeopleImageFileName) ? "block" : "none")" target="_blank" title="Click to delete cover picture">
+                                                    <i class="fa fa-trash-o"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                }
+                                else
+                                {
+                                    <img class="img-responsive" id="img@(peopleImage.Key)" src="@EditionImageType.PeopleImage.BlobFullUrl(Model.EditionEditGeneralInfoModel.PeopleImageFileName)" style="display: block; margin: auto; max-width: 100%; max-height: 100%" onerror="this.onerror = null; this.src = '@EditionImageType.PeopleImage.EditionDefaultImageUrl()';" />
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <div class="panel-body">
+                    @Html.HiddenFor(model => model.EventId)
+                    @Html.HiddenFor(model => model.EditionTranslationId)
+                    @Html.HiddenFor(model => model.DirectorFullName)
+                    @Html.HiddenFor(model => model.LanguageCode)
+                    <div class="text-center m-b-md" id="wizardControl" style="margin: 0 !important">
+                        <a class="btn btn-default" href="#step1" data-toggle="tab"><i class="pe-7s-info fa-lg"></i> General Info</a>
+                        <a class="btn btn-default" href="#step2" data-toggle="tab"><i class="pe-7s-photo-gallery fa-lg"></i> Images</a>
+                        @if (Model.LanguageCode == LanguageHelper.GetBaseLanguageCultureName())
+                        {
+                            <fieldset>
+                                <legend>Post Show Metrics</legend>
+                                <a class="btn btn-default" href="#step3" data-toggle="tab"><i class="pe-7s-graph3 fa-lg"></i> Sales Info</a>
+                                <a class="btn btn-default" href="#step4" data-toggle="tab"><i class="pe-7s-users fa-lg"></i> Exhibitor / Visitor Stats</a>
+                                <a class="btn btn-default" href="#step5" data-toggle="tab"><i class="pe-7s-file fa-lg"></i> File Library</a>
+                                <a class="btn btn-default" href="#step6" data-toggle="tab"><i class="pe-7s-graph fa-lg"></i> Survey Results</a>
+                            </fieldset>
+                        }
+                        <a class="btn btn-warning" href="@Url.Action("Details", "Edition", new { id = Model.EditionId, name = Model.EditionEditGeneralInfoModel.EditionName.ToUrlString(), lang = Model.LanguageCode })" target="_blank"><i class="pe-7s-note2 fa-lg"></i> Overview</a>
+                        <a class="btn btn-orange" href="@Url.Action("Index", "Dashboard", new { id = Model.EventId, name = Model.EventMasterName.ToUrlString() })" title="Dashboard for @Model.EventMasterName" target="_blank"><i class="fa fa-line-chart fa-lg"></i> Dashboard</a>
+                    </div>
+
+                    <div class="tab-content" style="border: 2px solid #F1F3F6">
+                        <div id="step1" class="p-m tab-pane">
+                            @{ Html.RenderPartial("_EditGeneralInfo", Model.EditionEditGeneralInfoModel); }
+                        </div>
+                        <div id="step2" class="p-m tab-pane">
+                            @{ Html.RenderPartial("_EditImages", Model.EditionEditImagesModel); }
+                        </div>
+                        <div id="step3" class="p-m tab-pane">
+                            @{ Html.RenderPartial("_EditSalesMetrics", Model.EditionEditSalesMetricsModel); }
+                        </div>
+                        <div id="step4" class="p-m tab-pane">
+                            @{ Html.RenderPartial("_EditExhibitiorVisitorStats", Model.EditionEditExhibitorVisitorStatsModel); }
+                        </div>
+                        <div id="step5" class="p-m tab-pane">
+                            @{ Html.RenderPartial("~/Views/File/_EditFiles.cshtml", Model.EditionEditFilesModel); }
+                        </div>
+                        <div id="step6" class="p-m tab-pane">
+                            @{ Html.RenderPartial("_EditPostShowMetrics", Model.EditionEditPostShowMetricsModel); }
+                        </div>
+                    </div>
+                    @if (!Model.IsCancelled)
+                    {
+                        <div style="margin-top: 10px; margin-bottom: 10px">
+                            <a href="@string.Format("mailto:event-setup@hyve.group?subject=Event Cancellation Request Submission - {0}", Uri.EscapeDataString(Model.EditionEditGeneralInfoModel.EditionName))" class="btn btn-gray">
+                                <i class="fa fa-exclamation"></i> Click to report an event cancellation
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    @Styles.Render("~/bundles/sweetalert/css")
+    @Styles.Render("~/bundles/toastr/css")
+    @Styles.Render("~/bundles/xeditable/css")
+    @Styles.Render("~/bundles/touchspin/css")
+    @Styles.Render("~/bundles/datepicker/css")
+    @Styles.Render("~/bundles/bootstrapCheckbox/css")
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/sweetalert/js")
+    @Scripts.Render("~/bundles/toastr/js")
+    @Scripts.Render("~/bundles/moment/js")
+    @Scripts.Render("~/bundles/xeditable/js")
+    @Scripts.Render("~/bundles/touchspin/js")
+    @Scripts.Render("~/bundles/datepicker/js")
+    @Scripts.Render("~/bundles/maxlength")
+
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDuYZTUdX5nRB8gfGw0x32iNo3yVm0O6qI"></script>
+
+    <script type="text/javascript">
+
+        var editionId = @Model.EditionId;
+        var tabIndexCookieName = "tabIndexPairs";
+
+        /* set current tab */
+        $(function() {
+            var tabIndex = 0;
+
+            var tabIndexPairs = JSON.parse(readCookie(tabIndexCookieName));
+            if (tabIndexPairs == null) tabIndexPairs = [];
+
+            for (var i = 0; i < tabIndexPairs.length; i++) {
+                var p = tabIndexPairs[i];
+                if (p[@Model.EditionId] != null) {
+                    tabIndex = p[@Model.EditionId];
+                    break;
+                }
+            }
+
+            createCookie(tabIndexCookieName, JSON.stringify(tabIndexPairs), tabIndex);
+
+            var tabNumber = +tabIndex + 1;
+            var currentTab = $('a[data-toggle="tab"][href="#step' + tabNumber + '"]');
+            currentTab.trigger('click');
+            currentTab.removeClass('btn-default');
+            currentTab.addClass('btn-primary');
+        });
+
+        $(function() {
+
+            $('a[data-toggle="tab"]').on('shown.bs.tab',
+                function(e) {
+                    /* set current tab cookie */
+                    var tabIndex = $(this).attr('href').replace("#step", "") - 1;
+
+                    var tabIndexPairs = JSON.parse(readCookie(tabIndexCookieName));
+
+                    var exists = false;
+                    for (var i = 0; i < tabIndexPairs.length; i++) {
+                        var p = tabIndexPairs[i];
+                        if (p[@Model.EditionId] != null) {
+                            p[@Model.EditionId] = tabIndex;
+                            exists = true;
+                            break;
+                        }
+                    }
+
+                    if (!exists) {
+                        var pair = {};
+                        pair[editionId] = tabIndex;
+                        tabIndexPairs.push(pair);
+                    }
+
+                    createCookie(tabIndexCookieName, JSON.stringify(tabIndexPairs), 9999);
+
+                    $('a[data-toggle="tab"]').removeClass('btn-primary');
+                    $('a[data-toggle="tab"]').addClass('btn-default');
+                    $(this).removeClass('btn-default');
+                    $(this).addClass('btn-primary');
+                });
+
+            $('.next').click(function() {
+                var nextId = $(this).parents('.tab-pane').next().attr("id");
+                $('[href=#' + nextId + ']').tab('show');
+            });
+
+            $('.prev').click(function() {
+                var prevId = $(this).parents('.tab-pane').prev().attr("id");
+                $('[href=#' + prevId + ']').tab('show');
+            });
+        });
+
+        //function goToNext(elm) {
+        //    var nextId = elm.parents('.tab-pane').next().attr("id");
+        //    $('[href=#' + nextId + ']').tab('show');
+        //};
+
+        $(function() {
+            var hash = window.location.hash.substr(1);
+            $('[href=#' + hash + ']').tab('show');
+        });
+    </script>
+
+    <script src="~/Scripts/ced-edition.js?v=2"></script>
+    <script src="~/Scripts/ced-google-map.js"></script>
+
+    <script>
+        $(document).ready(
+            function() {
+                $(".ts-common").TouchSpin({
+                    min: 0,
+                    max: 100000000,
+                    step: 1,
+                    decimals: 0,
+                    boostat: 5,
+                    maxboostedstep: 10
+                });
+
+                $(".ts-sqm").TouchSpin({
+                    min: 0,
+                    max: 100000,
+                    step: 1,
+                    postfix: 'm²'
+                });
+
+                $(".ts-nps").TouchSpin({
+                    min: -100,
+                    max: 100,
+                    decimals: 2,
+                    step: 0.01
+                });
+
+                $(".ts-satisfaction").TouchSpin({
+                    min: 0,
+                    max: 5,
+                    decimals: 2,
+                    step: 0.01
+                });
+
+                $(".ts-rate").TouchSpin({
+                    min: 0,
+                    max: 100,
+                    decimals: 2,
+                    step: 0.01,
+                    postfix: '%'
+                });
+
+                $(".ts-cohosted").TouchSpin({
+                    min: 2,
+                    max: 10,
+                    step: 1,
+                    decimals: 0
+                });
+
+                $(".ts-oldvisitor").TouchSpin({
+                    min: 0,
+                    max: 100000000,
+                    step: 1,
+                    decimals: 0,
+                    boostat: 5,
+                    maxboostedstep: 10,
+                    prefix: 'O'
+                });
+
+                $(".ts-newvisitor").TouchSpin({
+                    min: 0,
+                    max: 100000000,
+                    step: 1,
+                    decimals: 0,
+                    boostat: 5,
+                    maxboostedstep: 10,
+                    prefix: 'N'
+                });
+            });
+
+        function emptyToZero(className) {
+            $.each($(className),
+                function() {
+                    if ($(this).val() === '')
+                        $(this).val(0);
+                });
+        }
+    </script>
+
+    @if (Model.IsEditableForImages)
+    {
+        <script>
+            Dropzone.options.dzFormWebLogo = {
+                maxFiles: 1,
+                acceptedFiles: 'image/png,.png',
+                uploadMultiple: false,
+                thumbnailWidth: '@webLogo.Height',
+                thumbnailHeight: '@webLogo.Height',
+                maxFilesize: @(webLogo.MinMaxLengths[1] * 1.0 / 1000),
+                accept: function(file, done) {
+                    var reader = new FileReader();
+                    reader.onload = (function(file) {
+                        var image = new Image();
+                        image.src = file.target.result;
+                        image.onload = function() {
+                            if (this.width != '@webLogo.Width' || this.height != '@webLogo.Height') {
+                                done(
+                                    "Image dimensions cannot be different from @(webLogo.Width)px (width) & @(webLogo.Height)px (height)");
+                            } else {
+                                done();
+                            }
+                        };
+                    });
+                    reader.readAsDataURL(file);
+                },
+                init: function() {
+                    this.on("complete",
+                        function(file) {
+                            this.removeFile(file);
+                        });
+
+                    this.on("success",
+                        function(file, response) {
+                            if (response.success === true) {
+                                var src = "@EditionImageType.WebLogo.BlobSubDirectory()" +
+                                        response.fileName
+                                    //+ "?" +new Date().getTime()
+                                    ;
+                                $("#img@(webLogo.Key)").attr("src", src);
+                                $("#del@(webLogo.Key)").show();
+                            } else {
+                                swal({
+                                    title: "Error!",
+                                    text: response.message,
+                                    type: "error"
+                                });
+                                this.removeFile(file);
+                            }
+                        });
+
+                    this.on("error",
+                        function(file, message) {
+                            swal({
+                                title: "Error!",
+                                text: message,
+                                type: "error"
+                            });
+                            this.removeFile(file);
+                        });
+                }
+            };
+
+            Dropzone.options.dzFormPeopleImage = {
+                maxFiles: 1,
+                acceptedFiles: 'image/jpg,image/jpeg,image/png,.jpg,.jpeg,.png',
+                uploadMultiple: false,
+                thumbnailWidth: '@peopleImage.Height',
+                thumbnailHeight: '@peopleImage.Height',
+                maxFilesize: @(peopleImage.MinMaxLengths[1] * 1.0 / 1000),
+                accept: function(file, done) {
+                    var reader = new FileReader();
+                    reader.onload = (function(file) {
+                        var image = new Image();
+                        image.src = file.target.result;
+                        image.onload = function() {
+                            if (this.width != '@peopleImage.Width' || this.height != '@peopleImage.Height') {
+                                done(
+                                    "Image dimensions cannot be different from @(peopleImage.Width)px (width) & @(peopleImage.Height)px (height)");
+                            } else {
+                                done();
+                            }
+                        };
+                    });
+                    reader.readAsDataURL(file);
+                },
+                init: function() {
+                    this.on("complete",
+                        function(file) {
+                            this.removeFile(file);
+                        });
+
+                    this.on("success",
+                        function(file, response) {
+                            var src = "@EditionImageType.PeopleImage.BlobSubDirectory()" +
+                                    response.fileName
+                                //+ "?" + new Date().getTime()
+                                ;
+                            $("#img@(peopleImage.Key)").attr("src", src);
+                            $("#del@(peopleImage.Key)").show();
+                        });
+
+                    this.on("error",
+                        function(file, message) {
+                            swal({
+                                title: "Error!",
+                                text: message,
+                                type: "error"
+                            });
+                            this.removeFile(file);
+                        });
+                }
+            };
+        </script>
+    }
+
+    @if (Model.IsCancelled)
+    {
+        <script>
+            $(document).ready(function() {
+                setTimeout(function() {
+                        swal({
+                            title: "Warning!",
+                            html: "@(Html.Raw(Constants.WarningMessageEventCancelled))",
+                            type: "warning"
+                        });
+                    },
+                    100);
+            });
+        </script>
+    }
+
+    @if (Model.EditionTranslationId <= 0)
+    {
+        <script>
+            $(document).ready(function() {
+                setTimeout(function() {
+                        swal({
+                            title: "Warning!",
+                            html: "<b>@(Model.LanguageCode.ToEnumFromDescription<LanguageHelper.Languages>())" +
+                                "</b> version of this event has not been saved yet, so you cannot upload <b>logo</b> or <b>cover</b> images until you save it once in that language.",
+                            type: "warning"
+                        });
+                    },
+                    100);
+            });
+        </script>
+    }
+
+    @if (!Model.IsCancelled && !Model.IsAlive)
+    {
+        <script>
+            $(document).ready(function() {
+                setTimeout(function() {
+                        swal({
+                            title: "Warning!",
+                            html:
+                                "This event has been locked for further data entry. Data needs to be submitted by Event Directors within <b>" +
+                                    @(WebConfigHelper.EditionLifeSpan) +
+                                    " days</b> following completion/end date of each event.",
+                            type: "warning"
+                        });
+                    },
+                    100);
+            });
+        </script>
+    }
+
+    <script>
+        var editionTranslationId = @Model.EditionTranslationId;
+    </script>
+
+    @if (Model.EditionEditGeneralInfoModel.CurrentUser.IsViewer)
+    {
+        <script>
+            $(document).ready(function() {
+                setTimeout(function() {
+                    swal({
+                        title: "Warning!",
+                        html: "You don’t have necessary permissions to edit this Event’s details.",
+                        type: "warning"
+                    });
+                },
+                    100);
+            });
+
+            $(function() {
+                $('#editionedit input, select, textarea').attr('disabled', 'disabled');
+            });
+            $(function() {
+                $('#editionedit input[type=submit], button[type=submit]').attr('style', 'display:none');
+            });
+        </script>
+    }
+}
+
+@if (Model.IsEditableForImages)
+{
+    <style>
+        #dzFormWebLogo, #dzFormPeopleImage {
+            border: 1px dashed #54c4fa !important;
+            border-radius: 2px;
+            width: 100%;
+        }
+
+            #dzFormWebLogo .dz-processing, .dz-preview, .dz-image, .dz-complete, #dzFormPeopleImage .dz-processing, .dz-preview, .dz-image, .dz-complete {
+                padding: 0;
+            }
+
+            #dzFormWebLogo .dz-processing, #dzFormPeopleImage .dz-processing {
+                width: 98%;
+            }
+
+            #dzFormWebLogo .dz-preview, #dzFormPeopleImage .dz-preview {
+                width: 98%;
+            }
+
+            #dzFormWebLogo .dz-image, #dzFormPeopleImage .dz-image {
+                width: 98%;
+            }
+
+            #dzFormWebLogo .dz-complete, #dzFormPeopleImage .dz-complete {
+                width: 98%;
+                margin: 0;
+            }
+    </style>
+}
+
+<style>
+    #wizardControl fieldset {
+        padding: 0 !important;
+        margin: 0;
+        display: inline-block;
+        border: dashed 1px lightgrey !important;
+        border-bottom: 0 !important;
+        height: 20px !important;
+    }
+
+    #wizardControl legend {
+        white-space: nowrap;
+        font-weight: bold !important;
+        font-size: 11px !important;
+        margin: 10px !important;
+        color: grey;
+    }
+
+    #visitorStatsDaily fieldset {
+        /*padding: 0 !important;*/
+        /*margin: 0;*/
+        /*display: inline-block;*/
+        border-color: lightgrey !important;
+        border-width: 1px 0 0 0 !important;
+        border-style: dashed !important;
+        /*height: 20px !important;*/
+    }
+
+    #visitorStatsDaily legend {
+        /*white-space: nowrap;*/
+        /*font-weight: bold !important;*/
+        font-size: 13px !important;
+        /*margin: 10px !important;*/
+        color: grey;
+    }
+</style>

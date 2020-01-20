@@ -1,0 +1,62 @@
+﻿@model Ced.Web.Models.ConfigSetting.ConfigSettingListModel
+
+@{
+    ViewBag.Title = "Config Settings";
+}
+
+<div class="small-header">
+    <div class="hpanel">
+        <div class="panel-body">
+            <h2 class="font-light m-b-xs">
+                Config Settings
+            </h2>
+            <div id="hbreadcrumb" class="pull-left">
+                <ol class="hbreadcrumb breadcrumb">
+                    <li><a href="@Url.Action("Index", "Dashboard")">Main</a></li>
+                    <li>
+                        <span>Config Settings</span>
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="content animate-panel">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="hpanel">
+                <div class="panel-body">
+                    <div id="tableHolder">
+                        @Html.Partial("_List", Model.ConfigSettings)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    @Styles.Render("~/bundles/datatables/css")
+
+    <style>
+        .dataTable > thead > tr > th[class*="no-sort"]:after {
+            content: "" !important;
+        }
+
+        .table-responsive {
+            overflow-x: hidden;
+        }
+    </style>
+
+    <style>
+        #s2id_autogen3_search {
+            text-transform: none;
+        }
+    </style>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/datatables/js")
+    @Scripts.Render("~/bundles/datatablesBootstrap/js")
+}

@@ -1,0 +1,107 @@
+﻿@using Ced.BusinessEntities
+@using ITE.Utility.Extensions
+@model Ced.Web.Models.Notification.NotificationListModel
+
+@{
+    ViewBag.Title = "Notifications";
+}
+
+<div class="small-header">
+    <div class="hpanel">
+        <div class="panel-body">
+            <h2 class="font-light m-b-xs">
+                Notifications
+            </h2>
+            <div id="hbreadcrumb" class="pull-left">
+                <ol class="hbreadcrumb breadcrumb">
+                    <li><a href="@Url.Action("Index", "Dashboard")">Main</a></li>
+                    <li>
+                        <span>Notifications</span>
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="content animate-panel">
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="hpanel">
+                <div class="panel-body">
+                    <div class="m-b-md">
+                        <h4>
+                            Filters
+                        </h4>
+                        <small>
+                            Filter your search based on different options below.
+                        </small>
+                    </div>
+                    @using (Html.BeginForm("_SearchNotifications", "Notification", FormMethod.Post, new { id = "searchNotifForm" }))
+                    {
+                        <div class="form-group">
+                            <label class="control-label">Notification Type:</label>
+                            <div class="input-group col-lg-12">
+                                @foreach (var notifType in Model.NotificationTypes)
+                                {
+                                    <div class="checkbox checkbox-success">
+                                        <input id="@notifType" name="NotificationType" type="checkbox" value="@notifType" checked="checked">
+                                        <label for="@notifType">
+                                            <i class="fa fa-@(notifType.GetAttribute<NotificationAttribute>().FaIcon) @(notifType.GetAttribute<NotificationAttribute>().TextClass)"></i> @notifType.ToString()
+                                        </label>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Log Date:</label>
+                            <div class="input-group col-lg-12">
+                                <select id="dayRange" name="dayRange" class="form-control">
+                                    <option value="">All</option>
+                                    <option value="1" @(Model.DayRange == 1 ? "selected" : "")>Last Day</option>
+                                    <option value="7" @(Model.DayRange == 7 ? "selected" : "")>Last Week</option>
+                                    <option value="30" @(Model.DayRange == 30 ? "selected" : "")>Last Month</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button class="btn btn-success btn-block" id="btnSearch"><i class="fa fa-spinner fa-spin" id="loading" style="display: none"></i> Search</button>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-9">
+            <div class="hpanel">
+                <div class="panel-body">
+                    <div id="tableHolder">
+                        @Html.Partial("_List", Model.Notifications)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    @Styles.Render("~/bundles/datatables/css")
+    @Styles.Render("~/bundles/sweetAlert/css")
+    
+    <link rel="stylesheet" href="~/Vendor/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" />
+
+    <style>
+        .dataTable > thead > tr > th[class*="no-sort"]:after {
+            content: "" !important;
+        }
+
+        .table-responsive {
+            overflow-x: hidden;
+        }
+    </style>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/datatables/js")
+    @Scripts.Render("~/bundles/datatablesBootstrap/js")
+    @Scripts.Render("~/bundles/sweetAlert/js")
+    
+    <script src="~/Scripts/ced-notification.js?v=2"></script>
+}

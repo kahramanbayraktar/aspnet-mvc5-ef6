@@ -1,0 +1,1074 @@
+﻿@using System.Web.Mvc.Html
+@using Ced.BusinessEntities
+@using Ced.Utility
+@using ITE.Utility.Extensions
+@model Ced.Web.Models.Edition.EditionEditGeneralInfoModel
+
+@using (Html.BeginForm("_SaveGeneralInfo", "Edition", FormMethod.Post, new { id = "editGeneralInfoForm" }))
+{
+    @Html.HiddenFor(model => model.EditionTranslationId)
+    @Html.HiddenFor(model => model.EditionId)
+    @Html.HiddenFor(model => model.EventId)
+    @Html.HiddenFor(model => model.LanguageCode)
+    @Html.HiddenFor(model => model.StartDate)
+    @Html.HiddenFor(model => model.EndDate)
+    @Html.HiddenFor(model => model.EventActivity)
+
+    var displayOnTypeFieldsMappable = Model.CurrentUser.IsAdmin || Model.CurrentUser.IsSuperAdmin || Model.CurrentUser.IsEventBasedAdmin;
+    @Html.Hidden("DisplayOnTypeFieldsMappable", displayOnTypeFieldsMappable)
+
+    var isEditionTranslationSaved = Model.EditionTranslationId > 0;
+
+    if (!Model.CurrentUser.IsViewer)
+    {
+        <div class="text-right m-t-xs">
+            <button class="btn btn-success btnSave1" id="btnSave1" type="submit" @(!Model.IsAlive || Model.IsCancelled ? "disabled=\"disabled\"" : "")>
+                Save
+            </button>
+        </div>
+    }
+
+    <div class="row generalinfo">
+        <div class="col-lg-3 text-center">
+            <i class="pe-7s-info fa-5x text-muted"></i>
+            <p class="small m-t-md">
+                <ul class="wizard-notf">
+                    <li>
+                        Central Events Database is an information repository built for Event Directors. The information to be provided herein allows the Group to standardise its reporting structures and performance metrics.
+                        <br />
+                        <br />
+                    </li>
+                    <li>
+                        Event Directors will use this portal to submit their key metrics. These metrics consist of "Public" and "Sensitive" data. While public data will be used for integration purposes like population of our calendars on corporate sites, sensitive data will only be used for internal reporting and visualisation purposes to better guide management hierarchies for efficient operational planning & budget duties.
+                        <hr />
+                    </li>
+                    <li>
+                        The data that will be submitted by Event Directors supports multi-lingual entry. Since most of our shows belong to geographies with localisation needs and English language at the same time, an Event Director has the flexibility to populate this information in a scalable format. The 4 steps, through which Event Directors are asked to provide information include web form field marked by 3 colours:
+                        <br />
+                        <br />
+                        <span style="color: #54c4fa"><b>Blue:</b> Multi-lingual entry is required. For example a show's description in English and in Russian need to be provided separately</span>
+                        <br />
+                        <br />
+                        <span style="color: #e74c3c">
+                            <b>Red:</b> Master Data that can't be modified by Event Directors. This data is populated by London HQ upon collection of "Event Setup Forms" and is integrated with the Group's financial systems. Should you wish to amend or update an information in these fields marked in red. Please contact <a href="mailto:event-setup@hyve.group">Reporting Department</a>.
+                        </span>
+                        <br />
+                        <br />
+                        <a href="@string.Format("mailto:event-setup@hyve.group?subject=Event Master Data Change Request Submission - {0}", Uri.EscapeDataString(Model.EditionName))" class="btn btn-sm btn-danger" title="Send an email to request to change event master data, such as event name, event dates, event venue location, etc.">
+                            <i class="fa fa-info-circle"></i> Report changes to event master data
+                        </a>
+                        <br />
+                        <br />
+                        <span style="color: #ffb606">
+                            <b>Orange:</b> Generic information that doesn't need to be populated every time an Event Director submits data in a different language. For example Venue Coordinates, Visiting Hours, etc.
+                        </span>
+                        <br />
+                        <br />
+                        <b>Tip:</b> To switch between available language input forms, please refer to the dropdown menu selection which sits next to the 4 steps.
+                        <br />
+                        <br />
+                    </li>
+                </ul>
+            </p>
+        </div>
+
+        <div class="col-lg-9">
+            <div class="row">
+
+                <div class="col-lg-12">
+                    <div class="hpanel hgrey">
+                        <div class="panel-heading">
+                            Summary / Description
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="form-group col-lg-12 tooltip-demo">
+                                    @*<a href="javascript:void(0)" data-toggle="modal" data-target="#sumModal">
+                                            <span style="text-decoration: underline; font-weight: bold">Summary</span> <i class="fa fa-question-circle"></i>
+                                        </a>*@
+                                    @*<div class="modal fade" id="sumModal" tabindex="-1" role="dialog" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="color-line"></div>
+                                                    <div class="modal-body">
+                                                        <p>
+                                                            <img src="@Url.Content("~/Content/images/tip/tipsummary1.png")" class="img-responsive" />
+                                                            <img src="@Url.Content("~/Content/images/tip/tipsummary2.png")" class="img-responsive" />
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>*@
+                                    @Html.TextAreaFor(model => model.Summary, new { @class = "form-control hblue maxlength", rows = 3, placeholder = "Summary", maxlength = "215" })
+                                </div>
+                                <div class="form-group col-lg-12 tooltip-demo">
+                                    @*<a href="javascript:void(0)" data-toggle="modal" data-target="#descModal">
+                                            <span style="text-decoration: underline; font-weight: bold">Description</span> <i class="fa fa-question-circle"></i>
+                                        </a>*@
+                                    @*<div class="modal fade" id="descModal" tabindex="-1" role="dialog" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="color-line"></div>
+                                                    <div class="modal-body">
+                                                        <p>
+                                                            <img src="@Url.Content("~/Content/images/tip/tipdescription.png")" class="img-responsive" />
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>*@
+                                    @Html.TextAreaFor(model => model.Description, new { @class = "form-control hblue maxlength", rows = 13, placeholder = "Description", maxlength = "5000" })
+                                </div>
+                                <div class="form-group col-lg-6">
+                                    <label>@(Model.EventType == EventType.Exhibition ? "Exhibitor Profile" : Model.EventType == EventType.Conference ? "Delegate Profile" : "Exhibitor/Delegate Profile")</label>
+                                    @Html.TextAreaFor(model => model.ExhibitorProfile, new { @class = "form-control hblue maxlength", rows = 12, placeholder = "Exhibitor Profile", maxlength = "500" })
+                                </div>
+                                <div class="form-group col-lg-6">
+                                    <label>Visitor Profile</label>
+                                    @Html.TextAreaFor(model => model.VisitorProfile, new { @class = "form-control hblue maxlength", rows = 12, placeholder = "Visitor Profile", maxlength = "500" })
+                                </div>
+                                <div class="form-group col-lg-12 tooltip-demo">
+                                    <label data-toggle="tooltip" data-placement="top" title="This is the reporting name of your event and is based on the name you submit as part of the event/edition set-up process. It will be used in the Group's AX Finance system, for all internal reporting purposes and as the Project ID in the Group's CRM system.">Event Name <i class="fa fa-question-circle"></i></label>
+                                    @Html.EditorFor(model => model.EditionName, new { htmlAttributes = new { @class = "form-control hred", readOnly = "readOnly" } })
+                                </div>
+                                <div class="form-group col-lg-12 tooltip-demo">
+                                    <label data-toggle="tooltip" data-placement="top" title="Please enter the name of the event as it would be expressed internationally. This is the name that will be displayed on external Hyve Group websites and in all documentation (invoices, quotes) generated from the Group's CRM system.">International Name <i class="fa fa-question-circle"></i></label>
+                                    @Html.EditorFor(model => model.InternationalName, new { htmlAttributes = new { @class = "form-control hyellow" } })
+                                    @Html.ValidationMessageFor(model => model.InternationalName, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="form-group col-lg-12 tooltip-demo">
+                                    <label data-toggle="tooltip" data-placement="top" title="If the name of the event is expressed differently in the host country, please enter it here. This name will be displayed on documentation (invoices, quotes) generated from the Group's CRM system for local contracts.">Local Name <i class="fa fa-question-circle"></i></label>
+                                    @Html.EditorFor(model => model.LocalName, new { htmlAttributes = new { @class = "form-control hblue" } })
+                                    @Html.ValidationMessageFor(model => model.LocalName, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-12">
+                    <div class="hpanel hgrey">
+                        <div class="panel-heading">
+                            Dates / Visiting Hours
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="form-group col-lg-6">
+                                    <label>Start-End Dates</label>
+                                    <div class="input-group">
+                                        @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control hred", disabled = "disabled" } })
+                                        <span class="input-group-addon">
+                                            <span class="fa fa-calendar-o"></span>
+                                        </span>
+                                        <span class="input-group-addon">-</span>
+                                        @Html.EditorFor(model => model.EndDate, new { htmlAttributes = new { @class = "form-control hred", disabled = "disabled" } })
+                                        <span class="input-group-addon">
+                                            <span class="fa fa-calendar-o"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="form-group col-lg-6">
+                                    <label>Visiting Hours</label>
+                                    <div class="input-group">
+                                        @Html.EditorFor(model => model.VisitStartTime, new { htmlAttributes = new { type = "text", @class = "form-control clockpicker hyellow" } })
+                                        <span class="input-group-addon">
+                                            <span class="fa fa-clock-o"></span>
+                                        </span>
+                                        <span class="input-group-addon">-</span>
+                                        @Html.EditorFor(model => model.VisitEndTime, new { htmlAttributes = new { type = "text", @class = "form-control clockpicker hyellow" } })
+                                        <span class="input-group-addon">
+                                            <span class="fa fa-clock-o"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-lg-3">
+                                    <label>Edition No</label>
+                                    @Html.EditorFor(model => model.EditionNo, new { htmlAttributes = new { @class = "form-control hyellow" } })
+                                </div>
+                                <div class="form-group col-lg-3" style="padding-top: 30px">
+                                    <div>
+                                        <label> @Html.CheckBoxFor(model => model.AllDayEvent, new { @class = "i-checks" }) All Day Event </label>
+                                    </div>
+                                </div>
+                                <div class="form-group col-lg-3" style="padding-top: 30px">
+                                    <div class="tooltip-demo">
+                                        <label> @Html.CheckBoxFor(model => model.Promoted, new { @class = "i-checks" }) Promoted</label> <label data-toggle="tooltip" data-placement="top" title="A promoted event will be highlighted with a red background on the Event listing page on the corporate Hyve.group site"> <i class="fa fa-question-circle"></i></label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-12">
+                    <div class="hpanel hgrey">
+                        <div class="panel-heading">
+                            Event Setup Information
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="form-group col-lg-6">
+                                    <label>Cool Off Period Start-End Dates</label>
+                                    <div class="input-group">
+                                        @Html.EditorFor(model => model.CoolOffPeriodStartDate, new { htmlAttributes = new { @class = "datepicker form-control hyellow", placeholder = "Start Date" } })
+                                        <span class="input-group-addon">
+                                            <span class="fa fa-calendar-o"></span>
+                                        </span>
+                                        <span class="input-group-addon">-</span>
+                                        @Html.EditorFor(model => model.CoolOffPeriodEndDate, new { htmlAttributes = new { @class = "datepicker form-control hyellow", placeholder = "End Date" } })
+                                        <span class="input-group-addon">
+                                            <span class="fa fa-calendar-o"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group col-lg-6 tooltip-demo">
+                                    <label data-toggle="tooltip" data-placement="top" title="Start-End date with month written in English and the year">Event Dates (International) <i class="fa fa-question-circle"></i></label>
+                                    @Html.EditorFor(model => model.InternationalDate, new { htmlAttributes = new { @class = "form-control hyellow" } })
+                                </div>
+                                <div class="form-group col-lg-6 tooltip-demo">
+                                    <label data-toggle="tooltip" data-placement="top" title="Start-End date with month written in Local language and the year">Event Dates (Local) <i class="fa fa-question-circle"></i></label>
+                                    @Html.EditorFor(model => model.LocalDate, new { htmlAttributes = new { @class = "form-control hyellow" } })
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-12">
+                    <div class="hpanel hgrey">
+                        <div class="panel-heading tooltip-demo">
+                            <a href="javascript:void(0)" data-toggle="modal" data-target="#sectionModal" style="color: #6a6c6f">
+                                <label data-toggle="tooltip" data-placement="top" title="<i class='fa fa-hand-pointer-o'></i> Click to see the details" style="cursor: pointer">Sections <i class="fa fa-question-circle"></i></label>
+                            </a>
+                        </div>
+                        <div class="modal fade" id="sectionModal" tabindex="-1" role="dialog" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="color-line"></div>
+                                    <div class="modal-body">
+                                        <p>
+                                            <img src="@Url.Content("~/Content/images/tip/tip-sect.png")" class="img-responsive" />
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div id="edition-sections-div" class="col-lg-12">
+                                    @{ Html.RenderAction("_GetEditionSections", "EditionSection", new { editionId = Model.EditionId }); }
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <a href="javascript:void(0)" id="toggle-edition-section-btn" class="btn btn-warning"><span class="fa fa-toggle-off 2x"></span> Add more</a>
+                                    </div>
+                                    <div id="add-edition-section-div" class="row" style="display: none">
+                                        <div class="col-lg-4">
+                                            <input class="form-control hblue" id="sections" name="sections" placeholder="Sections" />
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <a href="#" id="add-edition-section-btn" class="btn btn-primary">Add</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-12">
+                    <div class="hpanel hgrey">
+                        <div class="panel-heading tooltip-demo">
+                            <a href="javascript:void(0)" data-toggle="modal" data-target="#discountModal" style="color: #6a6c6f">
+                                <label data-toggle="tooltip" data-placement="top" title="<i class='fa fa-hand-pointer-o'></i> Click to see the details" style="cursor: pointer">Discount Approvers <i class="fa fa-question-circle"></i></label>
+                            </a>
+                        </div>
+                        <div class="modal fade" id="discountModal" tabindex="-1" role="dialog" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="color-line"></div>
+                                    <div class="modal-body">
+                                        <p>
+                                            <img src="@Url.Content("~/Content/images/tip/tip-disc-app.png")" class="img-responsive" />
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div id="edition-discount-approvers-div" class="col-lg-12">
+                                    @{ Html.RenderAction("_GetEditionDiscountApprovers", "EditionDiscountApprover", new { editionId = Model.EditionId }); }
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <a href="javascript:void(0)" id="toggle-edition-discount-approver-btn" class="btn btn-warning"><span class="fa fa-toggle-off 2x"></span> Add more</a>
+                                    </div>
+                                    <div id="add-edition-discount-approver-div" class="row" style="display: none">
+                                        <div class="col-lg-4">
+                                            <input class="form-control hblue" id="approving-user" placeholder="Approving User" />
+                                        </div>
+                                        <div class="form-group col-lg-4">
+                                            <input class="touchspin ts-common hyellow" id="edition-discount-approver-lower-percentage" placeholder="Lower Approval Percentage" />
+                                        </div>
+                                        <div class="form-group col-lg-4">
+                                            <input class="touchspin ts-common hyellow" id="edition-discount-approver-upper-percentage" placeholder="Upper Approval Percentage" />
+                                        </div>
+                                        <div class="col-lg-12 text-right">
+                                            <a href="#" id="add-edition-discount-approver-btn" class="btn btn-primary">Add</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-12">
+                    <div class="hpanel hgrey">
+                        <div class="panel-heading">
+                            Contact Information
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="form-group col-lg-12">
+                                    <label>Email</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="fa fa-at"></i></span>
+                                        @Html.EditorFor(model => model.ManagingOfficeEmail, new { htmlAttributes = new { @class = "form-control hyellow" } })
+                                        @if (!string.IsNullOrWhiteSpace(Model.ManagingOfficeEmail))
+                                        {
+                                            <span class="input-group-addon"><a href="mailto:@(Model.ManagingOfficeEmail)"><i class="fa fa-envelope-o"></i> </a></span>
+                                        }
+                                        @Html.ValidationMessageFor(model => model.ManagingOfficeEmail, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="form-group col-lg-12">
+                                    <label>Phone</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="fa fa-phone"></i></span>
+                                        @Html.EditorFor(model => model.ManagingOfficePhone, new { htmlAttributes = new { @class = "form-control hyellow" } })
+                                        @Html.ValidationMessageFor(model => model.ManagingOfficePhone, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="form-group col-lg-12">
+                                    <label>Event Website</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="fa fa-chain"></i></span>
+                                        @Html.EditorFor(model => model.EventWebSite, new { htmlAttributes = new { @class = "form-control hyellow" } })
+                                        @if (!string.IsNullOrWhiteSpace(Model.EventWebSite))
+                                        {
+                                            <span class="input-group-addon"><a href="@Model.EventWebSite.ToExternalLink()" target="_blank" title="Go to website"><i class="fa fa-external-link"></i></a></span>
+                                        }
+                                        @Html.ValidationMessageFor(model => model.EventWebSite, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-12">
+                    <div class="hpanel hgrey">
+                        <div class="panel-heading">
+                            Event Venue
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="form-group col-lg-6">
+                                    <label>Country</label>
+                                    @Html.EditorFor(model => model.Country, new { htmlAttributes = new { @class = "form-control hred", readOnly = "readOnly" } })
+                                </div>
+                                <div class="form-group col-lg-6">
+                                    <label>City</label>
+                                    @Html.EditorFor(model => model.City, new { htmlAttributes = new { @class = "form-control hred", readOnly = "readOnly" } })
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group col-lg-6">
+                                    <label>Country Local Name</label>
+                                    @Html.EditorFor(model => model.CountryLocalName, new { htmlAttributes = new { @class = "form-control hyellow" } })
+                                </div>
+                                <div class="form-group col-lg-6">
+                                    <label>City Local Name</label>
+                                    @Html.EditorFor(model => model.CityLocalName, new { htmlAttributes = new { @class = "form-control hyellow" } })
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group col-lg-12">
+                                    <label>Venue Name</label>
+                                    @if (Model.LanguageCode == LanguageHelper.GetBaseLanguageCultureName())
+                                    {
+                                        @Html.EditorFor(model => model.VenueName, new { htmlAttributes = new { @class = "form-control hred", readOnly = "readOnly" } })
+                                    }
+                                    else
+                                    {
+                                        @Html.EditorFor(model => model.VenueName, new { htmlAttributes = new { @class = "form-control hblue" } })
+                                    }
+                                    @Html.ValidationMessageFor(model => model.VenueName, "", new { @class = "text-danger" })
+                                </div>
+
+                                <div class="form-group col-lg-12 tooltip-demo">
+                                    <label data-toggle="tooltip" data-placement="top" title="Please use the address form field to locate the venue location. If the result on the map is somewhat off, you may also use the pin to adjust the location from the map module.">Full Address <i class="fa fa-question-circle"></i></label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon" style="width: 40px" id="basic-addon1"><i class="fa fa-map-signs"></i></span>
+                                        @Html.EditorFor(model => model.MapVenueFullAddress, new { htmlAttributes = new { id = "VenueAddress", @class = "form-control hyellow", placeholder = "Full Address" } })
+                                        @Html.HiddenFor(model => model.VenueCoordinates, new { id = "VenueCoordinates" })
+                                        <span class="input-group-btn">
+                                            <button type="button" id="btnGetByAddress" class="btn btn-default" title="Search By Full Address" aria-label="Left Align">
+                                                <i class="fa fa-search"></i>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-lg-12">
+                                    <div class="border-right border-left">
+                                        <section id="map">
+                                            <div id="dvMap" style="height: 200px"></div>
+                                        </section>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-12">
+                    <div class="hpanel hgrey">
+                        <div class="panel-heading">
+                            Important Web Links
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="form-group col-lg-12">
+                                    <label>Book a Stand Web Link</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="fa fa-link"></i></span>
+                                        @Html.EditorFor(model => model.BookStandUrl, new { htmlAttributes = new { type = "text", @class = "form-control hblue" } })
+                                        @if (!string.IsNullOrWhiteSpace(Model.BookStandUrl))
+                                        {
+                                            <span class="input-group-addon"><a href="@Model.BookStandUrl.ToExternalLink()" target="_blank" title="Go to book stand page"><i class="fa fa-external-link"></i></a></span>
+                                        }
+                                    </div>
+                                </div>
+                                <div class="form-group col-lg-12">
+                                    <label>E-ticket / Online Registration Web Link</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="fa fa-link"></i></span>
+                                        @Html.EditorFor(model => model.OnlineInvitationUrl, new { htmlAttributes = new { type = "text", @class = "form-control hblue" } })
+                                        @if (!string.IsNullOrWhiteSpace(Model.OnlineInvitationUrl))
+                                        {
+                                            <span class="input-group-addon"><a href="@Model.OnlineInvitationUrl.ToExternalLink()" target="_blank" title="Go to online invitation page"><i class="fa fa-external-link"></i></a></span>
+                                        }
+                                    </div>
+                                </div>
+                                <div class="form-group col-lg-12">
+                                    <label>Marketo Preference Center Link</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="fa fa-link"></i></span>
+                                        @Html.EditorFor(model => model.MarketoPreferenceCenterLink, new { htmlAttributes = new { type = "text", @class = "form-control hyellow" } })
+                                        @if (!string.IsNullOrWhiteSpace(Model.MarketoPreferenceCenterLink))
+                                        {
+                                            <span class="input-group-addon"><a href="@Model.MarketoPreferenceCenterLink.ToExternalLink()" target="_blank" title="Go to Marketo Preference Center page"><i class="fa fa-external-link"></i></a></span>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-12">
+                    <div class="hpanel hgrey">
+                        <div class="panel-heading tooltip-demo">
+                            <label data-toggle="tooltip" data-placement="top" title="Please copy and paste the full public URL addresses of your event’s social media accounts.">Social Media Accounts (Optional) <i class="fa fa-question-circle"></i></label>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div id="divSocialMedias" class="col-lg-12">
+                                    @{ Html.RenderAction("_GetSocialMedias", "EditionSocialMedia", new { editionTranslationId = Model.EditionTranslationId }); }
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <a href="javascript:void(0)" id="togglesocialmediabtn" class="btn btn-warning" @(!isEditionTranslationSaved ? "disabled" : "")><span class="fa fa-toggle-off 2x"></span> Add more</a>
+                                    </div>
+                                    <div id="socialmediasdiv" class="row" style="display: none">
+                                        <div class="form-group col-lg-2">
+                                            <select class="form-control" id="socialMediaIdSelect">
+                                                @foreach (SocialMediaType socialMedia in Enum.GetValues(typeof(SocialMediaType)))
+                                                {
+                                                    <option name="SocialMediaId" value="@socialMedia.GetDescription()">@socialMedia.ToString()</option>
+                                                }
+                                            </select>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <input class="form-control hblue" id="accountName" name="accountName" placeholder="Account Name" />
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <a href="#" id="addsocialmediatbn" class="btn btn-primary">Add</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                @{
+                    var checkBoxHtmlAttrs = new Dictionary<string, object> { { "class", "i-checks" } };
+                    if (!displayOnTypeFieldsMappable)
+                    {
+                        checkBoxHtmlAttrs.Add("disabled", "disabled");
+                    }
+                }
+
+                @if (displayOnTypeFieldsMappable)
+                {
+                    <div class="col-lg-12">
+                        <div class="hpanel hgrey">
+                            <div class="panel-heading">
+                                Automatically Push Event Calendar & Public Information to:
+                            </div>
+                            <div class="panel-body">
+                                <div class="row" style="background: #ffeaaa; padding: 10px; margin-top: -5px">
+                                    Important: Select only the Hyve websites that apply to your case. By ticking a box from the list below, you will make your exhibition / event information automatically available to that website (i.e. Mosbuild is sold by Hyve Germany and Hyve Asia, hence Mosbuild's Event Director should definitely tick these boxes).
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-lg-4" style="padding-top: 20px">
+                                        <div>
+                                            <label> @Html.CheckBoxFor(model => model.DisplayOnIteAsia, checkBoxHtmlAttrs) Display on Hyve Asia </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-lg-4" style="padding-top: 20px">
+                                        <div>
+                                            <label> @Html.CheckBoxFor(model => model.DisplayOnIteI, checkBoxHtmlAttrs) Display on Hyvei </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-lg-4" style="padding-top: 20px">
+                                        <div>
+                                            <label> @Html.CheckBoxFor(model => model.DisplayOnIteGermany, checkBoxHtmlAttrs) Display on Hyve Germany </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-lg-4" style="padding-top: 20px">
+                                        <div>
+                                            <label> @Html.CheckBoxFor(model => model.DisplayOnIteTurkey, checkBoxHtmlAttrs) Display on Hyve Turkey </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-lg-4" style="padding-top: 20px">
+                                        <div>
+                                            <label> @Html.CheckBoxFor(model => model.DisplayOnIteRussia, checkBoxHtmlAttrs) Display on Hyve Russia </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-lg-4" style="padding-top: 20px">
+                                        <div>
+                                            <label> @Html.CheckBoxFor(model => model.DisplayOnIteEurasia, checkBoxHtmlAttrs) Display on Hyve Eurasia </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-lg-4" style="padding-top: 20px">
+                                        <div>
+                                            <label> @Html.CheckBoxFor(model => model.DisplayOnTradeLink, checkBoxHtmlAttrs) Display on Trade Link </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-lg-4" style="padding-top: 20px">
+                                        <div>
+                                            <label> @Html.CheckBoxFor(model => model.DisplayOnItePoland, checkBoxHtmlAttrs) Display on Hyve Poland </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-lg-4" style="padding-top: 20px">
+                                        <div>
+                                            <label> @Html.CheckBoxFor(model => model.DisplayOnIteModa, checkBoxHtmlAttrs) Display on Hyve Moda </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-lg-4" style="padding-top: 20px">
+                                        <div>
+                                            <label> @Html.CheckBoxFor(model => model.DisplayOnIteUkraine, checkBoxHtmlAttrs) Display on Hyve Ukraine </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr />
+                                <div class="row">
+                                    <div class="form-group col-lg-6" style="padding-top: 20px">
+                                        <div>
+                                            <label> @Html.CheckBoxFor(model => model.DisplayOnIteBuildInteriors, checkBoxHtmlAttrs) Display on Hyve Build & Interiors </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-lg-6" style="padding-top: 20px">
+                                        <div>
+                                            <label> @Html.CheckBoxFor(model => model.DisplayOnIteFoodDrink, checkBoxHtmlAttrs) Display on Hyve Food & Drink </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-lg-6" style="padding-top: 20px">
+                                        <div>
+                                            <label> @Html.CheckBoxFor(model => model.DisplayOnIteOilGas, checkBoxHtmlAttrs) Display on Hyve Oil & Gas </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-lg-6" style="padding-top: 20px">
+                                        <div>
+                                            <label> @Html.CheckBoxFor(model => model.DisplayOnIteTravelTourism, checkBoxHtmlAttrs) Display on Hyve Travel & Tourism </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-lg-6" style="padding-top: 20px">
+                                        <div>
+                                            <label> @Html.CheckBoxFor(model => model.DisplayOnIteTransportLogistics, checkBoxHtmlAttrs) Display on Hyve Transport & Logistics </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-lg-6" style="padding-top: 20px">
+                                        <div>
+                                            <label> @Html.CheckBoxFor(model => model.DisplayOnIteFashion, checkBoxHtmlAttrs) Display on Hyve Fashion </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-lg-6" style="padding-top: 20px">
+                                        <div>
+                                            <label> @Html.CheckBoxFor(model => model.DisplayOnIteSecurity, checkBoxHtmlAttrs) Display on Hyve Security </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-lg-6" style="padding-top: 20px">
+                                        <div>
+                                            <label> @Html.CheckBoxFor(model => model.DisplayOnIteBeauty, checkBoxHtmlAttrs) Display on Hyve Beauty </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-lg-6" style="padding-top: 20px">
+                                        <div>
+                                            <label> @Html.CheckBoxFor(model => model.DisplayOnIteHealthCare, checkBoxHtmlAttrs) Display on Hyve Health Care </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-lg-6" style="padding-top: 20px">
+                                        <div>
+                                            <label> @Html.CheckBoxFor(model => model.DisplayOnIteMining, checkBoxHtmlAttrs) Display on Hyve Mining </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-lg-6" style="padding-top: 20px">
+                                        <div>
+                                            <label> @Html.CheckBoxFor(model => model.DisplayOnIteEngineeringIndustrial, checkBoxHtmlAttrs) Display on Hyve Engineering & Industrial </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr />
+                                <div class="row">
+                                    <div class="form-group col-lg-12" style="padding-top: 20px">
+                                        <div>
+                                            <label class="text-danger"> @Html.CheckBoxFor(model => model.HiddenFromWebSites, checkBoxHtmlAttrs) Hide this event from all Hyve websites </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr />
+                                <div class="row" style="padding-top: 10px">
+                                    <div class="form-group col-lg-12 tooltip-demo">
+                                        <label data-toggle="tooltip" data-placement="top" title="Only applicable to events that are integrated with worldbuild365.com and the WorldBuild365 iPhone application.<br>
+'TC Display' selection allows an integrated Build & Interiors or Aquatherm event to stay open on the website / mobile application for a duration of 3-6 months after the event is completed.<br>
+'Normal' selection means, the event will disappear from the listing on worldbuild365.com and the WorldBuild365 iPhone application once the event is completed.">Tradeshow Connect Display <i class="fa fa-question-circle"></i></label>
+                                        <div class="input-group">
+                                            <div class="radio radio-info radio-inline">
+                                                <input type="radio" id="inlineRadio1" value="@TradeShowConnectDisplay.None.GetHashCode()" name="TradeShowConnectDisplay" @(Model.TradeShowConnectDisplay == 0 ? "checked" : "") @(displayOnTypeFieldsMappable ? "" : "disabled")>
+                                                <label for="inlineRadio1"> None </label>
+                                            </div>
+                                            <div class="radio radio-warning radio-inline">
+                                                <input type="radio" id="inlineRadio2" value="@TradeShowConnectDisplay.Normal.GetHashCode()" name="TradeShowConnectDisplay" @(Model.TradeShowConnectDisplay == 1 ? "checked" : "") @(displayOnTypeFieldsMappable ? "" : "disabled")>
+                                                <label for="inlineRadio2"> Normal </label>
+                                            </div>
+                                            <div class="radio radio-success radio-inline">
+                                                <input type="radio" id="inlineRadio3" value="@TradeShowConnectDisplay.TcDisplay.GetHashCode()" name="TradeShowConnectDisplay" @(Model.TradeShowConnectDisplay == 2 ? "checked" : "") @(displayOnTypeFieldsMappable ? "" : "disabled")>
+                                                <label for="inlineRadio3"> TC Display </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            @if (!Model.CurrentUser.IsViewer)
+            {
+                <div class="text-right m-t-xs">
+                    <button class="btn btn-success btnSave1" id="btnSave1" type="submit" @(!Model.IsAlive || Model.IsCancelled ? "disabled=\"disabled\"" : "")>
+                        Save
+                    </button>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+<script>
+
+    var editionSectionGetUrl = "@Url.Action("_GetEditionSections", "EditionSection")";
+    var editionSectionDelUrl = "@Url.Action("_DeleteEditionSection", "EditionSection")";
+
+    $("#toggle-edition-section-btn").on("click",
+        function(e) {
+            e.preventDefault();
+            $("#add-edition-section-div").toggle();
+            var btnHtml = $(this).html();
+            if (btnHtml.indexOf("-off ") >= 0) {
+                btnHtml = btnHtml.replace("-off ", "-on ");
+            } else {
+                btnHtml = btnHtml.replace("-on ", "-off ");
+            }
+            $(this).html(btnHtml);
+        });
+
+    $("#add-edition-section-btn").on("click", function(e) {
+        e.preventDefault();
+
+        var btn = $("#add-edition-section-btn").html("Adding...").attr("disabled", true);
+
+        var editionId = @Model.EditionId;
+        var sections = $("#sections").val();
+
+        $.ajax({
+            url: "@Url.Action("_AddEditionSection", "EditionSection")",
+            type: "GET",
+            data: {editionId : editionId, sections: sections},
+            dataType: "json",
+            success: function(result) {
+                if (result.success === true) {
+                    refreshEditionSections(editionId);
+                    clearEditionSectionsAddForm();
+                    $("#add-edition-section-div").toggle();
+                    swal({
+                        title: "Added!",
+                        text: result.message,
+                        type: "success"
+                    });
+                    btn.html("Add").attr("disabled", false);
+                } else {
+                    swal({
+                        title: "Error!",
+                        text: result.message,
+                        type: "error"
+                    });
+                    btn.html("Add").attr("disabled", false);
+                }
+            },
+            error: function(xhr, textStatus, error) {
+                swal({
+                    title: "Error!",
+                    text: xhr.statusText,
+                    type: textStatus
+                });
+                btn.html("Add").attr("disabled", false);
+            }
+        });
+    });
+
+    $(document).ready(function() {
+        $("body").on("click", ".del-edition-section", function(e) {
+            e.preventDefault();
+            var delBtn = $(e.currentTarget);
+            var innerSpan = $(delBtn.get(0).firstElementChild);
+            delBtn.addClass("disabled");
+            innerSpan.addClass("fa-spin");
+            var editionSectionId = delBtn.attr("data-id");
+            $.ajax({
+                url: editionSectionDelUrl,
+                data: { editionSectionId: editionSectionId },
+                dataType: "json",
+                success: function(result) {
+                    if (result.success === true) {
+                        refreshEditionSections(editionId);
+                        swal({
+                            title: "Deleted!",
+                            text: result.message,
+                            type: "success"
+                        });
+                    } else {
+                        swal({
+                            title: "Error!",
+                            text: result.message,
+                            type: "error"
+                        });
+                        delBtn.removeClass("disabled");
+                        innerSpan.removeClass("fa-spin");
+                    }
+                },
+                error: function(xhr, textStatus, error) {
+                    swal({
+                        title: "Error!",
+                        text: xhr.statusText,
+                        type: textStatus
+                    });
+                    delBtn.removeClass("disabled");
+                    innerSpan.removeClass("fa-spin");
+                }
+            });
+        });
+    });
+
+    function refreshEditionSections(editionId) {
+        $.get(editionSectionGetUrl + "?editionId=" + editionId,
+            function(result) {
+                $("#edition-sections-div").html(result);
+            });
+    }
+
+    function clearEditionSectionsAddForm(editionId) {
+        $('#add-edition-section-div').find('input').val('');
+    }
+</script>
+
+<script>
+
+    var editionDiscountApproverGetUrl = "@Url.Action("_GetEditionDiscountApprovers", "EditionDiscountApprover")";
+    var editionDiscountApproverDelUrl = "@Url.Action("_DeleteEditionDiscountApprover", "EditionDiscountApprover")";
+
+    $("#toggle-edition-discount-approver-btn").on("click",
+        function(e) {
+            e.preventDefault();
+            $("#add-edition-discount-approver-div").toggle();
+            var btnHtml = $(this).html();
+            if (btnHtml.indexOf("-off ") >= 0) {
+                btnHtml = btnHtml.replace("-off ", "-on ");
+            } else {
+                btnHtml = btnHtml.replace("-on ", "-off ");
+            }
+            $(this).html(btnHtml);
+        });
+
+    $("#add-edition-discount-approver-btn").on("click", function(e) {
+        e.preventDefault();
+
+        var btn = $("#add-edition-discount-approver-btn").html("Adding...").attr("disabled", true);
+
+        var editionId = @Model.EditionId;
+        var approvingUser = $("#approving-user").val();
+        var approvalLowerPercentage = $("#edition-discount-approver-lower-percentage").val();
+        var approvalUpperPercentage = $("#edition-discount-approver-upper-percentage").val();
+
+        $.ajax({
+            url: "@Url.Action("_AddEditionDiscountApprover", "EditionDiscountApprover")",
+            type: "GET",
+            data: { editionId, approvingUser, approvalLowerPercentage, approvalUpperPercentage },
+            dataType: "json",
+            success: function(result) {
+                if (result.success === true) {
+                    refreshEditionDiscountApprovers(editionId);
+                    clearEditionDiscountApproverAddForm();
+                    $("#add-edition-discount-approver-div").toggle();
+                    swal({
+                        title: "Added!",
+                        text: result.message,
+                        type: "success"
+                    });
+                    btn.html("Add").attr("disabled", false);
+                } else {
+                    swal({
+                        title: "Error!",
+                        text: result.message,
+                        type: "error"
+                    });
+                    btn.html("Add").attr("disabled", false);
+                }
+            },
+            error: function(xhr, textStatus, error) {
+                swal({
+                    title: "Error!",
+                    text: xhr.statusText,
+                    type: textStatus
+                });
+                btn.html("Add").attr("disabled", false);
+            }
+        });
+    });
+
+    $(document).ready(function() {
+        $("body").on("click", ".del-edition-discount-approver", function(e) {
+            e.preventDefault();
+            var delBtn = $(e.currentTarget);
+            var innerSpan = $(delBtn.get(0).firstElementChild);
+            delBtn.addClass("disabled");
+            innerSpan.addClass("fa-spin");
+            var id = delBtn.attr("data-id");
+            $.ajax({
+                url: editionDiscountApproverDelUrl,
+                data: { id },
+                dataType: "json",
+                success: function(result) {
+                    if (result.success === true) {
+                        refreshEditionDiscountApprovers(editionId);
+                        swal({
+                            title: "Deleted!",
+                            text: result.message,
+                            type: "success"
+                        });
+                    } else {
+                        swal({
+                            title: "Error!",
+                            text: result.message,
+                            type: "error"
+                        });
+                        delBtn.removeClass("disabled");
+                        innerSpan.removeClass("fa-spin");
+                    }
+                },
+                error: function(xhr, textStatus, error) {
+                    swal({
+                        title: "Error!",
+                        text: xhr.statusText,
+                        type: textStatus
+                    });
+                    delBtn.removeClass("disabled");
+                    innerSpan.removeClass("fa-spin");
+                }
+            });
+        });
+    });
+
+    function refreshEditionDiscountApprovers(editionId) {
+        $.get(editionDiscountApproverGetUrl + "?editionId=" + editionId,
+            function(result) {
+                $("#edition-discount-approvers-div").html(result);
+            });
+    }
+
+    function clearEditionDiscountApproverAddForm(editionId) {
+        $('#add-edition-discount-approver-div').find('input').val('');
+    }
+</script>
+
+<script>
+
+    var editionSocialMediaGetUrl = "@Url.Action("_GetSocialMedias", "EditionSocialMedia")";
+    var editionSocialMediaDelUrl = "@Url.Action("_DeleteSocialMedia", "EditionSocialMedia")";
+
+    $("#togglesocialmediabtn").on("click",
+        function(e) {
+            e.preventDefault();
+            $("#socialmediasdiv").toggle();
+            var btnHtml = $(this).html();
+            if (btnHtml.indexOf("-off ") >= 0) {
+                btnHtml = btnHtml.replace("-off ", "-on ");
+            } else {
+                btnHtml = btnHtml.replace("-on ", "-off ");
+            }
+            $(this).html(btnHtml);
+        });
+
+    $("#addsocialmediatbn").on("click", function(e) {
+        e.preventDefault();
+
+        var btn = $("#addsocialmediatbn").html("Adding...").attr("disabled", true);
+
+        var editionTranslationId = @Model.EditionTranslationId;
+        var socialMediaId = $("#socialMediaIdSelect").val();
+        var accountName = $("#accountName").val();
+
+        $.ajax({
+            url: "@Url.Action("_AddSocialMedia", "EditionSocialMedia")",
+            type: "GET",
+            data: {editionTranslationId : editionTranslationId, socialMediaId: socialMediaId, accountName: accountName},
+            dataType: "json",
+            success: function(result) {
+                if (result.success === true) {
+                    refreshEditionSocialMedias(editionTranslationId);
+                    swal({
+                        title: "Added!",
+                        text: result.message,
+                        type: "success"
+                    });
+                    btn.html("Add").attr("disabled", false);
+                } else {
+                    swal({
+                        title: "Error!",
+                        text: result.message,
+                        type: "error"
+                    });
+                    btn.html("Add").attr("disabled", false);
+                }
+            },
+            error: function(xhr, textStatus, error) {
+                swal({
+                    title: "Error!",
+                    text: xhr.statusText,
+                    type: textStatus
+                });
+                btn.html("Add").attr("disabled", false);
+            }
+        });
+    });
+
+    $(document).ready(function() {
+        $("body").on("click", ".del-socialmedia", function(e) {
+            e.preventDefault();
+            var delBtn = $(e.currentTarget);
+            var innerSpan = $(delBtn.get(0).firstElementChild);
+            delBtn.addClass("disabled");
+            innerSpan.addClass("fa-spin");
+            var editionSocialMediaId = delBtn.attr("data-id");
+            var editionTranslationId = delBtn.attr("data-editiontranslationid");
+            $.ajax({
+                url: editionSocialMediaDelUrl,
+                data: { editionSocialMediaId: editionSocialMediaId },
+                dataType: "json",
+                success: function(result) {
+                    if (result.success === true) {
+                        refreshEditionSocialMedias(editionTranslationId);
+                        swal({
+                            title: "Deleted!",
+                            text: result.message,
+                            type: "success"
+                        });
+                    } else {
+                        swal({
+                            title: "Error!",
+                            text: result.message,
+                            type: "error"
+                        });
+                        delBtn.removeClass("disabled");
+                        innerSpan.removeClass("fa-spin");
+                    }
+                },
+                error: function(xhr, textStatus, error) {
+                    swal({
+                        title: "Error!",
+                        text: xhr.statusText,
+                        type: textStatus
+                    });
+                    delBtn.removeClass("disabled");
+                    innerSpan.removeClass("fa-spin");
+                }
+            });
+        });
+    });
+
+    function refreshEditionSocialMedias(editionTranslationId) {
+        $.get(editionSocialMediaGetUrl + "?editionTranslationId=" + editionTranslationId,
+            function(result) {
+                $("#divSocialMedias").html(result);
+            });
+    }
+</script>
+
+<script>
+    /* MAP */
+    var currentCoords = '@Model.VenueCoordinates';
+    var eventCity = '@Model.City';
+</script>
+
+<script src="~/Scripts/bootstrap-clockpicker.min.js"></script>
+
+<script>
+    $('.datepicker').datepicker({
+        format: "dd-mm-yyyy",
+        language: "en-GB"
+    });
+    $('.clockpicker').clockpicker({ autoclose: true });
+</script>
+
+<link rel="stylesheet" href="~/Content/bootstrap-clockpicker.min.css" />

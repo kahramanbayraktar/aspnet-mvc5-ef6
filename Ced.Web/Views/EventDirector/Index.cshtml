@@ -1,0 +1,95 @@
+﻿@model Ced.Web.Models.EventDirector.EventDirectorListModel
+
+@{
+    ViewBag.Title = "Event Directors";
+}
+
+<div class="small-header">
+    <div class="hpanel">
+        <div class="panel-body">
+            <h2 class="font-light m-b-xs">
+                Event Directors
+            </h2>
+            <div id="hbreadcrumb" class="pull-left">
+                <ol class="hbreadcrumb breadcrumb">
+                    <li><a href="@Url.Action("Index", "Dashboard")">Main</a></li>
+                    <li>
+                        <span>Event Directors</span>
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="content animate-panel">
+    <div class="row">
+        <div class="col-lg-3">
+            @Html.Action("_Search", "EventDirector")
+        </div>
+        <div class="col-lg-9">
+            <div class="hpanel">
+                <div class="panel-body">
+                    <div id="tableHolder">
+                        @Html.Partial("_List", Model.EventDirectors)
+                    </div>
+                    <div>
+                        <a class="btn btn-orange" href="#newEventDirector" data-toggle="modal" title="Add Event Director"><i class="fa fa-plus fa-lg"></i></a>
+                        <div class="modal fade" id="newEventDirector" tabindex="-1" role="dialog" aria-hidden="true">
+                            @Html.Action("_Add")
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    @Styles.Render("~/bundles/datatables/css")
+    @Styles.Render("~/bundles/sweetalert/css")
+    @Styles.Render("~/bundles/toastr/css")
+
+    <link rel="stylesheet" href="~/Vendor/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" />
+    <link href="https://cdn.jsdelivr.net/jquery.loading/1.2.0/jquery.loading.min.css" rel="stylesheet">
+
+    <style>
+        .dataTable > thead > tr > th[class*="no-sort"]:after {
+            content: "" !important;
+        }
+
+        .table-responsive {
+            overflow-x: hidden;
+        }
+    </style>
+
+    <style>
+        #s2id_autogen3_search {
+            text-transform: none;
+        }
+    </style>
+}
+
+<div id="editEventDirector" class="modal fade" tabindex="-1" role="dialog">
+    <div id="editEventDirectorContainer"></div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/moment/js")
+    @Scripts.Render("~/bundles/datatables/js")
+    @Scripts.Render("~/bundles/datatablesBootstrap/js")
+    @Scripts.Render("~/bundles/sweetalert/js")
+    @Scripts.Render("~/bundles/toastr/js")
+    <script src="https://cdn.jsdelivr.net/jquery.loading/1.2.0/jquery.loading.min.js"></script>
+
+    <script>
+        var eventDirectorSearchUrl = "@Url.Action("_Search", "EventDirector")";
+        var eventDirectorAddUrl = "@Url.Action("_Add", "EventDirector")";
+        var eventDirectorEditUrl = "@Url.Action("_Edit", "EventDirector")";
+        var eventDirectorDelUrl = "@Url.Action("_Delete", "EventDirector")";
+        var eventSearchUrl = "@Url.Action("_SearchEventsAsAdmin", "Event")";
+        var userSearchUrl = "@Url.Action("_SearchUsers", "User")";
+    </script>
+
+    <script src="~/Scripts/ced-eventdirector.js?v=4"></script>
+}

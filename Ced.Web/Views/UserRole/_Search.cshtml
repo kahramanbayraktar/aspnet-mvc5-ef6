@@ -1,0 +1,79 @@
+﻿@model Ced.Web.Models.UserRole.UserRoleSearchModel
+@{
+    const string appCheckboxName = "applicationIds";
+    const string roleCheckboxName = "roleIds";
+}
+<div class="hpanel">
+    <div class="panel-body">
+        @using (Html.BeginForm("_Search", "UserRole", FormMethod.Post, new { id = "searchUserRoleForm" }))
+        {
+            <div class="form-group">
+                <label class="control-label">User:</label>
+                <div class="input-group col-lg-12">
+                    <input id="emailSearchBox" name="UserEmail" class="form-control" type="text" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Application:</label>
+                <div class="input-group col-lg-12">
+                    @foreach (var app in Model.Applications)
+                    {
+                        <div class="checkbox checkbox-success">
+                            <input id="@app.Code" name="@appCheckboxName" type="checkbox" value="@app.ApplicationId" checked="checked">
+                            <label for="@app.Code">
+                                @app.Code
+                            </label>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div id="roles" class="form-group" style="display: none">
+                <label class="control-label">Roles:</label>
+                <div class="input-group col-lg-12">
+                    @foreach (var role in Model.Roles)
+                    {
+                        <div id="cb@(role.RoleId)" data-appid="@role.ApplicationId" class="checkbox checkbox-success roleCbDiv">
+                            <input id="@role.RoleId" name="@roleCheckboxName" type="checkbox" value="@role.RoleId" data-appid="@role.ApplicationId" checked="checked">
+                            <label for="@role.RoleId">
+                                @role.Name
+                            </label>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Regions:</label>
+                <div class="input-group col-lg-12">
+                    @foreach (var region in Model.Regions)
+                    {
+                        <div class="checkbox checkbox-success">
+                            <input id="@region.Name" name="regionIds" type="checkbox" value="@region.RegionId">
+                            <label for="@region.Name">
+                                @region.Name
+                            </label>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Industries:</label>
+                <div class="input-group col-lg-12">
+                    @foreach (var industry in Model.Industries)
+                    {
+                        <div class="checkbox checkbox-success">
+                            <input id="@industry.Name" name="industryIds" type="checkbox" value="@industry.IndustryId">
+                            <label for="@industry.Name">
+                                @industry.Name
+                            </label>
+                        </div>
+                    }
+                </div>
+            </div>
+            <button class="btn btn-success btn-block" id="btnSearch"><i class="fa fa-spinner fa-spin" id="loading" style="display: none"></i> Search</button>
+        }
+    </div>
+</div>
+
+<script>
+    var appCheckboxName = "@appCheckboxName";
+</script>

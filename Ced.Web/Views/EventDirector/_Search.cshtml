@@ -1,0 +1,70 @@
+﻿@model Ced.Web.Models.EventDirector.EventDirectorSearchModel
+
+<div class="hpanel">
+    <div class="panel-body">
+        @using (Html.BeginForm("_Search", "EventDirector", FormMethod.Post, new { id = "searchEventDirectorForm" }))
+        {
+            <div class="form-group">
+                <label class="control-label">Event:</label>
+                <div class="input-group col-lg-12">
+                    <input id="eventSearchBox" name="EventId" class="form-control" type="text" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label">User:</label>
+                <div class="input-group col-lg-12">
+                    <input id="emailSearchBox" name="UserEmail" class="form-control" type="text" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Application:</label>
+                <div class="input-group col-lg-12">
+                    @foreach (var app in Model.Applications)
+                    {
+                        <div class="checkbox checkbox-success">
+                            <input id="@app.Code" name="ApplicationIds" type="checkbox" value="@app.ApplicationId" checked="checked">
+                            <label for="@app.Code">
+                                @app.Code
+                            </label>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Primary:</label>
+                <div class="input-group col-lg-12">
+                    <div class="radio radio-success">
+                        <input type="radio" id="inlineRadio1" value="" name="IsPrimary" checked="checked">
+                        <label for="inlineRadio1"> Any </label>
+                    </div>
+                    <div class="radio radio-success">
+                        <input type="radio" id="inlineRadio2" value="true" name="IsPrimary">
+                        <label for="inlineRadio2"> Primary </label>
+                    </div>
+                    <div class="radio radio-success">
+                        <input type="radio" id="inlineRadio3" value="false" name="IsPrimary">
+                        <label for="inlineRadio3"> Not Primary </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Assistant:</label>
+                <div class="input-group col-lg-12">
+                    <div class="radio radio-success">
+                        <input type="radio" id="inlineRadio4" value="" name="IsAssistant" checked="checked">
+                        <label for="inlineRadio4"> Any </label>
+                    </div>
+                    <div class="radio radio-success">
+                        <input type="radio" id="inlineRadio5" value="true" name="IsAssistant">
+                        <label for="inlineRadio5"> Assistant </label>
+                    </div>
+                    <div class="radio radio-success">
+                        <input type="radio" id="inlineRadio6" value="false" name="IsAssistant">
+                        <label for="inlineRadio6"> Not Assistant </label>
+                    </div>
+                </div>
+            </div>
+            <button class="btn btn-success btn-block" id="btnSearch"><i class="fa fa-spinner fa-spin" id="loading" style="display: none"></i> Search</button>
+        }
+    </div>
+</div>

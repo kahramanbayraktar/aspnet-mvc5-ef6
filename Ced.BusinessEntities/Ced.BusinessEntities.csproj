@@ -1,0 +1,131 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{42055DAD-E7DD-4BFA-9047-BDF63972B3C2}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Ced.BusinessEntities</RootNamespace>
+    <AssemblyName>Ced.BusinessEntities</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>CedBusinessEntities.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ITE.Utility, Version=1.0.0.0, Culture=neutral, PublicKeyToken=1b9cb81c7e159909, processorArchitecture=MSIL">
+      <HintPath>..\packages\ITE.Utility.1.0.0\lib\net452\ITE.Utility.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ActionType.cs" />
+    <Compile Include="ActionTypeAttribute.cs" />
+    <Compile Include="Auth\ApplicationEntity.cs" />
+    <Compile Include="Auth\CountryEntity.cs" />
+    <Compile Include="Auth\IndustryEntity.cs" />
+    <Compile Include="Auth\RegionEntity.cs" />
+    <Compile Include="Auth\RoleEntity .cs" />
+    <Compile Include="Auth\TokenEntity.cs" />
+    <Compile Include="Auth\UserRoleEntity.cs" />
+    <Compile Include="EditionDiscountApprover\EditionPaymentScheduleEntity.cs" />
+    <Compile Include="EditionPaymentSchedule\EditionPaymentScheduleEntity.cs" />
+    <Compile Include="EditionSection\EditionSectionEntity.cs" />
+    <Compile Include="KeyVisitor\KeyVisitorEntity.cs" />
+    <Compile Include="EditionKeyVisitor\EditionKeyVisitorEntity.cs" />
+    <Compile Include="EventInformation\EventInformationEntity.cs" />
+    <Compile Include="EditionVisitor\EditionVisitorEntity.cs" />
+    <Compile Include="Edition\EditionVenue.cs" />
+    <Compile Include="ExternalEntities\WisentApiEventEntity.cs" />
+    <Compile Include="ExternalEntities\Wb365ApiEventEntity.cs" />
+    <Compile Include="CustomTypes\EventEditionCustomType.cs" />
+    <Compile Include="EditionCohost\EditionCohostEntity.cs" />
+    <Compile Include="EditionCountry\EditionCountryEntity.cs" />
+    <Compile Include="EditionCountry\EditionCountryRelationType.cs" />
+    <Compile Include="EditionTranslationSocialMedia\EditionTranslationSocialMediaEntity.cs" />
+    <Compile Include="EditionTranslation\EditionTranslationEntityLight.cs" />
+    <Compile Include="Edition\EditionEntity.cs" />
+    <Compile Include="Edition\EditionEntityLight.cs" />
+    <Compile Include="ImageAttribute.cs" />
+    <Compile Include="Edition\EditionImageType.cs" />
+    <Compile Include="Edition\EditionInfoType.cs" />
+    <Compile Include="Edition\EditionStatusType.cs" />
+    <Compile Include="Edition\EditionStatusAttribute.cs" />
+    <Compile Include="Edition\EventActivity.cs" />
+    <Compile Include="Edition\StagingDbComparableAttribute.cs" />
+    <Compile Include="Edition\TradeShowConnectDisplay.cs" />
+    <Compile Include="EventDirector\EventDirectorEntity.cs" />
+    <Compile Include="Event\EventEntityLight.cs" />
+    <Compile Include="Event\EventEntity.cs" />
+    <Compile Include="EntityType.cs" />
+    <Compile Include="File\EditionFileType.cs" />
+    <Compile Include="File\FileEntity.cs" />
+    <Compile Include="File\FileTypeAttribute.cs" />
+    <Compile Include="KeyVisitor\KeyVisitorTypeType.cs" />
+    <Compile Include="Log\LogEntityLight.cs" />
+    <Compile Include="Notification\CompletenessNotificationTypeAttribute.cs" />
+    <Compile Include="Notification\NotificationEntity.cs" />
+    <Compile Include="Edition\EditionFieldAttribute.cs" />
+    <Compile Include="Notification\NotificationAttribute.cs" />
+    <Compile Include="Notification\NotificationType.cs" />
+    <Compile Include="EditionTranslation\EditionTranslationEntity.cs" />
+    <Compile Include="Log\LogEntity.cs" />
+    <Compile Include="Notification\StatusChangeNotificationTypeAttribute.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SocialMedia\SocialMediaAttribute.cs" />
+    <Compile Include="SocialMedia\SocialMediaEntity.cs" />
+    <Compile Include="SocialMedia\SocialMediaType.cs" />
+    <Compile Include="Subscription\SubscriptionEntity.cs" />
+    <Compile Include="Task\TaskType.cs" />
+    <Compile Include="UpdateInfoAttribute.cs" />
+    <Compile Include="User\UserImageType.cs" />
+    <Compile Include="User\UserEntity.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CedBusinessEntities.snk" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

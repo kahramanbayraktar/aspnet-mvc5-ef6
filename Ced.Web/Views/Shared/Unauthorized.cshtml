@@ -1,0 +1,17 @@
+﻿@model Ced.Web.Models.ErrorModel
+
+@{
+    Layout = "~/Views/Shared/_Layout_Blank.cshtml";
+    ViewBag.Title = "Unauthorized";
+}
+
+<div class="error-container text-center">
+    <i class="pe-7s-less text-success big-icon"></i>
+    <h1>401</h1>
+    <strong>@(Model != null && !string.IsNullOrWhiteSpace(Model.Title) ? Model.Title : "No Access")</strong>
+    <p>
+        @(Model != null && !string.IsNullOrWhiteSpace(Model.Message) ? Model.Message : "You don't have an access right to this resource.")
+    </p>
+    <a href="" onclick="window.history.back(); return false;" class="btn btn-xs btn-success">Go back</a>
+    <a href="~/" class="btn btn-xs btn-orange">Go to dashboard</a>
+</div>

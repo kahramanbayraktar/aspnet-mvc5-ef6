@@ -1,0 +1,664 @@
+﻿@using Ced.BusinessEntities
+@using Ced.Utility.Azure
+@using ITE.Utility.Extensions
+@model Ced.Web.Models.Edition.EditionEditImagesModel
+
+@{
+    var productImage = EditionImageType.ProductImage.GetAttribute<ImageAttribute>();
+    var masterLogo = EditionImageType.MasterLogo.GetAttribute<ImageAttribute>();
+    var crmLogo = EditionImageType.CrmLogo.GetAttribute<ImageAttribute>();
+    var icon = EditionImageType.Icon.GetAttribute<ImageAttribute>();
+    var promotedLogo = EditionImageType.PromotedLogo.GetAttribute<ImageAttribute>();
+    var detailsImage = EditionImageType.DetailsImage.GetAttribute<ImageAttribute>();
+
+    var isEditable = !Model.IsCancelled && Model.IsAlive && Model.IsEditableForImages && Model.EditionTranslationId > 0;
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="hpanel hgrey">
+            <div class="panel-heading tooltip-demo">
+                <label data-toggle="tooltip" data-placement="top" title="This image is used in portfolio or industry websites and other Portfolio communications.">
+                    Product Image Upload <i class="fa fa-question-circle"></i>
+                </label>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="form-group col-lg-12">
+                        @if (isEditable)
+                        {
+                            <table>
+                                <tr>
+                                    <td>
+                                        <form action="@Url.Action("_SaveImage", "Edition")" class="dropzone dzimage" id="dzForm@(productImage.Key)" style="border: 1px solid #f1f3f6; width: 794px; height: 358px">
+                                            @Html.HiddenFor(x => x.EditionId)
+                                            @Html.HiddenFor(x => x.EditionName)
+                                            @Html.HiddenFor(x => x.LanguageCode)
+                                            @Html.HiddenFor(x => x.ProductImageFileName)
+                                            @Html.Hidden("EditionImageType", EditionImageType.ProductImage)
+                                            <div id="dz-message-portfolio-details" class="dz-default dz-message" style="position: relative; left: 0; top: 0">
+                                                <div>
+                                                    <img class="img-responsive" id="img@(productImage.Key)" src="@EditionImageType.ProductImage.BlobFullUrl(Model.ProductImageFileName)" style="display: block; margin: auto" onerror="this.onerror = null; this.src = '@(string.Format("https://dummyimage.com/{0}x{1}/f1f3f6/000000.png&text=+", productImage.Width, productImage.Height))';" />
+                                                </div>
+                                                <div class="text-justify" style="padding: 10px; line-height: 1em">
+                                                    <span style="font-size: 10px; line-height: 10px; font-weight: normal">Click above to upload product image.<br />Image format: <b>.jpg/.jpeg/.png</b><br />Image dimensions: <b>@productImage.Width x @productImage.Height px</b><br />Max file size: <b>@productImage.MinMaxLengths[1] KB</b></span>
+                                                </div>
+                                                <i id="upload@(productImage.Key)" class="fa fa-send" style="font-size: 1.5em; display: none; position: absolute; left: 270px; top: 140px"><br /><span style="font-family: 'open sans'; font-size: 1.1em; color: #6a6c6f">upload product image</span></i>
+                                            </div>
+                                        </form>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: right">
+                                        <a href="@Url.Action("_DeleteImage", "Edition", new {editionTranslationId = Model.EditionTranslationId, imageType = EditionImageType.ProductImage})" id="del@(productImage.Key)" class="deletePic" style="display: @(!string.IsNullOrWhiteSpace(Model.ProductImageFileName) ? "block" : "none")" target="_blank" title="Click to delete product image">
+                                            <i class="fa fa-trash-o"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>
+                        }
+                        else
+                        {
+                            <img class="img-responsive" id="img@(productImage.Key)" src="@EditionImageType.ProductImage.BlobFullUrl(Model.ProductImageFileName)" style="display: block" onerror="this.onerror = null; this.src = '@EditionImageType.ProductImage.EditionDefaultImageUrl()';" />
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="hpanel hgrey">
+            <div class="panel-heading tooltip-demo">
+                <label data-toggle="tooltip" data-placement="top" title="The master logo is the event's most commonly used and recognisable brand logo, for use in offline media, printable materials or where dimensions are not restricted.">
+                    Master Logo Upload <i class="fa fa-question-circle"></i>
+                </label>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="form-group col-lg-12">
+                        @if (isEditable)
+                        {
+                            <table>
+                                <tr>
+                                    <td>
+                                        <form action="@Url.Action("_SaveImage", "Edition")" class="dropzone dzimage" id="dzForm@(masterLogo.Key)" style="border: 1px solid #f1f3f6; height: auto">
+                                            @Html.HiddenFor(x => x.EditionId)
+                                            @Html.HiddenFor(x => x.EditionName)
+                                            @Html.HiddenFor(x => x.LanguageCode)
+                                            @Html.HiddenFor(x => x.MasterLogoFileName)
+                                            @Html.Hidden("EditionImageType", EditionImageType.MasterLogo)
+                                            <div id="dz-message-portfolio-list" class="dz-default dz-message" style="position: relative; left: 0; top: 0">
+                                                <div>
+                                                    <img class="img-responsive" id="img@(masterLogo.Key)" src="@EditionImageType.MasterLogo.BlobFullUrl(Model.MasterLogoFileName)" style="display: block; margin: auto" onerror="this.onerror = null; this.src = '@(string.Format("https://dummyimage.com/{0}x{1}/f1f3f6/000000.png&text=+", 128, 128))';" />
+                                                </div>
+                                                <div class="text-justify" style="padding: 10px; line-height: 1em">
+                                                    <span style="font-size: 10px; line-height: 10px; font-weight: normal">Click above to upload master logo.<br />Image format: <b>.png</b><br />Image dimensions: <b>No restriction</b><br />Max file size: <b>@masterLogo.MinMaxLengths[1] KB</b></span>
+                                                </div>
+                                                <i id="upload@(masterLogo.Key)" class="fa fa-send" style="font-size: 1.5em; display: none; position: absolute; left: 20px; top: 50px"><br /><span style="font-family: 'open sans'; font-size: 0.8em; color: #6a6c6f">upload master logo</span></i>
+                                            </div>
+                                        </form>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: right">
+                                        <a href="@Url.Action("_DeleteImage", "Edition", new {editionTranslationId = Model.EditionTranslationId, imageType = EditionImageType.MasterLogo})" id="del@(masterLogo.Key)" class="deletePic" style="display: @(!string.IsNullOrWhiteSpace(Model.MasterLogoFileName) ? "block" : "none")" target="_blank" title="Click to delete master logo">
+                                            <i class="fa fa-trash-o"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>
+                        }
+                        else
+                        {
+                            <img class="img-responsive" id="img@(masterLogo.Key)" src="@EditionImageType.MasterLogo.BlobFullUrl(Model.MasterLogoFileName)" style="display: block" onerror="this.onerror = null; this.src = '@EditionImageType.MasterLogo.EditionDefaultImageUrl()';" />
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="hpanel hgrey">
+            <div class="panel-heading tooltip-demo">
+                <label data-toggle="tooltip" data-placement="top" title="The CRM logo is for use on contracts and proposal generated from CRM.">
+                    CRM Logo Upload <i class="fa fa-question-circle"></i>
+                </label>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="form-group col-lg-12">
+                        @if (isEditable)
+                        {
+                            <table>
+                                <tr>
+                                    <td>
+                                        <form action="@Url.Action("_SaveImage", "Edition")" class="dropzone dzimage" id="dzForm@(crmLogo.Key)" style="border: 1px solid #f1f3f6; width: 590px; height: 255px">
+                                            @Html.HiddenFor(x => x.EditionId)
+                                            @Html.HiddenFor(x => x.EditionName)
+                                            @Html.HiddenFor(x => x.LanguageCode)
+                                            @Html.HiddenFor(x => x.CrmLogoFileName)
+                                            @Html.Hidden("EditionImageType", EditionImageType.CrmLogo)
+                                            <div id="dz-message-portfolio-list" class="dz-default dz-message" style="position: relative; left: 0; top: 0">
+                                                <div>
+                                                    <img class="img-responsive" id="img@(crmLogo.Key)" src="@EditionImageType.CrmLogo.BlobFullUrl(Model.CrmLogoFileName)" style="display: block; margin: auto" onerror="this.onerror = null; this.src = '@(string.Format("https://dummyimage.com/{0}x{1}/f1f3f6/000000.png&text=+", crmLogo.Width, crmLogo.Height))';" />
+                                                </div>
+                                                <div class="text-justify" style="padding: 10px; line-height: 1em">
+                                                    <span style="font-size: 10px; line-height: 10px; font-weight: normal">Click above to upload CRM logo.<br />Image format: <b>.png</b><br />Image dimensions: <b>@crmLogo.Width x @crmLogo.Height px</b><br />Max file size: <b>@crmLogo.MinMaxLengths[1] KB</b></span>
+                                                </div>
+                                                <i id="upload@(crmLogo.Key)" class="fa fa-send" style="font-size: 1.5em; display: none; position: absolute; left: 220px; top: 70px"><br /><span style="font-family: 'open sans'; font-size: 0.8em; color: #6a6c6f">upload CRM logo</span></i>
+                                            </div>
+                                        </form>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: right">
+                                        <a href="@Url.Action("_DeleteImage", "Edition", new {editionTranslationId = Model.EditionTranslationId, imageType = EditionImageType.CrmLogo})" id="del@(crmLogo.Key)" class="deletePic" style="display: @(!string.IsNullOrWhiteSpace(Model.CrmLogoFileName) ? "block" : "none")" target="_blank" title="Click to delete CRM logo">
+                                            <i class="fa fa-trash-o"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>
+                        }
+                        else
+                        {
+                            <img class="img-responsive" id="img@(crmLogo.Key)" src="@EditionImageType.CrmLogo.BlobFullUrl(Model.CrmLogoFileName)" style="display: block" onerror="this.onerror = null; this.src = '@EditionImageType.CrmLogo.EditionDefaultImageUrl()';" />
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="hpanel hgrey">
+            <div class="panel-heading tooltip-demo">
+                <label data-toggle="tooltip" data-placement="top" title="The event icon will be used in Social Media channels, as the event website favicon and in other places where space is limited and use of the full logo is inappropriate.">
+                    Icon Upload <i class="fa fa-question-circle"></i>
+                </label>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="form-group col-lg-12">
+                        @if (isEditable)
+                        {
+                            <table>
+                                <tr>
+                                    <td>
+                                        <form action="@Url.Action("_SaveImage", "Edition")" class="dropzone dzimage" id="dzForm@(icon.Key)" style="border: 1px solid #f1f3f6; height: 128px">
+                                            @Html.HiddenFor(x => x.EditionId)
+                                            @Html.HiddenFor(x => x.EditionName)
+                                            @Html.HiddenFor(x => x.LanguageCode)
+                                            @Html.HiddenFor(x => x.IconFileName)
+                                            @Html.Hidden("EditionImageType", EditionImageType.Icon)
+                                            <div id="dz-message-icon" class="dz-default dz-message" style="position: relative; left: 0; top: 0">
+                                                <div>
+                                                    <img class="img-responsive" id="img@(icon.Key)" src="@EditionImageType.Icon.BlobFullUrl(Model.IconFileName)" style="display: block; margin: auto" onerror="this.onerror = null; this.src = '@(string.Format("https://dummyimage.com/{0}x{1}/f1f3f6/000000.png&text=+", icon.Width, icon.Height))';" />
+                                                </div>
+                                                <div class="text-justify" style="padding: 10px; line-height: 1em">
+                                                    <span style="font-size: 10px; line-height: 10px; font-weight: normal">Click above to upload the event icon.<br />Image format: <b>.png</b><br />Image dimensions: <b>@icon.Width x @icon.Height px</b><br />Max file size: <b>@icon.MinMaxLengths[1] KB</b></span>
+                                                </div>
+                                                <i id="upload@(icon.Key)" class="fa fa-send" style="font-size: 1.2em; display: none; position: absolute; left: 50px; top: 25px"><br /><span style="font-family: 'open sans'; font-size: 0.8em; color: #6a6c6f">upload event icon</span></i>
+                                            </div>
+                                        </form>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: right">
+                                        <a href="@Url.Action("_DeleteImage", "Edition", new {editionTranslationId = Model.EditionTranslationId, imageType = EditionImageType.Icon})" id="del@(icon.Key)" class="deletePic" style="display: @(!string.IsNullOrWhiteSpace(Model.IconFileName) ? "block" : "none")" target="_blank" title="Click to delete icon">
+                                            <i class="fa fa-trash-o"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>
+                        }
+                        else
+                        {
+                            <img class="img-responsive" id="img@(icon.Key)" src="@EditionImageType.Icon.BlobFullUrl(Model.IconFileName)" style="display: block" onerror="this.onerror = null; this.src = '@EditionImageType.Icon.EditionDefaultImageUrl()';" />
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="hpanel hgrey">
+            <div class="panel-heading tooltip-demo">
+                <label data-toggle="tooltip" data-placement="top" title="...">
+                    Promoted Logo Upload <i class="fa fa-question-circle"></i>
+                </label>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="form-group col-lg-12">
+                        @if (isEditable)
+                        {
+                            <table>
+                                <tr>
+                                    <td>
+                                        <form action="@Url.Action("_SaveImage", "Edition" )" class="dropzone dzimage" id="dzForm@(promotedLogo.Key)" style="border: 1px solid #f1f3f6; height: auto">
+                                            @Html.HiddenFor(x => x.EditionId)
+                                            @Html.HiddenFor(x => x.EditionName)
+                                            @Html.HiddenFor(x => x.LanguageCode)
+                                            @Html.HiddenFor(x => x.PromotedLogoFileName)
+                                            @Html.Hidden("EditionImageType", EditionImageType.PromotedLogo)
+                                            <div id="dz-message-portfolio-list" class="dz-default dz-message" style="position: relative; left: 0; top: 0">
+                                                <div>
+                                                    <img class="img-responsive" id="img@(promotedLogo.Key)" src="@EditionImageType.PromotedLogo.BlobFullUrl(Model.PromotedLogoFileName)" style="display: block; margin: auto" onerror="this.onerror = null; this.src = '@(string.Format("https://dummyimage.com/214x111/f1f3f6/000000.png&text=+", promotedLogo.Width, promotedLogo.Height))';" />
+                                                </div>
+                                                <div class="text-justify" style="padding: 10px; line-height: 1em">
+                                                    <span style="font-size: 10px; line-height: 10px; font-weight: normal">Click above to upload promoted logo.<br />Image format: <b>@(string.Join(",", promotedLogo.AllowedExtensions))</b><br />Image dimensions: <b>No restriction</b><br />Max file size: <b>@promotedLogo.MinMaxLengths[1] KB</b></span>
+                                                </div>
+                                                <i id="upload@(promotedLogo.Key)" class="fa fa-send" style="font-size: 1.5em; display: none; position: absolute; left: 20px; top: 50px"><br /><span style="font-family: 'open sans'; font-size: 0.8em; color: #6a6c6f">upload promoted logo</span></i>
+                                            </div>
+                                        </form>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: right">
+                                        <a href="@Url.Action("_DeleteImage", "Edition", new {editionTranslationId = Model.EditionTranslationId, imageType = EditionImageType.PromotedLogo})" id="del@(promotedLogo.Key)" class="deletePic" style="display: @(!string.IsNullOrWhiteSpace(Model.PromotedLogoFileName) ? "block" : "none")" target="_blank" title="Click to delete promoted logo">
+                                            <i class="fa fa-trash-o"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>
+                        }
+                        else
+                        {
+                            <img class="img-responsive" id="img@(promotedLogo.Key)" src="@EditionImageType.PromotedLogo.BlobFullUrl(Model.PromotedLogoFileName)" style="display: block" onerror="this.onerror = null; this.src = '@EditionImageType.PromotedLogo.EditionDefaultImageUrl()';" />
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    
+<div class="row">
+    <div class="col-lg-12">
+        <div class="hpanel hgrey">
+            <div class="panel-heading tooltip-demo">
+                <label data-toggle="tooltip" data-placement="top" title="...">
+                    Details Image Upload <i class="fa fa-question-circle"></i>
+                </label>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="form-group col-lg-12">
+                        @if (isEditable)
+                        {
+                        <table>
+                            <tr>
+                                <td>
+                                    <form action="@Url.Action("_SaveImage", "Edition" )" class="dropzone dzimage" id="dzForm@(detailsImage.Key)" style="border: 1px solid #f1f3f6; width: 500px; height: 365px">
+                                        @Html.HiddenFor(x => x.EditionId)
+                                        @Html.HiddenFor(x => x.EditionName)
+                                        @Html.HiddenFor(x => x.LanguageCode)
+                                        @Html.HiddenFor(x => x.DetailsImageFileName)
+                                        @Html.Hidden("EditionImageType", EditionImageType.DetailsImage)
+                                        <div id="dz-message-portfolio-list" class="dz-default dz-message" style="position: relative; left: 0; top: 0">
+                                            <div>
+                                                <img class="img-responsive" id="img@(detailsImage.Key)" src="@EditionImageType.DetailsImage.BlobFullUrl(Model.DetailsImageFileName)" style="display: block; margin: auto" onerror="this.onerror = null; this.src = '@(string.Format("https://dummyimage.com/{0}x{1}/f1f3f6/000000.png&text=+", detailsImage.Width, detailsImage.Height))';" />
+                                            </div>
+                                            <div class="text-justify" style="padding: 10px; line-height: 1em">
+                                                <span style="font-size: 10px; line-height: 10px; font-weight: normal">Click above to upload details image.<br />Image format: <b>@(string.Join(",", detailsImage.AllowedExtensions))</b><br />Image dimensions: <b>@detailsImage.Width x @detailsImage.Height px</b><br />Max file size: <b>@detailsImage.MinMaxLengths[1] KB</b></span>
+                                            </div>
+                                            <i id="upload@(detailsImage.Key)" class="fa fa-send" style="font-size: 1.5em; display: none; position: absolute; left: 180px; top: 140px"><br /><span style="font-family: 'open sans'; font-size: 0.8em; color: #6a6c6f">upload details image</span></i>
+                                        </div>
+                                    </form>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: right">
+                                    <a href="@Url.Action("_DeleteImage", "Edition" , new {editionTranslationId=Model.EditionTranslationId, imageType=EditionImageType.DetailsImage})" id="del@(detailsImage.Key)" class="deletePic" style="display: @(!string.IsNullOrWhiteSpace(Model.DetailsImageFileName) ? " block" : "none" )" target="_blank" title="Click to delete details image">
+                                        <i class="fa fa-trash-o"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </table>
+                        }
+                        else
+                        {
+                        <img class="img-responsive" id="img@(detailsImage.Key)" src="@EditionImageType.DetailsImage.BlobFullUrl(Model.DetailsImageFileName)" style="display: block" onerror="this.onerror = null; this.src = '@EditionImageType.DetailsImage.EditionDefaultImageUrl()';" />
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (isEditable)
+{
+<script>
+        Dropzone.options.dzFormProductImage = {
+            maxFiles: 1,
+            acceptedFiles: 'image/jpg,image/jpeg,image/png,.jpg,.jpeg,.png',
+            uploadMultiple: false,
+            thumbnailWidth: '794',
+            thumbnailHeight: '293',
+            maxFilesize: .3,
+            init: function () {
+                // Execute when file uploads are complete
+                this.on("complete", function (file) {
+                    this.removeFile(file);
+                });
+
+                this.on("success", function (file, response) {
+                    if (response.success == true) {
+                        var src = "@EditionImageType.ProductImage.BlobSubDirectory()" + response.fileName + "?" + new Date().getTime();
+                        $("#img@(productImage.Key)").attr("src", src);
+                        $("#del@(productImage.Key)").show();
+                    } else {
+                        swal({
+                            title: "Error!",
+                            text: response.message,
+                            type: "error"
+                        });
+                        this.removeFile(file);
+                    }
+                });
+
+                this.on("error", function (file, message) {
+                    swal({
+                        title: "Error!",
+                        text: message,
+                        type: "error"
+                    });
+                    this.removeFile(file);
+                });
+            }
+        };
+
+        Dropzone.options.dzFormMasterLogo = {
+            maxFiles: 1,
+            acceptedFiles: 'image/png,.png',
+            uploadMultiple: false,
+            //thumbnailWidth: '320',
+            //thumbnailHeight: '128',
+            maxFilesize: .5,
+            init: function () {
+                // Execute when file uploads are complete
+                this.on("complete", function (file) {
+                    this.removeFile(file);
+                });
+
+                this.on("success", function (file, response) {
+                    if (response.success == true) {
+                        var src = "@EditionImageType.MasterLogo.BlobSubDirectory()" + response.fileName + "?" + new Date().getTime();
+                        $("#img@(masterLogo.Key)").attr("src", src);
+                        $("#del@(masterLogo.Key)").show();
+                    } else {
+                        swal({
+                            title: "Error!",
+                            text: response.message,
+                            type: "error"
+                        });
+                        this.removeFile(file);
+                    }
+                });
+
+                this.on("error", function (file, message) {
+                    swal({
+                        title: "Error!",
+                        text: message,
+                        type: "error"
+                    });
+                    this.removeFile(file);
+                });
+            }
+        };
+
+        Dropzone.options.dzFormCrmLogo = {
+            maxFiles: 1,
+            acceptedFiles: 'image/png,.png',
+            uploadMultiple: false,
+            thumbnailWidth: '@crmLogo.Width',
+            thumbnailHeight: '@crmLogo.Height',
+            maxFilesize: @(crmLogo.MinMaxLengths[1] * 1.0 / 1000),
+            accept: function(file, done) {
+                var reader = new FileReader();
+                reader.onload = (function(file) {
+                    var image = new Image();
+                    image.src = file.target.result;
+                    image.onload = function() {
+                        if (this.width != '@crmLogo.Width' || this.height != '@crmLogo.Height') {
+                            done(
+                                "Image dimensions cannot be different from @(crmLogo.Width)px (width) & @(crmLogo.Height)px (height)");
+                        } else {
+                            done();
+                        }
+                    };
+                });
+                reader.readAsDataURL(file);
+            },
+            init: function () {
+                // Execute when file uploads are complete
+                this.on("complete", function (file) {
+                    this.removeFile(file);
+                });
+
+                this.on("success", function (file, response) {
+                    if (response.success == true) {
+                        var src = "@EditionImageType.CrmLogo.BlobSubDirectory()" + response.fileName + "?" + new Date().getTime();
+                        $("#img@(crmLogo.Key)").attr("src", src);
+                        $("#del@(crmLogo.Key)").show();
+                    } else {
+                        swal({
+                            title: "Error!",
+                            text: response.message,
+                            type: "error"
+                        });
+                        this.removeFile(file);
+                    }
+                });
+
+                this.on("error", function (file, message) {
+                    swal({
+                        title: "Error!",
+                        text: message,
+                        type: "error"
+                    });
+                    this.removeFile(file);
+                });
+            }
+        };
+
+        Dropzone.options.dzFormIcon = {
+            maxFiles: 1,
+            acceptedFiles: 'image/png,.png',
+            uploadMultiple: false,
+            thumbnailWidth: '64',
+            thumbnailHeight: '64',
+            maxFilesize: .025,
+            init: function () {
+                // Execute when file uploads are complete
+                this.on("complete", function (file) {
+                    this.removeFile(file);
+                });
+
+                this.on("success", function (file, response) {
+                    if (response.success == true) {
+                        var src = "@EditionImageType.Icon.BlobSubDirectory()" + response.fileName + "?" + new Date().getTime();
+                        $("#img@(icon.Key)").attr("src", src);
+                        $("#del@(icon.Key)").show();
+                    } else {
+                        swal({
+                            title: "Error!",
+                            text: response.message,
+                            type: "error"
+                        });
+                        this.removeFile(file);
+                    }
+                });
+
+                this.on("error", function (file, message) {
+                    swal({
+                        title: "Error!",
+                        text: message,
+                        type: "error"
+                    });
+                    this.removeFile(file);
+                });
+            }
+        };
+
+        Dropzone.options.dzFormPromotedLogo = {
+                maxFiles: 1,
+                acceptedFiles: 'image/png,.png',
+                uploadMultiple: false,
+                thumbnailWidth: '@promotedLogo.Height',
+                thumbnailHeight: '@promotedLogo.Height',
+                maxFilesize: @(promotedLogo.MinMaxLengths[1] * 1.0 / 1000),
+                accept: function(file, done) {
+                    var reader = new FileReader();
+                    reader.onload = (function(file) {
+                        var image = new Image();
+                        image.src = file.target.result;
+                        image.onload = function() {
+                            @*if (this.width != '@promotedLogo.Width' || this.height != '@promotedLogo.Height') {
+                                done("Image dimensions cannot be different from @(promotedLogo.Width)px (width) & @(promotedLogo.Height)px (height)");
+                            } else {
+                                done();
+                            }*@
+                            done();
+                        };
+                    });
+                    reader.readAsDataURL(file);
+                },
+                init: function() {
+                    this.on("complete",
+                        function(file) {
+                            this.removeFile(file);
+                        });
+
+                    this.on("success",
+                        function(file, response) {
+                            if (response.success === true) {
+                                var src = "@EditionImageType.PromotedLogo.BlobSubDirectory()" + response.fileName;
+                                $("#img@(promotedLogo.Key)").attr("src", src);
+                                $("#del@(promotedLogo.Key)").show();
+                            } else {
+                                swal({
+                                    title: "Error!",
+                                    text: response.message,
+                                    type: "error"
+                                });
+                                this.removeFile(file);
+                            }
+                        });
+
+                    this.on("error",
+                        function(file, message) {
+                            swal({
+                                title: "Error!",
+                                text: message,
+                                type: "error"
+                            });
+                            this.removeFile(file);
+                        });
+                }
+            };
+
+        Dropzone.options.dzFormDetailsImage = {
+            maxFiles: 1,
+            acceptedFiles: 'image/jpg,image/jpeg,image/png,.jpg,.jpeg,.png',
+            uploadMultiple: false,
+            thumbnailWidth: '@detailsImage.Height',
+            thumbnailHeight: '@detailsImage.Height',
+            maxFilesize: @(detailsImage.MinMaxLengths[1] * 1.0 / 1000),
+            init: function () {
+                // Execute when file uploads are complete
+                this.on("complete", function (file) {
+                    this.removeFile(file);
+                });
+
+                this.on("success", function (file, response) {
+                    if (response.success == true) {
+                        var src = "@EditionImageType.DetailsImage.BlobSubDirectory()" + response.fileName + "?" + new Date().getTime();
+                        $("#img@(detailsImage.Key)").attr("src", src);
+                        $("#del@(detailsImage.Key)").show();
+                    } else {
+                        swal({
+                            title: "Error!",
+                            text: response.message,
+                            type: "error"
+                        });
+                        this.removeFile(file);
+                    }
+                });
+
+                this.on("error", function (file, message) {
+                    swal({
+                        title: "Error!",
+                        text: message,
+                        type: "error"
+                    });
+                    this.removeFile(file);
+                });
+            }
+        };
+
+</script>
+
+<script>
+    $(document).ready(function() {
+        @foreach (EditionImageType imgType in Enum.GetValues(typeof (EditionImageType)))
+        {
+            var key = imgType.GetAttribute<ImageAttribute>().Key;
+            <text>
+                $("#dzForm@(key)").mouseover(function() {
+                    $("#upload@(key)").show();
+                    $("#img@(key)").css("opacity", 0.1);
+                });
+                $("#dzForm@(key)").mouseout(function() {
+                    $("#upload@(key)").hide();
+                    $("#img@(key)").css("opacity", 1.0);
+                });
+            </text>
+        }
+    });
+</script>
+}
+
+@if (isEditable)
+{
+<style>
+    #dzFormProductImage, #dzFormMasterLogo, #dzFormCrmLogo, #dzFormIcon, #dzFormPromotedLogo, #dzFormDetailsImage {
+        border: 1px dashed #54c4fa !important;
+        border-radius: 2px;
+        width: 100%;
+    }
+
+        #dzFormProductImage .dz-processing, .dz-preview, .dz-image, .dz-complete, #dzFormMasterLogo .dz-processing, .dz-preview, .dz-image, .dz-complete, #dzFormIcon .dz-processing, .dz-preview, .dz-image, .dz-complete, #dzFormPromotedLogo .dz-processing {
+            padding: 0;
+        }
+
+        #dzFormProductImage .dz-processing, #dzFormMasterLogo .dz-processing, #dzFormIcon .dz-processing, #dzFormPromotedLogo .dz-processing {
+            width: 98%;
+        }
+
+        #dzFormProductImage .dz-preview, #dzFormMasterLogo .dz-preview, #dzFormIcon .dz-preview, #dzFormPromotedLogo .dz-preview {
+            width: 98%;
+        }
+
+        #dzFormProductImage .dz-image, #dzFormMasterLogo .dz-image, #dzFormIcon .dz-image, #dzFormPromotedLogo .dz-image {
+            width: 98%;
+        }
+
+        #dzFormProductImage .dz-complete, #dzFormMasterLogo .dz-complete, #dzFormIcon .dz-complete, #dzFormPromotedLogo .dz-complete {
+            width: 98%;
+            margin: 0;
+        }
+</style>
+}

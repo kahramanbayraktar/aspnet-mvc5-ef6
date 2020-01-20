@@ -1,0 +1,90 @@
+﻿@model Ced.Web.Models.AdminEdition.AdminEditionSearchModel
+
+<div class="hpanel">
+    <div class="panel-body">
+        @using (Html.BeginForm("_Search", "AdminEdition", FormMethod.Post, new { id = "searchEditionForm" }))
+        {
+            <div class="form-group">
+                <label class="control-label">Event:</label>
+                <div class="input-group col-lg-12">
+                    <input id="eventSearchBox" name="EventId" class="form-control" type="text" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Director:</label>
+                <div class="input-group col-lg-12">
+                    <input id="emailSearchBox" name="DirectorEmail" class="form-control" type="text" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Country:</label>
+                <div class="input-group col-lg-12">
+                    <input id="countrySearchBox" name="CountryCode" class="form-control" type="text" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label">City:</label>
+                <div class="input-group col-lg-12">
+                    <input id="citySearchBox" name="CityName" class="form-control" type="text" />
+                </div>
+            </div>
+            @*<div class="form-group">
+                    <label class="control-label">Region:</label>
+                    <div class="input-group col-lg-12">
+                        @foreach (var region in Model.Regions)
+                        {
+                            <div class="checkbox checkbox-success">
+                                <input id="@region.Name" name="RegionIds" type="checkbox" value="@region.RegionId" checked="checked">
+                                <label for="@region.Name">
+                                    @region.Name
+                                </label>
+                            </div>
+                        }
+                    </div>
+                </div>*@
+            <div class="form-group">
+                <label class="control-label">Status:</label>
+                <div class="input-group col-lg-12">
+                    @foreach (var status in Model.EditionStatusTypes)
+                    {
+                        <div class="checkbox checkbox-success">
+                            <input id="@status.ToString()" name="EditionStatusTypeIds" type="checkbox" value="@status.GetHashCode()" checked="checked">
+                            <label for="@status.ToString()">
+                                @status.ToString()
+                            </label>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Event Activity:</label>
+                <div class="input-group col-lg-12">
+                    @foreach (var eventActivity in Model.EventActivities)
+                    {
+                        <div class="checkbox checkbox-success">
+                            <input id="@eventActivity.ToString()" name="EventActivityIds" type="checkbox" value="@eventActivity.GetHashCode()" checked="checked">
+                            <label for="@eventActivity.ToString()">
+                                @eventActivity.ToString()
+                            </label>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Event Type:</label>
+                <div class="input-group col-lg-12">
+                    @foreach (var eventType in Model.EventTypes)
+                    {
+                        <div class="checkbox checkbox-success">
+                            <input id="@eventType.ToString()" name="EventTypeIds" type="checkbox" value="@eventType.GetHashCode()" checked="checked">
+                            <label for="@eventType.ToString()">
+                                @eventType.ToString()
+                            </label>
+                        </div>
+                    }
+                </div>
+            </div>
+            <button class="btn btn-success btn-block" id="btnSearch"><i class="fa fa-spinner fa-spin" id="loading" style="display: none"></i> Search</button>
+        }
+    </div>
+</div>

@@ -1,0 +1,275 @@
+﻿@using Ced.BusinessEntities
+@using Ced.Utility.Web
+@using Ced.Web.Models.User
+
+@model UserViewModel
+
+<div id="navigation">
+    <div class="profile-picture">
+        <form action="@Url.Action("_SaveProfilePicture", "User")" class="dropzone" id="dzFormProfilePic" style="border: none">
+            <div id="dz-message-profile-pic" class="dz-default dz-message" style="">
+                <img id="imgProfilePicture" class="img-circle m-b" style="width: 76px" src="@Model.ProfilePictureUrl" />
+                <i id="uploadProfilePic" class="fa fa-send" style="font-size: 1.5em; display: none; position: absolute; left: 0; top: 20px"> <span style="font-family: 'open sans'; font-size: 0.8em; color: #6a6c6f">upload profile picture</span></i>
+            </div>
+        </form>
+        <div class="stats-label text-color">
+            <span class="font-extra-bold font-uppercase" title="@Model.CurrentUser.CurrentUser.Email">@Model.FullName</span>
+
+            <div class="dropdown">
+                <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+                    @*<small class="text-muted">@Html.Raw(Model.RoleNames.Replace(",", "<br/>")) <b class="fa fa-gear"></b></small>*@
+                    <small class="text-muted"><i class="fa fa-gear"></i></small>
+                </a>
+                <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                    <li>
+                        @Html.ActionLink("Log out", "Logout", "User")
+                    </li>
+                    <li>
+                        @Html.ActionLink("Delete Profile Pic", "_DeleteProfilePicture", "User", null, new { @id = "delProfilePicture" })
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <ul class="nav" id="side-menu">
+        <li class="@Html.IsSelected("Event", "Index")">
+            <a href="@Url.Action("Index", "Event")"> <span class="nav-label">Event Masters</span> </a>
+        </li>
+        <li class="@Html.IsSelected("Dashboard")">
+            <a href="@Url.RouteUrl("DashboardIndex")"> <span class="nav-label">Dashboard</span> </a>
+        </li>
+        @*<li class="@Html.IsSelectedByRouteName("EditionIndex")">*@
+        <li class="@(Request.RawUrl.ToLower().Contains("/editions") && !Request.RawUrl.ToLower().Contains("status=") ? "active" : "")">
+            <a href="@Url.RouteUrl("EditionsIndex")"> <span class="nav-label">Event Editions</span> </a>
+        </li>
+        @if (Model.CurrentUser.IsSuperAdmin || Model.CurrentUser.IsPrimaryDirector || Model.CurrentUser.IsAssistantDirector)
+        {
+            <li class="@Html.IsSelected("Event", "Add")">
+                <a id="submitNewEdition" href="#" data-toggle="modal" data-target="#newEditionModal"> <span class="nav-label">Submit<br />a new Edition</span> </a>
+            </li>
+            <div class="modal fade" id="newEditionModal" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="color-line"></div>
+                        <div class="modal-body text-center">
+                            <p></p>
+                            <p>
+                                If you want to submit a new edition against an existing event<br />
+                                (i.e. 40th YAPI - Turkeybuild Istanbul 2020):<br/><br/>
+                                <a href="@Url.RouteUrl("EditionsNew")" class="btn btn-primary">Create and Submit a New Edition</a>
+                            </p>
+                            <p>
+                                <hr />
+                            </p>
+                            <p>
+                                If you are trying to submit a new launch, please follow these steps:<br />
+                                1. <b>Download</b> the <a href="@(WebConfigHelper.ApplicationAbsolutePath)/content/files/ced-event-setup-form.xls" class="text-danger">Event Setup Form <i class="fa fa-file-excel-o"></i></a>.<br />
+                                2. <b>Fill out</b> the form.<br />
+                                3. <b>Attach</b> your form and <b>Send</b> it to <a href='mailto:event-setup@hyve.group?subject=New Event Setup Form' class="text-danger">event-setup@hyve.group</a><br /><br />
+                                First time launches require a controlled process by London HQ Finance teams,<br />
+                                therefore 1st edition of each launch must be processed manually.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (WebConfigHelper.IsLocal || WebConfigHelper.IsTest || Model.CurrentUser.IsSuperAdmin)
+        {
+            <li class="@(Request.RawUrl.Contains("draft") ? "active" : "")">
+                <a href="@Url.RouteUrl("EditionsByStatus", new {status = EditionStatusType.Draft.ToString().ToLower()})"> <span class="nav-label">Draft</span> <small>@(Model.DraftCount > 0 ? "(" + Model.DraftCount + ")" : "")</small></a>
+            </li>
+        }
+        @if (Model.CurrentUser.IsApprover || Model.CurrentUser.IsSuperAdmin)
+        {
+            <li class="@(Request.RawUrl.Contains("waitingforapproval") ? "active" : "")">
+                <a href="@Url.RouteUrl("EditionsByStatus", new {status = EditionStatusType.WaitingForApproval.ToString().ToLower()})"> <span class="nav-label">Waiting for Approval</span> <small>@(Model.ApprovalCount > 0 ? "(" + Model.ApprovalCount + ")" : "")</small></a>
+            </li>
+        }
+        @if (Model.CurrentUser.IsApprover || Model.CurrentUser.IsSuperAdmin)
+        {
+            <li class="@(Request.RawUrl.Contains("approved") ? "active" : "")">
+                <a href="@Url.RouteUrl("EditionsByStatus", new {status = EditionStatusType.Approved.ToString().ToLower()})"> <span class="nav-label">Approved</span> <small>@(Model.ApprovedCount > 0 ? "(" + Model.ApprovedCount + ")" : "")</small></a>
+            </li>
+        }
+    </ul>
+</div>
+<br />
+<div class="hpanel">
+    <div class="vertical-container" data-child="vertical-timeline-block">
+        <div class="vertical-timeline-block">
+            <a href="@(WebConfigHelper.QuickStartGuideFilePath)" target="_blank">
+                <div class="vertical-timeline-icon navy-bg">
+                    <i class="fa fa-file-pdf-o text-danger"></i>
+                </div>
+                <div class="vertical-timeline-content">
+                    <div class="p-sm" style="font-size: 12px; padding: 10px !important">
+                        Quick Start Guide
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+@if (Model.CurrentUser.IsSuperAdmin)
+{
+    var icon = WebConfigHelper.IsLocal ? "flask" : (WebConfigHelper.IsTest ? "flask" : "rss");
+    var color = WebConfigHelper.IsLocal ? "warning" : (WebConfigHelper.IsTest ? "warning" : "danger");
+    var text = WebConfigHelper.IsLocal ? "LOCAL" : (WebConfigHelper.IsTest ? "TEST" : "LIVE");
+
+    <div class="hpanel">
+        <div class="vertical-container" data-child="vertical-timeline-block">
+            <div class="vertical-timeline-block">
+                <div class="vertical-timeline-icon navy-bg">
+                    <i class="fa fa-@(icon) text-@(color)"></i>
+                </div>
+                <div class="vertical-timeline-content">
+                    <div class="p-sm" style="font-size: 12px; padding: 10px !important">
+                        @text
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@Styles.Render("~/bundles/dropzone/css")
+<style>
+    #dzFormProfilePic {
+        border: 1px solid transparent !important;
+        border-radius: 10px !important;
+    }
+
+        #dzFormProfilePic:hover {
+            border: 1px dashed lightgrey !important;
+            border-radius: 2px !important;
+        }
+
+        #dzFormProfilePic .dz-processing, .dz-image, .dz-complete {
+            padding: 0;
+        }
+
+        #dzFormProfilePic .dz-processing {
+            width: 76px;
+            height: 76px;
+        }
+
+        #dzFormProfilePic .dz-image {
+            width: 76px;
+            height: 76px;
+        }
+
+        #dzFormProfilePic .dz-complete {
+            width: 76px;
+            height: 76px;
+            min-height: 91px;
+            margin: 0;
+        }
+
+    /*#dzFormProfilePic .dz-processing {
+            display: none;
+        }*/
+</style>
+
+@Scripts.Render("~/bundles/dropzone")
+
+<script type="text/javascript">
+    var fileList = new Array;
+    var i = 0;
+    Dropzone.options.dzFormProfilePic = {
+        maxFiles: 1,
+        acceptedFiles: "image/jpeg,image/png,image/gif",
+        uploadMultiple: false,
+        thumbnailWidth: '76',
+        thumbnailHeight: '76',
+        maxFilesize: .1,
+        init: function () {
+            this.on("complete", function (file) {
+                this.removeFile(file);
+            });
+            this.on("success", function (file, result) {
+                if (result.success === true) {
+                    $('#delProfilePicture').parent().show();
+                    $("#imgProfilePicture").attr("src", "@string.Format("{0}?{1}", Model.ProfilePictureUrl, DateTime.Now)");
+                    swal({
+                        title: "Success!",
+                        text: result.message,
+                        type: "success"
+                    });
+                } else {
+                    swal({
+                        title: "Error!",
+                        text: result.message,
+                        type: "error"
+                    });
+                }
+            });
+            this.on("error", function (file, message) {
+                swal({
+                    title: "Error!",
+                    text: message,
+                    type: "error"
+                });
+                this.removeFile(file);
+            });
+        }
+    };
+
+    $(document).ready(function () {
+        $("#dzFormProfilePic").mouseover(function () {
+            $("#uploadProfilePic").show();
+            $("#imgProfilePicture").css("opacity", 0.1);
+        });
+        $("#dzFormProfilePic").mouseout(function () {
+            $("#uploadProfilePic").hide();
+            $("#imgProfilePicture").css("opacity", 1.0);
+        });
+    });
+
+    $('#delProfilePicture').click(function (e) {
+        e.preventDefault();
+        var url = this.href;
+        swal({
+            title: "Are you sure?",
+            text: "You are about to delete your profile picture irreversibly!",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Yes, delete it!"
+        })
+            .then(
+                function (result) {
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        success: function (result) {
+                            if (result.success === true) {
+                                $("#imgProfilePicture").attr("src", "");
+                                swal({ title: "Success!", text: result.message, type: "success" });
+                            } else {
+                                swal({ title: "Error!", text: result.message, type: "error" });
+                                toastr.error(result.message);
+                            }
+                        },
+                        error: function () {
+                            alert("error!");
+                        }
+                    });
+                }, function (dismiss) {
+                    // dismiss can be 'cancel', 'overlay', 'esc' or 'timer'
+                }
+            );
+    });
+
+    $("#imgProfilePicture").error(function () {
+        $(this).attr('onerror', 'null');
+        $(this).attr('src', '@Url.Content(string.Format("~/Content/images/{0}", "no-profile-pic.png"))');
+        $('#delProfilePicture').parent().hide();
+    });
+
+    //$("#submitNewEdition").click(function (e) {
+    //    e.preventDefault();
+    //    //alert("ok!");
+    //});
+</script>

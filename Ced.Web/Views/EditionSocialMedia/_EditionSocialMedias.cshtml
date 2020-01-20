@@ -1,0 +1,31 @@
+﻿@using Ced.Web.Helpers
+
+@model Ced.Web.Models.Edition.EditionSocialMediaListModel
+
+<div class="row">
+    @if (Model.SocialMedias != null)
+    {
+        var i = 0;
+        foreach (var account in Model.SocialMedias)
+        {
+            if (account != null)
+            {
+                <div class="form-group col-lg-6">
+                    <label>@account.SocialMediaId</label>
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-@account.SocialMediaId"></i></span>
+                        <input class="form-control hblue" id="@account.SocialMediaId" name="SocialMedias[@i].AccountName" value="@account.AccountName"/>
+                        <span class="input-group-addon"><a href="@SocialMediaLinkHelper.GetAccountLink(account.SocialMediaId, account.AccountName)" target="_blank" title="Go to profile"><i class="fa fa-external-link"></i></a></span>
+                        <input type="hidden" name="SocialMedias[@i].SocialMediaId" value="@account.SocialMediaId"/>
+                        <span class="input-group-addon">
+                            <a href="#" class="del-socialmedia" data-id="@account.EditionTranslationSocialMediaId" data-editiontranslationid="@Model.EditionTranslationId" title="Delete Social Media Account">
+                                <i class="fa fa-trash"></i>
+                            </a>
+                        </span>
+                    </div>
+                </div>
+            }
+            i++;
+        }
+    }
+</div>

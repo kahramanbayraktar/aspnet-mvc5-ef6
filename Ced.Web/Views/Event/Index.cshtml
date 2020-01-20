@@ -1,0 +1,167 @@
+﻿@using Ced.Resources
+@using ITE.Utility.Extensions
+@model List<Ced.Web.Models.Event.EventListModel>
+
+@{
+    ViewBag.Title = "Event Masters";
+}
+
+<div class="small-header">
+    <div class="hpanel">
+        <div class="panel-body">
+            <h2 class="font-light m-b-xs">
+                Event Masters
+            </h2>
+            <div id="hbreadcrumb" class="pull-left">
+                <ol class="hbreadcrumb breadcrumb">
+                    <li><a href="@Url.Action("Index", "Dashboard")">Main</a></li>
+                    <li>
+                        <span>Event Masters</span>
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="content transition animated fadeIn">
+    <div class="hpanel hbgyellow2" style="margin-bottom: 0 !important">
+        <div class="panel-body" style="padding: 7px !important">
+            <div class="text-center">
+                The information displayed herein has been provided by you during the <b>Event Setup</b> process. To request a change, please click <a href="mailto:event-setup@hyve.group?subject=Change Request in the Event Masters">here</a> and submit your change request in detail.
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="content animate-panel">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="hpanel">
+                <div class="panel-body">
+                    <div class="table-responsive">
+                        <table id="tblEvents" class="table table-striped table-bordered table-hover">
+                            <thead>
+                            <tr>
+                                <th>
+                                    Event Master Group
+                                </th>
+                                <th>
+                                    @Resources.EventType
+                                </th>
+                                <th>
+                                    @Resources.Industry
+                                </th>
+                                <th>
+                                    @Resources.Region
+                                </th>
+                                <th class="no-sort"></th>
+                            </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th>
+                                        Event Master Group
+                                    </th>
+                                    <th>
+                                        @Resources.EventType
+                                    </th>
+                                    <th>
+                                        @Resources.Industry
+                                    </th>
+                                    <th>
+                                        @Resources.Region
+                                    </th>
+                                    <th></th>
+                                </tr>
+                            </tfoot>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.MasterName)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.EventTypeName)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Industry)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Region)
+                                        </td>
+                                        <td class="text-center nowrap">
+                                            <a href="@Url.Action("Details", "Event", new {id = item.EventId, name = item.MasterName.ToUrlString()})" title="View Master">
+                                                <small><i class="fa fa-eye fa-2x"></i></small>
+                                            </a>&nbsp;
+                                            <a href="@Url.Action("Index", "Edition", new {eventId = item.EventId, name = item.MasterName.ToUrlString()})" title="Browse Editions">
+                                                <small><i class="fa fa-bars fa-2x" style="color: #62CB31"></i></small>
+                                            </a>&nbsp;
+                                            <a href="@Url.Action("Index", "Dashboard", new { id = item.EventId, name = item.MasterName.ToUrlString() })" title="View Dashboard">
+                                                <small><i class="fa fa-line-chart fa-2x" style="color: #FF1932"></i></small>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section Styles {
+    @Styles.Render("~/bundles/datatables/css")
+
+    <style>
+        .dataTable > thead > tr > th[class*="no-sort"]:after {
+            content: "" !important;
+        }
+
+        .table-responsive {
+            overflow-x: hidden;
+        }
+    </style>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/datatables/js")
+    @Scripts.Render("~/bundles/datatablesBootstrap/js")
+
+    <script>
+        $(document).ready(function () {
+            $('#tblEvents').DataTable({
+                "iDisplayLength": 10,
+                "order": [[0, 'asc']],
+                "oLanguage": {
+                    "sSearch": "Quick filter:"
+                },
+                initComplete: function () {
+                    this.api().columns([0,1,2,3]).every(function () {
+                        var column = this;
+                        var select = $('<select class="form-control" style="background: url(' + '@Url.Content("~/content/images/filter.png")' + ') no-repeat scroll 7px 9px;padding-left:20px;width: 100%"><option value=""></option></select>')
+                            .appendTo($(column.footer()).empty())
+                            .on('change', function () {
+                                var val = $.fn.dataTable.util.escapeRegex(
+                                    $(this).val()
+                                );
+
+                                column
+                                    .search(val ? '^' + val + '$' : '', true, false)
+                                    .draw();
+                            });
+
+                        column.data().unique().sort().each(function (d, j) {
+                            select.append('<option value="' + d + '">' + d + '</option>');
+                        });
+                    });
+                }
+            });
+        });
+    </script>
+}

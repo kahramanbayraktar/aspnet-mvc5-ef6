@@ -1,0 +1,83 @@
+﻿@using Ced.Utility.Web
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>CED | @ViewBag.Title</title>
+
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700' rel='stylesheet' type='text/css'>
+    <link rel="icon" href="@Url.Content("~/content/images/favicon.ico")" />
+
+    <!-- Primary vendor style -->
+    @Styles.Render("~/bundles/font-awesome/css")
+    @Styles.Render("~/bundles/animate/css")
+    @Styles.Render("~/bundles/bootstrap/css")
+    @Styles.Render("~/bundles/peicon7stroke/css")
+    @Styles.Render("~/bundles/select2/css")
+    @*@Styles.Render("~/bundles/bootstraptour/css")*@
+
+    <!-- Add local styles, mostly for plugins css file -->
+    @if (IsSectionDefined("Styles"))
+    {@RenderSection("Styles", required: false)}
+
+    <!-- Primary HOMER style -->
+    @Styles.Render("~/bundles/homer/css")
+    @Styles.Render("~/bundles/xeditable/css")
+
+    <!-- Section for main scripts render -->
+    @Scripts.Render("~/bundles/jquery/js")
+    @Scripts.Render("~/bundles/validation/js")
+    @Scripts.Render("~/bundles/bootstrap/js")
+    @Scripts.Render("~/bundles/homer/js")
+    @Scripts.Render("~/bundles/xeditable/js")
+    @Scripts.Render("~/bundles/select2/js")
+    @Scripts.Render("~/bundles/timeago")
+    @Scripts.Render("~/bundles/maxlength")
+    @*@Scripts.Render("~/bundles/bootstraptour/js")*@
+    <!-- Promise support for IE -->
+     <script src="https://cdn.jsdelivr.net/bluebird/latest/bluebird.core.min.js"></script>
+    <!-- Datepicker patch for Chrome -->
+    <script>
+        jQuery.validator.methods["date"] = function (value, element) { return true; } 
+    </script>
+</head>
+<body class="@Html.PageClass() fixed-sidebar fixed-navbar">
+
+    @if (!Request.Url.AbsoluteUri.ToLower().Contains("/pdf"))
+    {
+        <!-- Simple splash screen-->
+        <div class="splash">
+            <div class="color-line"></div>
+            <div class="splash-title">
+                <h1>CED - Central Events Database</h1><img src="~/Images/loading-bars.svg" width="64" height="64" />
+            </div>
+        </div>
+        <!--[if lt IE 7]>
+            <p class="alert alert-danger">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+        <!-- Header -->
+        <div id="header">
+            @Html.Partial("_Header")
+        </div>
+
+        <!-- Navigation -->
+        <aside id="menu">
+            @Html.Action("_Navigation", "Global")
+        </aside>
+    }
+
+    <!-- Main view  -->
+    <div id="wrapper">
+        @RenderBody()
+
+        <!-- Footer-->
+        @Html.Partial("_Footer")
+    </div>
+
+    <!-- Handler for local scripts -->
+    @RenderSection("scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,84 @@
+﻿@model Ced.Web.Models.UserRole.UserRoleListModel
+
+@{
+    ViewBag.Title = "User Roles";
+}
+
+<div class="small-header">
+    <div class="hpanel">
+        <div class="panel-body">
+            <h2 class="font-light m-b-xs">
+                User Roles
+            </h2>
+            <div id="hbreadcrumb" class="pull-left">
+                <ol class="hbreadcrumb breadcrumb">
+                    <li><a href="@Url.Action("Index", "Dashboard")">Main</a></li>
+                    <li>
+                        <span>User Roles</span>
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="content animate-panel">
+    <div class="row">
+        <div class="col-lg-3">
+            @Html.Action("_Search", "UserRole")
+        </div>
+        <div class="col-lg-9">
+            <div class="hpanel">
+                <div class="panel-body">
+                    <div id="tableHolder">
+                        @Html.Partial("_List", Model.UserRoles)
+                    </div>
+                    <div>
+                        <a class="btn btn-orange" href="#newUserRole" data-toggle="modal" title="Add User Role"><i class="fa fa-plus fa-lg"></i></a>
+                        <div class="modal fade" id="newUserRole" tabindex="-1" role="dialog" aria-hidden="true">
+                            @Html.Action("_Add")
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    @Styles.Render("~/bundles/datatables/css")
+    @Styles.Render("~/bundles/sweetAlert/css")
+    @Styles.Render("~/bundles/toastr/css")
+
+    <link rel="stylesheet" href="~/Vendor/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" />
+    <link href="https://cdn.jsdelivr.net/jquery.loading/1.2.0/jquery.loading.min.css" rel="stylesheet">
+
+    <style>
+        .dataTable > thead > tr > th[class*="no-sort"]:after {
+            content: "" !important;
+        }
+
+        .table-responsive {
+            overflow-x: hidden;
+        }
+    </style>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/datatables/js")
+    @Scripts.Render("~/bundles/datatablesBootstrap/js")
+    @Scripts.Render("~/bundles/sweetAlert/js")
+    @Scripts.Render("~/bundles/toastr/js")
+    <script src="https://cdn.jsdelivr.net/jquery.loading/1.2.0/jquery.loading.min.js"></script>
+
+
+    <script>
+        var userRoleSearchUrl = "@Url.Action("_Search", "UserRole")";
+        var userRoleAddUrl = "@Url.Action("_Add", "UserRole")";
+        var userRoleDelUrl = "@Url.Action("_Delete", "UserRole")";
+        var eventSearchUrl = '@Url.Action("_SearchEventsAsAdmin", "Event")';
+        var userSearchUrl = '@Url.Action("_SearchUsers", "User")';
+    </script>
+
+    <script src="~/Scripts/ced-userrole.js?v=2"></script>
+}

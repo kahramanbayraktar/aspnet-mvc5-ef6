@@ -1,0 +1,333 @@
+﻿@using Ced.Resources
+@using Ced.Web.Models.EditionPaymentSchedule
+@model Ced.Web.Models.Edition.EditionEditSalesMetricsModel
+
+@using (Html.BeginForm("_SaveSalesMetrics", "Edition", FormMethod.Post, new { id = "editSalesMetricsForm" }))
+{
+    @Html.HiddenFor(model => model.EditionId)
+    @Html.HiddenFor(model => model.EventId)
+    @Html.HiddenFor(model => model.EventActivity)
+
+    if (!Model.CurrentUser.IsViewer)
+    {
+        <div class="text-right m-t-xs">
+            <a class="btn btn-default prev" href="javascript:void(0)"><i class="fa fa-angle-left"></i> @Resources.Previous</a>
+            <button class="btn btn-success btnSave2" id="btnSave2" @(!Model.IsAlive || Model.IsCancelled ? "disabled=\"disabled\"" : "")>
+                Save
+            </button>
+        </div>
+    }
+
+    <div class="row">
+        <div class="col-lg-3 text-center">
+            <i class="pe-7s-graph3 fa-5x text-muted"></i>
+            <p class="small m-t-md">
+                <ul class="wizard-notf">
+                    <li>
+                        Our events come in the form of exhibitions, conferences, and hybrid confexes. Revenue calculations involve complex currency conversion algorithms that are conducted on a weekly-basis. Event Directors and offices already submit this information to London HQ via Satire portal or automatically via AX Accounting software wherever available.
+                        <br />
+                        <br />
+                    </li>
+                    <li>
+                        Sponsorships are another aspect that is often overlooked in exhibitions given their relatively share in total show revenues. However, we do know that some visibility is also required at this end to better guide the management and understand the patterns, best practices and potential areas of improvement regarding both the Group's and individual events' approaches to Sponsorship Sales.
+                        <br />
+                        <br />
+                    </li>
+                    <li>
+                        For conferences and confexes, sponsorships become an even more important aspect of the sales operations, therefore we invite Conference & Confex Event Directors to input necessary information to the system through the "Sales Metrics" step.
+                        <br />
+                        <br />
+                    </li>
+                    <li>
+                        The data that will be submitted by Event Directors supports multi-lingual entry. Since most of our shows belong to geographies with localisation needs and English language at the same time, an Event Director has the flexibility to populate this information in a scalable format. The 4 steps, through which Event Directors are asked to provide information include web form field marked by 3 colours:
+                        <br />
+                        <br />
+                        <span style="color: #54c4fa"><b>Blue:</b> Multi-lingual entry is required. For example a show's description in English and in Russian need to be provided separately</span>
+                        <br />
+                        <br />
+                        <span style="color: #e74c3c">
+                            <b>Red:</b> Master Data that can't be modified by Event Directors. This data is populated by London HQ upon collection of "Event Setup Forms" and is integrated with the Group's financial systems. Should you wish to amend or update an information in these fields marked in red. Please contact <a href="mailto:event-setup@hyve.group">Reporting Department</a>.
+                        </span>
+                        <br />
+                        <br />
+                        <span style="color: #ffb606">
+                            <b>Orange:</b> Generic information that doesn't need to be populated every time an Event Director submits data in a different language. For example Venue Coordinates, Visiting Hours, etc.
+                        </span>
+                        <br />
+                        <br />
+                        <b>Tip:</b> To switch between available language input forms, please refer to the dropdown menu selection which sits next to the 4 steps.
+                        <br />
+                        <br />
+                    </li>
+                </ul>
+            </p>
+        </div>
+        <div class="col-lg-9">
+            <div class="row">
+
+                <div class="col-lg-12">
+                    <div class="hpanel hgrey">
+                        <div class="panel-heading">
+                            Sqm Sales
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                @*<div class="form-group col-lg-6">
+                                        <label>Local Sqm Sold</label>
+                                        @Html.EditorFor(model => model.LocalSqmSold, new { htmlAttributes = new { id = "localSqmSold", @class = "touchspin ts-sqm hyellow" } })
+                                    </div>
+                                    <div class="form-group col-lg-6">
+                                        <label>International Sqm Sold</label>
+                                        @Html.EditorFor(model => model.InternationalSqmSold, new { htmlAttributes = new { id = "intlSqmSold", @class = "touchspin ts-sqm hyellow" } })
+                                    </div>*@
+                                <div class="form-group col-lg-6">
+                                    <label>Sqm Sold</label>
+                                    @Html.EditorFor(model => model.SqmSold, new { htmlAttributes = new { @class = "touchspin ts-sqm hyellow" } })
+                                </div>
+                                @*<div class="form-group col-lg-12">
+                                        <label>Total Sqm Sold:</label>
+                                        <span id="totalSqmSold"></span>
+                                    </div>*@
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-12">
+                    <div class="hpanel hgrey">
+                        <div class="panel-heading">
+                            Sponsorship
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="form-group col-lg-6">
+                                    <label>Number of Sponsors</label>
+                                    @Html.EditorFor(model => model.SponsorCount, new { htmlAttributes = new { @type = "text", @class = "touchspin ts-common hyellow" } })
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-12">
+                    <div class="hpanel hgrey">
+                        <div class="panel-heading tooltip-demo">
+                            <a href="javascript:void(0)" data-toggle="modal" data-target="#paymentModal" style="color: #6a6c6f">
+                                <label data-toggle="tooltip" data-placement="top" title="<i class='fa fa-hand-pointer-o'></i> Click to see the details" style="cursor: pointer">Payment Schedules <i class="fa fa-question-circle"></i></label>
+                            </a>
+                        </div>
+                        <div class="modal fade" id="paymentModal" tabindex="-1" role="dialog" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="color-line"></div>
+                                    <div class="modal-body">
+                                        <p>
+                                            <img src="@Url.Content("~/Content/images/tip/tip-pay-sche.png")" class="img-responsive" />
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div id="edition-payment-schedules-div" class="col-lg-12">
+                                    @{ Html.RenderAction("_GetEditionPaymentSchedules", "EditionPaymentSchedule", new { editionId = Model.EditionId }); }
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    @{ Html.RenderPartial("~/Views/EditionPaymentSchedule/_EditionPaymentScheduleAdd.cshtml", new EditionPaymentScheduleAddModel { ActivationDate = DateTime.Today, ExpiryDate = DateTime.Today.AddMonths(1) }); }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @if (!Model.CurrentUser.IsViewer)
+            {
+                <div class="text-right m-t-xs">
+                    <a class="btn btn-default prev" href="javascript:void(0)"><i class="fa fa-angle-left"></i> @Resources.Previous</a>
+                    <button class="btn btn-success btnSave2" id="btnSave2" @(!Model.IsAlive || Model.IsCancelled ? "disabled=\"disabled\"" : "")>
+                        Save
+                    </button>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+<script src="~/Scripts/ced-sales-metrics.js"></script>
+
+<script>
+
+    var editionPaymentScheduleGetUrl = "@Url.Action("_GetEditionPaymentSchedules", "EditionPaymentSchedule")";
+    var editionPaymentScheduleDelUrl = "@Url.Action("_DeleteEditionPaymentSchedule", "EditionPaymentSchedule")";
+
+    $("#toggle-edition-payment-schedule-btn").on("click",
+        function(e) {
+            e.preventDefault();
+            $("#add-edition-payment-schedule-div").toggle();
+            var btnHtml = $(this).html();
+            if (btnHtml.indexOf("-off ") >= 0) {
+                btnHtml = btnHtml.replace("-off ", "-on ");
+            } else {
+                btnHtml = btnHtml.replace("-on ", "-off ");
+            }
+            $(this).html(btnHtml);
+        });
+
+    $("#add-edition-payment-schedule-btn").on("click", function(e) {
+        e.preventDefault();
+
+        var btn = $("#add-edition-payment-schedule-btn").html("Adding...").attr("disabled", true);
+
+        var editionId = @Model.EditionId;
+        var name = $("#payment-schedule-name").val();
+        var activationDate = $("#payment-schedule-activation-date").val();
+        var expiryDate = $("#payment-schedule-expiry-date").val();
+        var installment1Percentage = $("#payment-schedule-installment1-percentage").val();
+        var installment1DueDate = $("#payment-schedule-installment1-due-date").val();
+        var installment2Percentage = $("#payment-schedule-installment2-percentage").val();
+        var installment2DueDate = $("#payment-schedule-installment2-due-date").val();
+        var installment3Percentage = $("#payment-schedule-installment3-percentage").val();
+        var installment3DueDate = $("#payment-schedule-installment3-due-date").val();
+        var installment4Percentage = $("#payment-schedule-installment4-percentage").val();
+        var installment4DueDate = $("#payment-schedule-installment4-due-date").val();
+        var installment5Percentage = $("#payment-schedule-installment5-percentage").val();
+        var installment5DueDate = $("#payment-schedule-installment5-due-date").val();
+
+        $.ajax({
+            url: "@Url.Action("_AddEditionPaymentSchedule", "EditionPaymentSchedule")",
+            type: "POST",
+            data: {
+                editionId, name, activationDate, expiryDate,
+                installment1Percentage, installment1DueDate,
+                installment2Percentage, installment2DueDate,
+                installment3Percentage, installment3DueDate,
+                installment4Percentage, installment4DueDate,
+                installment5Percentage, installment5DueDate
+            },
+            dataType: "json",
+            success: function(result) {
+                if (result.success === true) {
+                    refreshEditionPaymentSchedules(editionId);
+                    clearEditionPaymentScheduleAddForm();
+                    $("#add-edition-payment-schedule-div").toggle();
+                    swal({
+                        title: "Added!",
+                        text: result.message,
+                        type: "success"
+                    });
+                    btn.html("Add").attr("disabled", false);
+                } else {
+                    swal({
+                        title: "Error!",
+                        text: result.message,
+                        type: "error"
+                    });
+                    btn.html("Add").attr("disabled", false);
+                }
+            },
+            error: function(xhr, textStatus, error) {
+                swal({
+                    title: "Error!",
+                    text: xhr.statusText,
+                    type: textStatus
+                });
+                btn.html("Add").attr("disabled", false);
+            }
+        });
+    });
+
+    $(document).ready(function() {
+        $("body").on("click", ".del-edition-payment-schedule", function(e) {
+            e.preventDefault();
+            var delBtn = $(e.currentTarget);
+            var innerSpan = $(delBtn.get(0).firstElementChild);
+            delBtn.addClass("disabled");
+            innerSpan.addClass("fa-spin");
+            var editionPaymentScheduleId = delBtn.attr("data-id");
+            $.ajax({
+                url: editionPaymentScheduleDelUrl,
+                data: { editionPaymentScheduleId: editionPaymentScheduleId },
+                dataType: "json",
+                success: function(result) {
+                    if (result.success === true) {
+                        refreshEditionPaymentSchedules(editionId);
+                        swal({
+                            title: "Deleted!",
+                            text: result.message,
+                            type: "success"
+                        });
+                    } else {
+                        swal({
+                            title: "Error!",
+                            text: result.message,
+                            type: "error"
+                        });
+                        delBtn.removeClass("disabled");
+                        innerSpan.removeClass("fa-spin");
+                    }
+                },
+                error: function(xhr, textStatus, error) {
+                    swal({
+                        title: "Error!",
+                        text: xhr.statusText,
+                        type: textStatus
+                    });
+                    delBtn.removeClass("disabled");
+                    innerSpan.removeClass("fa-spin");
+                }
+            });
+        });
+    });
+
+    function refreshEditionPaymentSchedules(editionId) {
+        $.get(editionPaymentScheduleGetUrl + "?editionId=" + editionId,
+            function(result) {
+                $("#edition-payment-schedules-div").html(result);
+            });
+    }
+
+    function clearEditionPaymentScheduleAddForm(editionId) {
+        $('#add-edition-payment-schedule-div').find('input').val('');   
+    }
+</script>
+
+<script>
+    $('.datepicker').datepicker({
+        format: "dd-mm-yyyy",
+        language: "en-GB"
+    });
+</script>
+
+@*<script>
+        $(document).ready(function () {
+            setTotalSqmSold();
+        });
+        $("#localSqmSold").change(function () {
+            setTotalSqmSold();
+        });
+        $("#intlSqmSold").change(function () {
+            setTotalSqmSold();
+        });
+        function setTotalSqmSold() {
+            var local = Number($("#localSqmSold").val());
+            var intl = Number($("#intlSqmSold").val());
+            var total = local + intl;
+            $("#totalSqmSold").text(total);
+        }
+    </script>*@
+
+@*<script>
+        var btnClicked;
+        $(document).on("click", "#btnSaveEdition", function () {
+            $("#editSalesMetricsForm").attr
+            (
+                "action",
+                "@Url.Action("_EditSalesMetrics", "Edition")"
+            );
+            btnClicked = $(this).attr('id');
+        });
+    </script>*@

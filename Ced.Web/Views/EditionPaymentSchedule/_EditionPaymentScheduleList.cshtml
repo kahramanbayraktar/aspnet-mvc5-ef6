@@ -1,0 +1,118 @@
+﻿@using Ced.Utility.Azure
+@model Ced.Web.Models.EditionPaymentSchedule.EditionPaymentScheduleListModel
+
+<div class="table-responsive">
+    @if (Model.EditionPaymentSchedules != null && Model.EditionPaymentSchedules.Any())
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th class="font-bold">Activation Date</th>
+                    <th class="font-bold">Expiry Date</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var editionPaymentSchedule in Model.EditionPaymentSchedules)
+                {
+                    <tr class="font-bold" style="border-top: 1px solid #FFBF25">
+                        <td style="border-top: 0">@editionPaymentSchedule.Name</td>
+                        <td style="border-top: 0">@editionPaymentSchedule.ActivationDate.ToString("MM/dd/yyyy")</td>
+                        <td style="border-top: 0">@editionPaymentSchedule.ExpiryDate.ToString("MM/dd/yyyy")</td>
+                        <td style="border-top: 0" class="col-lg-1 text-right">
+                            <a href="#" class="del-edition-payment-schedule" data-id="@editionPaymentSchedule.EditionPaymentScheduleId" data-editionid="@editionPaymentSchedule.EditionId" title="Delete Payment Schedule"><i class="fa fa-trash"></i></a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                        </td>
+                        <td class="font-bold">
+                            Due Date
+                        </td>
+                        <td class="font-bold">
+                            Percentage
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                        </td>
+                        <td>
+                            @editionPaymentSchedule.Installment1DueDate.ToString("MM/dd/yyyy")
+                        </td>
+                        <td>
+                            @editionPaymentSchedule.Installment1Percentage%
+                        </td>
+                    </tr>
+                    if (editionPaymentSchedule.Installment2DueDate.HasValue && editionPaymentSchedule.Installment2Percentage.HasValue)
+                    {
+                        <tr>
+                            <td colspan="2">
+                            </td>
+                            <td>
+                                @editionPaymentSchedule.Installment2DueDate.Value.ToString("MM/dd/yyyy")
+                            </td>
+                            <td>
+                                @editionPaymentSchedule.Installment2Percentage%
+                            </td>
+                        </tr>
+                    }
+                    if (editionPaymentSchedule.Installment3DueDate.HasValue && editionPaymentSchedule.Installment3Percentage.HasValue)
+                    {
+                        <tr>
+                            <td colspan="2">
+                            </td>
+                            <td>
+                                @editionPaymentSchedule.Installment3DueDate.Value.ToString("MM/dd/yyyy")
+                            </td>
+                            <td>
+                                @editionPaymentSchedule.Installment3Percentage%
+                            </td>
+                        </tr>
+                    }
+                    if (editionPaymentSchedule.Installment4DueDate.HasValue && editionPaymentSchedule.Installment4Percentage.HasValue)
+                    {
+                        <tr>
+                            <td colspan="2">
+                            </td>
+                            <td>
+                                @editionPaymentSchedule.Installment4DueDate.Value.ToString("MM/dd/yyyy")
+                            </td>
+                            <td>
+                                @editionPaymentSchedule.Installment4Percentage%
+                            </td>
+                        </tr>
+                    }
+                    if (editionPaymentSchedule.Installment5DueDate.HasValue && editionPaymentSchedule.Installment5Percentage.HasValue)
+                    {
+                        <tr>
+                            <td colspan="2">
+                            </td>
+                            <td>
+                                @editionPaymentSchedule.Installment5DueDate.Value.ToString("MM/dd/yyyy")
+                            </td>
+                            <td>
+                                @editionPaymentSchedule.Installment5Percentage%
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <table class="table borderless">
+            <tr>
+                <td class="text-center">
+                    <img src="@(AzureStorageHelper.ImageBlobDirectory + "no-content-spider-web.png")" style="opacity: .7" />
+                </td>
+            </tr>
+            <tr>
+                <td class="text-center">
+                    No payment schedules yet
+                </td>
+            </tr>
+        </table>
+    }
+</div>

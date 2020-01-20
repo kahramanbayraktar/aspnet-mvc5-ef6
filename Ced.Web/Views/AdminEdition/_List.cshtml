@@ -1,0 +1,164 @@
+﻿@using ITE.Utility.Extensions
+@model IList<Ced.Web.Models.AdminEdition.AdminEditionListItemModel>
+
+<div class="table-responsive" id="results">
+    <table id="tblEditions" class="table table-striped table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>
+                    Edition Name
+                </th>
+                <th>
+                    <span title="Edition No">
+                        No
+                    </span>
+                </th>
+                <th>
+                    Event Name
+                </th>
+                <th>
+                    <span title="Primary Director">
+                        Director
+                    </span>
+                </th>
+                <th>
+                    <span title="Start Date">
+                        Start
+                    </span>
+                </th>
+                <th>
+                    <span title="End Date">
+                        End
+                    </span>
+                </th>
+                <th>
+                    Status
+                </th>
+                <th>
+                    <span title="Event Activity">
+                        Ev. Act.
+                    </span>
+                </th>
+                <th class="no-sort"></th>
+            </tr>
+        </thead>
+        <tfoot>
+            <tr>
+                <th>
+                    Edition Name
+                </th>
+                <th>
+                    No
+                </th>
+                <th>
+                    Event Name
+                </th>
+                <th>
+                    Director
+                </th>
+                <th>
+                    Start Date
+                </th>
+                <th>
+                    End Date
+                </th>
+                <th>
+                    Status
+                </th>
+                <th>
+                    Event Activity
+                </th>
+                <th></th>
+            </tr>
+        </tfoot>
+        <tbody>
+            @if (Model != null)
+            {
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(m => item.EditionName)
+                        </td>
+                        <td class="text-center">
+                            @Html.DisplayFor(m => item.EditionNo)
+                        </td>
+                        <td>
+                            @*<a href="@Url.Action("Index", "Edition", new {eventId = item.EventId, name = item.EventName.ToUrlString()})" target="_blank" title="Browse Editions">
+                                    @Html.DisplayFor(m => item.EventName)
+                                </a>*@
+                            @Html.DisplayFor(m => item.EventName)
+                        </td>
+                        <td>
+                            @*<a href="mailto:@item.DirectorEmail" title="@Html.DisplayFor(m => item.DirectorEmail)">
+                                    @Html.DisplayFor(m => item.DirectorFullName)
+                                </a>*@
+                            @Html.DisplayFor(m => item.DirectorEmail)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(m => item.StartDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(m => item.EndDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(m => item.Status)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(m => item.EventActivity)
+                        </td>
+                        <td class="nowrap text-center">
+                            <a id="viewEdition" class="view-edition text-primary" href="#" data-id="@item.EditionId" data-toggle="modal" data-target="#editionDetails" title="View Edition Details">
+                                <small><i class="fa fa-eye fa-2x"></i></small>
+                            </a>
+                            @*<a style="padding: 5px" href="@Url.Action("Details", "Edition", new {id = item.EditionId, name = item.EditionName.ToUrlString()})" target="_blank" title="View Edition">
+                                    <small><i class="fa fa-eye fa-2x" style="color: #34495e"></i></small>
+                                </a>*@&nbsp;
+                            <a style="padding: 5px" href="@Url.Action("Edit", "Edition", new {id = item.EditionId, name = item.EditionName.ToUrlString()})" target="_blank" title="Edit Edition">
+                                <small><i class="fa fa-edit fa-2x" style="color: #62CB31"></i></small>
+                            </a>@*&nbsp;
+                                <a href="#" class="del-edition" data-id="@item.EditionId" title="Delete Edition">
+                                    <small><i class="fa fa-trash fa-2x text-danger"></i></small>
+                                </a>*@
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+<script>
+    $(document).ready(function () {
+
+        $.fn.dataTable.moment('DD/MM/YYYY');
+
+        $('#tblEditions').DataTable({
+            "iDisplayLength": 10,
+            "order": [[4, 'desc']],
+            "oLanguage": {
+                "sSearch": "Quick filter:"
+            },
+            initComplete: function () {
+                this.api().columns([0,1,2,3,4,5,6,7]).every(function () {
+                    var column = this;
+                    var select = $('<select class="form-control" style="background: url(' + '@Url.Content("~/content/images/filter.png")' + ') no-repeat scroll 7px 9px;padding-left:20px;width: 100%"><option value=""></option></select>')
+                        .appendTo($(column.footer()).empty())
+                        .on('change', function () {
+                            var val = $.fn.dataTable.util.escapeRegex(
+                                $(this).val()
+                            );
+
+                            column
+                                .search(val ? '^' + val + '$' : '', true, false)
+                                .draw();
+                        });
+
+                    column.data().unique().sort().each(function (d, j) {
+                        select.append('<option value="' + d + '">' + d + '</option>');
+                    });
+                });
+            }
+        });
+    });
+</script>

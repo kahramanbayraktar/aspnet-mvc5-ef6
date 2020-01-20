@@ -1,0 +1,543 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="BookStandUrl" xml:space="preserve">
+    <value>Book Stand Link</value>
+  </data>
+  <data name="CreateNew" xml:space="preserve">
+    <value>Create New</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Details" xml:space="preserve">
+    <value>Details</value>
+  </data>
+  <data name="Director" xml:space="preserve">
+    <value>Director</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="EditEdition" xml:space="preserve">
+    <value>Edit Edition</value>
+  </data>
+  <data name="EditionDescription" xml:space="preserve">
+    <value>Edition Description</value>
+  </data>
+  <data name="EditionName" xml:space="preserve">
+    <value>Edition Name</value>
+  </data>
+  <data name="EditionNo" xml:space="preserve">
+    <value>Edition No.</value>
+  </data>
+  <data name="Editions" xml:space="preserve">
+    <value>Editions</value>
+  </data>
+  <data name="EditionSummary" xml:space="preserve">
+    <value>Edition Summary</value>
+  </data>
+  <data name="EditionVenue" xml:space="preserve">
+    <value>Edition Venue</value>
+  </data>
+  <data name="EndDate" xml:space="preserve">
+    <value>End Date</value>
+  </data>
+  <data name="EventEditions" xml:space="preserve">
+    <value>Event Editions</value>
+  </data>
+  <data name="EventName" xml:space="preserve">
+    <value>Event Name</value>
+  </data>
+  <data name="Events" xml:space="preserve">
+    <value>Events</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="Login" xml:space="preserve">
+    <value>Log in</value>
+  </data>
+  <data name="OnlineInvitationUrl" xml:space="preserve">
+    <value>Online Invitation Link</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="SelectLanguage" xml:space="preserve">
+    <value>Select Language</value>
+  </data>
+  <data name="StartDate" xml:space="preserve">
+    <value>Start Date</value>
+  </data>
+  <data name="Welcome" xml:space="preserve">
+    <value>Welcome</value>
+  </data>
+  <data name="AllDayEvent" xml:space="preserve">
+    <value>All Day</value>
+  </data>
+  <data name="Classification" xml:space="preserve">
+    <value>Classification</value>
+  </data>
+  <data name="CoverPictureFileName" xml:space="preserve">
+    <value>Cover Picture File</value>
+  </data>
+  <data name="EventFlagPictureFileName" xml:space="preserve">
+    <value>Event Flag Picture</value>
+  </data>
+  <data name="InternationalExhibitorRetentionRate" xml:space="preserve">
+    <value>International Exhibitor Retention Rate</value>
+  </data>
+  <data name="InternationalRevenueCurrencyCode" xml:space="preserve">
+    <value>International Revenue Currency Code</value>
+  </data>
+  <data name="InternationalRevenueGBP" xml:space="preserve">
+    <value>International Revenue (GBP)</value>
+  </data>
+  <data name="InternationalRevenueLocalCurrency" xml:space="preserve">
+    <value>International Revenue (Local Currency)</value>
+  </data>
+  <data name="InternationalSqmSold" xml:space="preserve">
+    <value>International Sqm Sold</value>
+  </data>
+  <data name="InternationalVisitorCount" xml:space="preserve">
+    <value>International Visitor Count</value>
+  </data>
+  <data name="LocalRevenueCurrencyCode" xml:space="preserve">
+    <value>Local Revenue Currency Code</value>
+  </data>
+  <data name="LocalRevenueGBP" xml:space="preserve">
+    <value>Local Revenue (GBP)</value>
+  </data>
+  <data name="LocalRevenueLocalCurrency" xml:space="preserve">
+    <value>Local Revenue (Local Currency)</value>
+  </data>
+  <data name="LocalSqmSold" xml:space="preserve">
+    <value>Local Sqm Sold</value>
+  </data>
+  <data name="LocalVisitorCount" xml:space="preserve">
+    <value>Visitor Count (Local)</value>
+  </data>
+  <data name="LogoFileName" xml:space="preserve">
+    <value>Logo File</value>
+  </data>
+  <data name="NPSScoreExhibitor" xml:space="preserve">
+    <value>NPS Score Exhibitor</value>
+  </data>
+  <data name="NPSScoreVisitor" xml:space="preserve">
+    <value>NPS Score Visitor</value>
+  </data>
+  <data name="NumberOfExhibitingCountries" xml:space="preserve">
+    <value>Number Of Exhibiting Countries</value>
+  </data>
+  <data name="NumberOfInternationalDelegates" xml:space="preserve">
+    <value>Number Of International Delegates</value>
+  </data>
+  <data name="NumberOfInternationalExhibitors" xml:space="preserve">
+    <value>Number Of International Exhibitors</value>
+  </data>
+  <data name="NumberOfInternationalPaidDelegates" xml:space="preserve">
+    <value>Number Of International Paid Delegates</value>
+  </data>
+  <data name="NumberOfLocalDelegates" xml:space="preserve">
+    <value>Number Of Local Delegates</value>
+  </data>
+  <data name="NumberOfLocalExhibitors" xml:space="preserve">
+    <value>Number Of Local Exhibitors</value>
+  </data>
+  <data name="NumberOfLocalPaidDelegates" xml:space="preserve">
+    <value>Number Of Local Paid Delegates</value>
+  </data>
+  <data name="NumberOfNationalGroups" xml:space="preserve">
+    <value>Number Of National Groups</value>
+  </data>
+  <data name="NumberOfSponsors" xml:space="preserve">
+    <value>Number Of Sponsors</value>
+  </data>
+  <data name="NumberOfVisitorCountries" xml:space="preserve">
+    <value>Number Of Visitor Countries</value>
+  </data>
+  <data name="PreviousInstanceDwEventId" xml:space="preserve">
+    <value>Previous Instance Dw Event Id</value>
+  </data>
+  <data name="TotalSponsorshipRevenueCurrencyCode" xml:space="preserve">
+    <value>Total Sponsorship Revenue Currency Code</value>
+  </data>
+  <data name="TotalSponsorshipRevenueGBP" xml:space="preserve">
+    <value>International Revenue</value>
+  </data>
+  <data name="TotalSponsorshipRevenueLocalCurrency" xml:space="preserve">
+    <value>Local Revenue</value>
+  </data>
+  <data name="UpdateTime" xml:space="preserve">
+    <value>Update Time</value>
+  </data>
+  <data name="UpdateUser" xml:space="preserve">
+    <value>Update User</value>
+  </data>
+  <data name="VenueCoordinates" xml:space="preserve">
+    <value>Venue Coordinates</value>
+  </data>
+  <data name="VisitEndTime" xml:space="preserve">
+    <value>End</value>
+  </data>
+  <data name="VisitStartTime" xml:space="preserve">
+    <value>Start</value>
+  </data>
+  <data name="CreateTime" xml:space="preserve">
+    <value>Create Time</value>
+  </data>
+  <data name="Translations" xml:space="preserve">
+    <value>Translations</value>
+  </data>
+  <data name="Notifications" xml:space="preserve">
+    <value>Notifications</value>
+  </data>
+  <data name="GoogleMap" xml:space="preserve">
+    <value>Google Map</value>
+  </data>
+  <data name="ClickToZoom" xml:space="preserve">
+    <value>Click to zoom</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="Logout" xml:space="preserve">
+    <value>Logout</value>
+  </data>
+  <data name="ViewAll" xml:space="preserve">
+    <value>View all</value>
+  </data>
+  <data name="MasterCode" xml:space="preserve">
+    <value>Master Code</value>
+  </data>
+  <data name="EventType" xml:space="preserve">
+    <value>Event Type</value>
+  </data>
+  <data name="MasterName" xml:space="preserve">
+    <value>Master Name</value>
+  </data>
+  <data name="Frequency" xml:space="preserve">
+    <value>Frequency</value>
+  </data>
+  <data name="Manager" xml:space="preserve">
+    <value>Manager</value>
+  </data>
+  <data name="Region" xml:space="preserve">
+    <value>Region</value>
+  </data>
+  <data name="Industry" xml:space="preserve">
+    <value>Industry</value>
+  </data>
+  <data name="City" xml:space="preserve">
+    <value>City</value>
+  </data>
+  <data name="Country" xml:space="preserve">
+    <value>Country</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="Summary" xml:space="preserve">
+    <value>Summary</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="KeyIsInvalid" xml:space="preserve">
+    <value>Key is invalid</value>
+  </data>
+  <data name="LoginFailed" xml:space="preserve">
+    <value>Login failed</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="NPSSatisfactionVisitor" xml:space="preserve">
+    <value>NPS Satisfaction Visitor</value>
+  </data>
+  <data name="NPSSatisfactionExhibitor" xml:space="preserve">
+    <value>NPS Satisfaction Exhibitor</value>
+  </data>
+  <data name="NPSAverageVisitor" xml:space="preserve">
+    <value>NPS Average Visitor</value>
+  </data>
+  <data name="NPSAverageExhibitor" xml:space="preserve">
+    <value>NPS Average Exhibitor</value>
+  </data>
+  <data name="DirectorEmail" xml:space="preserve">
+    <value>Director Email</value>
+  </data>
+  <data name="CreateUser" xml:space="preserve">
+    <value>Created By</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="ManagingOfficeName" xml:space="preserve">
+    <value>Managing Office Name</value>
+  </data>
+  <data name="ManagingOfficeEmail" xml:space="preserve">
+    <value>Managing Office Email</value>
+  </data>
+  <data name="ManagingOfficeWebsite" xml:space="preserve">
+    <value>Managing Office Website</value>
+  </data>
+  <data name="ManagingOfficePhone" xml:space="preserve">
+    <value>Managing Office Phone</value>
+  </data>
+  <data name="EventId" xml:space="preserve">
+    <value>Event Id</value>
+  </data>
+  <data name="AxRecId" xml:space="preserve">
+    <value>Ax Rec Id</value>
+  </data>
+  <data name="Created" xml:space="preserve">
+    <value>Created</value>
+  </data>
+  <data name="Updated" xml:space="preserve">
+    <value>Updated</value>
+  </data>
+  <data name="CouldNotUpdated" xml:space="preserve">
+    <value>Could not updated</value>
+  </data>
+  <data name="EditionUpdated" xml:space="preserve">
+    <value>Edition has been updated</value>
+  </data>
+  <data name="BasedEditionTranslationNotFound" xml:space="preserve">
+    <value>Based Edition Translation could not found</value>
+  </data>
+  <data name="EventUpdated" xml:space="preserve">
+    <value>Event updated</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="EventSearchBoxPlaceHolder" xml:space="preserve">
+    <value>Master Code, Master Name or Director Email</value>
+  </data>
+  <data name="EditionSearchBoxPlaceHolder" xml:space="preserve">
+    <value>Event Name, Edition Name or Director Email</value>
+  </data>
+  <data name="SqmSold" xml:space="preserve">
+    <value>Sqm Sold</value>
+  </data>
+  <data name="Sponsors" xml:space="preserve">
+    <value>Sponsors</value>
+  </data>
+  <data name="LocalRevenue" xml:space="preserve">
+    <value>Local Revenue</value>
+  </data>
+  <data name="InternationalRevenue" xml:space="preserve">
+    <value>International Revenue</value>
+  </data>
+  <data name="Dates" xml:space="preserve">
+    <value>Dates</value>
+  </data>
+  <data name="VisitTimes" xml:space="preserve">
+    <value>Visit Times</value>
+  </data>
+  <data name="CohostedEvent" xml:space="preserve">
+    <value>Co-hosted</value>
+  </data>
+  <data name="Edition" xml:space="preserve">
+    <value>Edition</value>
+  </data>
+  <data name="EditionList" xml:space="preserve">
+    <value>Edition List</value>
+  </data>
+  <data name="OnlineRegisteredCount" xml:space="preserve">
+    <value>Online Registered Count</value>
+  </data>
+  <data name="OnlineRegisteredVisitorCount" xml:space="preserve">
+    <value>Online Registered Visitor Count</value>
+  </data>
+  <data name="LocalExhibitorRetentionRate" xml:space="preserve">
+    <value>Local Exhibitor Retention Rate</value>
+  </data>
+  <data name="Previous" xml:space="preserve">
+    <value>Previous</value>
+  </data>
+  <data name="Next" xml:space="preserve">
+    <value>Next</value>
+  </data>
+  <data name="DisplayDate" xml:space="preserve">
+    <value>DisplayDate</value>
+  </data>
+  <data name="DisplayOnITEAsia" xml:space="preserve">
+    <value>DisplayOnITEAsia</value>
+  </data>
+  <data name="DisplayOnITEI" xml:space="preserve">
+    <value>DisplayOnITEI</value>
+  </data>
+  <data name="DisplayOnGIMA" xml:space="preserve">
+    <value>DisplayOnGIMA</value>
+  </data>
+  <data name="DisplayOnITETurkey" xml:space="preserve">
+    <value>DisplayOnITETurkey</value>
+  </data>
+  <data name="DisplayOnTradeLink" xml:space="preserve">
+    <value>DisplayOnTradeLink</value>
+  </data>
+  <data name="DisplayOnITEModa" xml:space="preserve">
+    <value>DisplayOnITEModa</value>
+  </data>
+  <data name="TopExhibitorCountries" xml:space="preserve">
+    <value>TopExhibitorCountries</value>
+  </data>
+  <data name="TopVisitorCountries" xml:space="preserve">
+    <value>TopVisitorCountries</value>
+  </data>
+  <data name="DelegateCountries" xml:space="preserve">
+    <value>DelegateCountries</value>
+  </data>
+  <data name="ExhibitorRetentionRate" xml:space="preserve">
+    <value>ExhibitorRetentionRate</value>
+  </data>
+  <data name="FirstName" xml:space="preserve">
+    <value>First Name</value>
+  </data>
+  <data name="LastName" xml:space="preserve">
+    <value>Last Name</value>
+  </data>
+  <data name="CorporateEmail" xml:space="preserve">
+    <value>Corporate Email</value>
+  </data>
+  <data name="OfficeOrCompanyName" xml:space="preserve">
+    <value>Office / Company Name</value>
+  </data>
+  <data name="EventNames" xml:space="preserve">
+    <value>Event Names</value>
+  </data>
+  <data name="AdditionalNotes" xml:space="preserve">
+    <value>Additional Notes</value>
+  </data>
+  <data name="RevenueType" xml:space="preserve">
+    <value>Revenue Type</value>
+  </data>
+  <data name="Revenue" xml:space="preserve">
+    <value>Revenue</value>
+  </data>
+  <data name="CurrencyCode" xml:space="preserve">
+    <value>Currency Code</value>
+  </data>
+</root>

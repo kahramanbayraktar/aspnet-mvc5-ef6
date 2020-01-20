@@ -1,0 +1,42 @@
+﻿@using Ced.Utility.Azure
+@model Ced.Web.Models.EditionSection.EditionSectionListModel
+
+<div class="table-responsive">
+    @if (Model.EditionSections != null && Model.EditionSections.Any())
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Section</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var editionSection in Model.EditionSections)
+                {
+                    <tr>
+                        <td>@editionSection.Sections</td>
+                        <td class="col-lg-1">
+                            <a href="#" class="del-edition-section" data-id="@editionSection.EditionSectionId" data-editionid="@editionSection.EditionId" title="Delete Section"><i class="fa fa-trash"></i></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <table class="table borderless">
+            <tr>
+                <td class="text-center">
+                    <img src="@(AzureStorageHelper.ImageBlobDirectory + "no-content-spider-web.png")" style="opacity: .7" />
+                </td>
+            </tr>
+            <tr>
+                <td class="text-center">
+                    No sections yet
+                </td>
+            </tr>
+        </table>
+    }
+</div>

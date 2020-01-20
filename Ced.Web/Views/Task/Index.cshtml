@@ -1,0 +1,153 @@
+﻿@model Ced.Web.Models.Task.TaskListModel
+
+@{
+    ViewBag.Title = "Tasks";
+}
+
+<div class="small-header">
+    <div class="hpanel">
+        <div class="panel-body">
+            <h2 class="font-light m-b-xs">
+                Tasks
+            </h2>
+            <div id="hbreadcrumb" class="pull-left">
+                <ol class="hbreadcrumb breadcrumb">
+                    <li><a href="@Url.Action("Index", "Dashboard")">Main</a></li>
+                    <li>
+                        <span>Tasks</span>
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="content animate-panel">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="hpanel">
+                <div class="panel-body">
+                    <div id="tableHolder">
+                        @Html.Partial("_List", Model.Tasks)
+                    </div>
+                    <div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    @Styles.Render("~/bundles/datatables/css")
+    @Styles.Render("~/bundles/toastr/css")
+
+    <style>
+        .dataTable > thead > tr > th[class*="no-sort"]:after {
+            content: "" !important;
+        }
+
+        .table-responsive {
+            overflow-x: hidden;
+        }
+    </style>
+
+    <style>
+        #s2id_autogen3_search {
+            text-transform: none;
+        }
+    </style>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/datatables/js")
+    @Scripts.Render("~/bundles/datatablesBootstrap/js")
+    @Scripts.Render("~/bundles/toastr/js")
+
+    <script src="~/Scripts/jquery.signalR-2.2.2.min.js" type="text/javascript"></script>
+    <script src="~/signalr/hubs"></script>
+    <script src="~/Scripts/ced-task.js" type="text/javascript"></script>
+
+    @*<script type="text/javascript">
+
+        $(function () {
+            // Reference the auto-generated proxy for the hub.
+            var progress = $.connection.progressHub;
+
+            // Create a function that the hub can call back to display messages.
+            progress.client.AddProgress = function (message, percentage, taskId) {
+
+                $("#runbutton" + taskId).hide();
+                $("#progressouter" + taskId).show();
+                $("#progressresult" + taskId).text(percentage);
+                $("#progressresult" + taskId).width(percentage);
+
+                //ProgressBarModal("show", message + " " + percentage);
+                //$('#ProgressMessage').width(percentage);
+
+                if (percentage == "100%") {
+                    //ProgressBarModal();
+                    setTimeout(function () {
+                        $("#progressresult" + taskId).text("")
+                    }, 1000);
+
+                    $("#progressouter" + taskId).hide("slow", function () {
+                        $("#runbutton" + taskId).show("slow");
+                    });
+                }
+            };
+
+            $.connection.hub.start().done(function () {
+                var connectionId = $.connection.hub.id;
+            });
+
+        });
+
+    </script>*@
+
+    @*<script>
+        function ProgressBarModal(showHide) {
+            if (showHide === 'show') {
+                $('#mod-progress').modal('show');
+                if (arguments.length >= 2) {
+                    $('#progressBarParagraph').text(arguments[1]);
+                } else {
+                    $('#progressBarParagraph').text('U tijeku...');
+                }
+
+                window.progressBarActive = true;
+
+            } else {
+                $('#mod-progress').modal('hide');
+                window.progressBarActive = false;
+            }
+        }
+    </script>*@
+}
+
+@*<div class="modal fade in" id="mod-progress" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            </div>
+            <div class="modal-body">
+                <div class="text-center">
+                    <div class="i-circle warning"><i class="fa fa-info"></i></div>
+                    <div id="result" style="font-size: 1.1em; padding-bottom: 5px">
+                        <p id="progressBarParagraph"></p>
+                    </div>
+                    <div style="width: 30%; margin: 0 auto; display:none;">
+                        <div id="progressbar" style="width: 300px; height: 15px"></div>
+                        <br />
+                    </div>
+                    <div id="ProgressStripe" class="progress progress-striped active" style="position:relative; top:10px; width:100%;">
+                        <div id="ProgressMessage" class="progress-bar progress-bar-info" style="width: 100%; border:none;"></div>
+                    </div>
+                    <br />
+                </div>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>*@

@@ -1,0 +1,49 @@
+﻿@using Ced.Web.Models.Notification
+
+@model LatestNotificationsModel
+
+@Html.Hidden("UnreadNotificationCount", Model.Count)
+
+<li style="text-align: right !important"><a id="readAll" href="#">Mark All as Read</a></li>
+
+@if (Model.Notifications.Any())
+{
+    foreach (var notf in Model.Notifications)
+    {
+        <li style="background-color: @(!notf.Displayed ? "#f1f3f6" : "")">
+            <a href="@notf.Url" target="_blank">
+                <div>
+                    <span class="fa fa-@notf.FaIcon fa-lg @notf.TextClass" style="width: 24px"></span> @Html.Raw(notf.Title)
+                </div>
+                <div class="text-right">
+                    <small><time class="timeago" datetime="@notf.CreatedOn.ToUniversalTime().ToString(@"yyyy-MM-dd HH:mm:ssZ")"></time></small>
+                </div>
+            </a>
+        </li>
+    }
+}
+else
+{
+    <li style="text-align: center">
+        <a href="#">No notifications</a>
+    </li>
+}
+
+@if (Model.Notifications.Any())
+{
+    <li class="summary"><a href="@Url.Action("Index", "Notification")">See All</a></li>
+}
+
+<script>
+    $("#readAll").on("click", function () {
+        $.ajax({
+            url: "@Url.Action("_ReadAllNotifications", "Notification")",
+            type: "POST",
+            success: function (result) {
+                if (result.success === true) {
+                    getNotifications();
+                }
+            }
+        });
+    })
+</script>

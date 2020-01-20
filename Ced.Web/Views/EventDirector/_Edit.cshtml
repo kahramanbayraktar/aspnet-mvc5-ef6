@@ -1,0 +1,71 @@
+﻿@model Ced.Web.Models.EventDirector.EventDirectorEditModel
+
+<div class="modal-dialog" style="max-width: 600px">
+    <div class="modal-content">
+        <div class="color-line"></div>
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <h4 class="modal-title">Edit Event Director</h4>
+        </div>
+        <div class="modal-body">
+            @using (Html.BeginForm("_Edit", "EventDirector", FormMethod.Post, new { id = "editEventDirectorForm" }))
+            {
+                @Html.HiddenFor(x => x.EventDirectorId)
+                @Html.HiddenFor(x => x.EventId)
+                @Html.HiddenFor(x => x.ApplicationId)
+                <div class="col-lg-12">
+                    <div class="row">
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <label class="control-label">Event:</label>
+                                <div class="input-group col-lg-12">
+                                    @Model.EventName
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">User:</label>
+                                <div class="input-group col-lg-12">
+                                    @Model.UserEmail
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Application:</label>
+                                <div class="input-group col-lg-12">
+                                    @Model.AppName
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Primary:</label>
+                                <div class="input-group col-lg-12">
+                                    <div class="checkbox checkbox-success">
+                                        <input id="isPrimary3" name="IsPrimary" type="checkbox" @(Model.IsPrimary ? "checked" : "") value="true">
+                                        <label for="isPrimary3">
+                                            Primary
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Assistant:</label>
+                                <div class="input-group col-lg-12">
+                                    <div class="checkbox checkbox-success">
+                                        <input id="isAssistant3" name="IsAssistant" type="checkbox" @(Model.IsAssistant ? "checked" : "") value="true">
+                                        <label for="isAssistant3">
+                                            Assistant
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-justify m-b-md">
+                    <button class="btn btn-success btn-block" id="btnSave"><i class="fa fa-spinner fa-spin" id="loading" style="display: none"></i> Save</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>

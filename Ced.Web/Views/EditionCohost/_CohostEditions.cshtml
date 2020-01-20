@@ -1,0 +1,16 @@
+﻿@model Ced.Web.Models.Edition.CohostEditionListModel
+
+<table id="tblHostEdition" class="table table-bordered">
+    @if (Model.EditionCohosts != null)
+    {
+        foreach (var edition in Model.EditionCohosts)
+        {
+            <tr>
+                <td>@(Model.EditionId == edition.FirstEditionId ? edition.SecondEdition.EditionName : edition.FirstEdition.EditionName)</td>
+                <td class="text-center">
+                    <a href="#" class="del-cohost" data-id="@edition.EditionCohostId" data-editionid="@Model.EditionId" title="Delete Co-host"><i class="fa fa-trash"></i></a>
+                </td>
+            </tr>
+        }
+    }
+</table>

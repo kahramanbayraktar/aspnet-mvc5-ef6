@@ -1,0 +1,113 @@
+﻿@model Ced.Web.Models.User.LoginModel
+
+@{
+    Layout = "~/Views/Shared/_Layout_Blank.cshtml";
+    ViewBag.Title = "Login";
+}
+
+<script src="@Url.Content("~/Vendor/jquery-validation/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+
+<div class="login-container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="hpanel">
+                <div class="panel-body">
+                    <div>
+                        <img src="@Url.Content("~/Content/images/logo.png")" />
+                    </div>
+                    <br /><br />
+                    @using (Html.BeginForm("Login", "User", FormMethod.Post, new { id = "loginForm" }))
+                    {
+                        @Html.HiddenFor(model => model.ReturnUrl)
+                        <div class="form-group">
+                            <label class="control-label" for="email">Corporate Email / Active Directory Username</label>
+                            @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", placeholder = "event.director@hyve.group", title = "Please enter your email/username", name = "email", id = "email" } })
+                            @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="password">Password</label>
+                            @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", title = "Please enter your password", placeholder = "*******" } })
+                            @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                        </div>
+                        <button class="btn btn-orange btn-block" id="btnLogin"><i class="fa fa-spinner fa-spin" id="loading" style="display: none"></i> Log in</button>
+                        <br />
+                        <div>
+                            <div class="col-md-6 text-left">
+                                <a href="~/content/files/ced-quick-start-guide.pdf" target="_blank"><i class="fa fa-file-pdf-o"></i> Quick Start Guide</a>
+                            </div>
+                            <div class="col-md-6 text-right">
+                                <a href="@Url.Action("RequestAccess", "User")" class="cantlogin">I can't log in, need help!</a>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="text-justify m-b-md">
+                <small>
+                    Central Events Database is an information repository built for Event Directors. The information to be provided herein allows the Group to standardise its reporting structures and performance metrics.<br />
+                    <br />
+                    Event Directors will use this portal to submit their key metrics. These metrics consist of "Public" and "Sensitive" data. While public data will be used for integration purposes like population of our calendars on corporate sites, sensitive data will only be used for internal reporting and visualisation purposes to better guide management hierarchies for efficient operational planning & budget duties.
+                </small>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            © 2016 Hyve Group Plc. All rights reserved.
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    @Styles.Render("~/bundles/sweetAlert/css")
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/sweetAlert/js")
+
+    <script>
+        $(function () {
+            $('#loginForm').submit(function (e) {
+                var btn = $("#btnLogin").html("<i class=\"fa fa-spinner fa-spin\" id=\"loading\" style=\"display: none\"></i> Logging in...").attr("disabled", true);
+                e.preventDefault();
+                if ($(this).valid()) {
+                    $("#loading").toggle();
+                    $.ajax({
+                        url: this.action,
+                        type: this.method,
+                        data: $(this).serialize(),
+                        dataType: "json",
+                        success: function (result) {
+                            if (result.success === true) {
+                                window.location.replace(result.returnUrl);
+                            } else {
+                                swal({
+                                    title: "Ooops!",
+                                    text: result.message,
+                                    type: "error"
+                                });
+                                btn.html("Log in").attr("disabled", false);
+                            }
+                        },
+                        error: function (xhr, textStatus, error) {
+                            if (textStatus === "parsererror") { // possibly already logged in
+                                window.location.reload();
+                            } else {
+                                swal({
+                                    title: "Error!",
+                                    text: xhr.statusText,
+                                    type: "error"
+                                });
+                                btn.html("Log in").attr("disabled", false);
+                            }
+                        }
+                    });
+                } else {
+                    btn.html("Log in").attr("disabled", false);
+                }
+                return false;
+            });
+        });
+    </script>
+}

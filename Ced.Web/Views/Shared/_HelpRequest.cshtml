@@ -1,0 +1,91 @@
+﻿@model Ced.Web.Models.User.HelpRequestModel
+
+<div class="register-container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="hpanel" style="margin-bottom: 0">
+                <div class="panel-body" style="border: none">
+                    @using (Html.BeginForm("_RequestHelp", "Global", FormMethod.Post, new { id = "helpRequestForm" }))
+                    {
+                        <div class="row">
+                            <div class="form-group col-lg-12">
+                                <label>Send us your questions & comments</label>
+                                @Html.TextAreaFor(model => model.Message, new { @class = "form-control maxlength", rows = 5, maxlength = "1000" })
+                                @*@Html.ValidationMessageFor(model => model.Message, "", new { @class = "text-danger" })*@
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div>
+                                <button class="btn btn-orange" id="btnSubmit">Submit</button>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('#helpRequestForm').submit(function (e) {
+            var btn = $("#btnSubmit").html("Submitting...").attr("disabled", true);
+            e.preventDefault();
+            if ($(this).valid()) {
+                $.ajax({
+                    url: this.action,
+                    type: this.method,
+                    data: $(this).serialize(),
+                    dataType: "json",
+                    success: function (result) {
+                        if (result.success === true) {
+                            swal({
+                                title: "Success!",
+                                text: "We received your message. You will be contacted by Hyve HelpDesk team.",
+                                type: "success"
+                            });
+                            $("#Message").val("");
+                            btn.html("Submit Help Request").attr("disabled", false);
+                        } else {
+                            swal({
+                                title: "Error!",
+                                text: result.message,
+                                type: "error"
+                            });
+                            btn.html("Submit Help Request").attr("disabled", false);
+                        }
+                    },
+                    error: function (xhr, textStatus, error) {
+                        swal({
+                            title: "Error!",
+                            text: error,
+                            type: "error"
+                        });
+                        btn.html("Submit Help Request").attr("disabled", false);
+                    }
+                });
+            } else {
+                btn.html("Submit Help Request").attr("disabled", false);
+                var validator = $("#helpRequestForm").validate();
+                var errors = "";
+                $.each(validator.errorMap, function (index, value) {
+                    errors += value;
+                });
+                swal({
+                    title: "Warning!",
+                    text: errors,
+                    type: "warning"
+                });
+            }
+            return false;
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        $('.maxlength').maxlength({
+            alwaysShow: true
+        });
+    });
+</script>
